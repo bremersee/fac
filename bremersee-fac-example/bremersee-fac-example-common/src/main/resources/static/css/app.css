@@ -1,0 +1,38 @@
+body {
+}
+.page-header {
+    text-align: center;
+}
+.page-header-no-border {
+    border-bottom: medium none;
+}
+.form-group-inline {
+    margin-left: 8px !important;
+    margin-right: 8px !important;
+}
+
+.form-group-inline {
+    width: 250px !important;
+}
+
+.form-group-list input {
+    margin-bottom: 8px;
+}
+
+.form-group-list-item {
+    margin-bottom: 8px;
+}
+
+.help-block-list {
+}
+
+.panel-group-button {
+    text-align: center;
+}
+
+.checkbox-input-list {
+    margin-left: 30px;
+}
+a .add-img {
+    margin-top: -8px;
+}

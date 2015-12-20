@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="OFF">
+    <appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{dd.MM.yyyy HH:mm:ss.SSS} %-7level %class:%line [%method] (%t)%n%msg%n" />
+        </Console>
+    </appenders>
+    <Loggers>
+        <Logger name="org.springframework" level="warn" additivity="false">
+            <AppenderRef ref="Console" />
+        </Logger>
+        <Logger name="org.bremersee" level="debug" additivity="false">
+            <AppenderRef ref="Console" />
+        </Logger>
+        <Root level="info">
+            <AppenderRef ref="Console" />
+        </Root>
+    </Loggers>
+</configuration>

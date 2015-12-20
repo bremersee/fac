@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<!--+
+    | Copyright 2015 Christian Bremer.
+    | 
+    | Licensed under the Apache License, Version 2.0 (the "License");
+    | you may not use this file except in compliance with the License.
+    | You may obtain a copy of the License at
+    | 
+    |      http://www.apache.org/licenses/LICENSE-2.0
+    | 
+    | Unless required by applicable law or agreed to in writing, software
+    | distributed under the License is distributed on an "AS IS" BASIS,
+    | WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    | See the License for the specific language governing permissions and
+    | limitations under the License.
+    +-->
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="de">
+    <meta charset="UTF-8"/>
+    <title>Bremersee Resource Example</title>
+    <script type="text/javascript" src="../static/jquery/jquery.min.js"
+            th:src="@{/jquery/jquery.min.js}"></script>
+    <script type="text/javascript" src="../static/bootstrap/js/bootstrap.js"
+            th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" type="text/css"
+          href="../static/bootstrap/css/bootstrap.css"
+          th:href="@{/bootstrap/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css"
+          href="../static/bootstrap/css/bootstrap-theme.css"
+          th:href="@{/bootstrap/css/bootstrap-theme.min.css}"/>
+    <link rel="stylesheet" type="text/css"
+          href="../static/css/app.css"
+          th:href="@{/css/app.css}"/>
+</head>
+<body>
+    <div class="container">
+        <div class="page-header page-header-no-border">
+            <h1>Bremersee Resource Example</h1>
+        </div>
+        
+        <div class="panel panel-default" th:class="(${result.accessGranted})? 'panel panel-default' : 'panel panel-danger'">
+            <div class="panel-heading" th:text="${resourceId}">Resource</div>
+            <div class="panel-body">
+                <div th:text="(${result.accessGranted})? 'Access is granted.' : 'Access is denied until ' + ${result.accessDeniedUntil}">Access is granted.</div>
+                <a style="margin-top: 12px;"
+                   href="entries.html"
+                   th:href="@{entries.html(c=${c},q=${q},s=${s},p=${p})}"
+                   class="btn btn-default"
+                   role="button">
+                    <span>Back</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

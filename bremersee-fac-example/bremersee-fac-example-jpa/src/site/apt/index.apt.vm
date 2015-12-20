@@ -1,0 +1,12 @@
+Bremersee Failed Access Counter JPA Example
+
+  This module stores the failed access entries in a database by using JPA.
+  The database will be created in memory.
+  
+  You can run the example from the command line:
+
++----------------------------------------------------------------------+
+mvn spring-boot:run
++----------------------------------------------------------------------+
+
+  After the sample has been started you can open the demo page: {{http://localhost:8080/entries.html}}

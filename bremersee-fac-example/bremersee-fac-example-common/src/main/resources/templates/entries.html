@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<!--+
+    | Copyright 2015 Christian Bremer.
+    | 
+    | Licensed under the Apache License, Version 2.0 (the "License");
+    | you may not use this file except in compliance with the License.
+    | You may obtain a copy of the License at
+    | 
+    |      http://www.apache.org/licenses/LICENSE-2.0
+    | 
+    | Unless required by applicable law or agreed to in writing, software
+    | distributed under the License is distributed on an "AS IS" BASIS,
+    | WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    | See the License for the specific language governing permissions and
+    | limitations under the License.
+    +-->
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="de">
+    <meta charset="UTF-8"/>
+    <title>Bremersee Failed Access Entries Example</title>
+    <script type="text/javascript" src="../static/jquery/jquery.min.js"
+            th:src="@{/jquery/jquery.min.js}"></script>
+    <script type="text/javascript" src="../static/bootstrap/js/bootstrap.js"
+            th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" type="text/css"
+          href="../static/bootstrap/css/bootstrap.css"
+          th:href="@{/bootstrap/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css"
+          href="../static/bootstrap/css/bootstrap-theme.css"
+          th:href="@{/bootstrap/css/bootstrap-theme.min.css}"/>
+    <link rel="stylesheet" type="text/css"
+          href="../static/css/app.css"
+          th:href="@{/css/app.css}"/>
+</head>
+<body>
+    <div class="container">
+        <div class="page-header page-header-no-border">
+            <h1>Bremersee Failed Access Entries Example</h1>
+        </div>
+        
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#users-navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <div id="users-navbar" class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li>
+                            <a href="#"
+                               th:href="@{accessFailed.html(c=${pageControl.comparatorParamValue},q=${pageControl.page.pageRequest.query},s=${pageControl.page.pageRequest.pageSize},p=${pageControl.page.pageRequest.pageNumber})}">
+                                <img class="add-img" src="../static/img/add.gif" th:src="@{/img/add.gif}" alt=""/> Add an entry
+                            </a>
+                        </li>
+                    </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li th:if="${pageControl.querySupported}">
+                            <form class="navbar-form navbar-left" method="get">
+                                <input type="hidden" name="_p" th:attr="name=${pageControl.pageNumberParamName}" value="0" />
+                                <input type="hidden" name="_c" th:attr="name=${pageControl.comparatorParamName}" th:value="${pageControl.comparatorParamValue}" />
+                                <input type="hidden" name="_s" th:attr="name=${pageControl.pageSizeParamName}" th:value="${pageControl.page.pageRequest.pageSize}" />
+                                <div class="form-group">
+                                    <input type="text" name="_q" th:attr="name=${pageControl.queryParamName}" th:value="${pageControl.page.pageRequest.query}" class="form-control" />
+                                </div>
+                            </form>
+                        </li>
+                        <li>
+                            <form class="navbar-form navbar-left" method="get">
+                                <input type="hidden" name="_p" th:attr="name=${pageControl.pageNumberParamName}" value="0" />
+                                <input type="hidden" name="_c" th:attr="name=${pageControl.comparatorParamName}" th:value="${pageControl.comparatorParamValue}" />
+                                <input type="hidden" name="_q" th:attr="name=${pageControl.queryParamName}" th:value="${pageControl.page.pageRequest.query}" />
+                                <div class="form-group">
+                                    <select name="_s" th:attr="name=${pageControl.pageSizeParamName}" class="form-control" style="width:auto" onchange="this.form.submit()">
+                                        <option th:each="pageSizeOption : ${pageControl.pageSizeSelectorOptions}" 
+                                                th:selected="${pageSizeOption.selected}"
+                                                th:value="${pageSizeOption.value}"
+                                                th:text="${pageSizeOption.displayedValue}">10</option>
+                                    </select>
+                                </div>
+                            </form>
+                        </li>
+                        <li>
+                            <form class="navbar-form navbar-left" method="get">
+                                <input type="hidden" name="_c" th:attr="name=${pageControl.comparatorParamName}" th:value="${pageControl.comparatorParamValue}" />
+                                <input type="hidden" name="_s" th:attr="name=${pageControl.pageSizeParamName}" th:value="${pageControl.page.pageRequest.pageSize}" />
+                                <input type="hidden" name="_q" th:attr="name=${pageControl.queryParamName}" th:value="${pageControl.page.pageRequest.query}" />
+                                <a href="#" 
+                                   th:href="@{${pageControl.pagination.previousPageLink.url}}" 
+                                   class="btn btn-default disabled" 
+                                   th:class="${pageControl.pagination.previousPageLink.active}? 'btn btn-default' : 'btn btn-default disabled'"
+                                   role="button">
+                                    <span class="glyphicon glyphicon-minus-sign" aria-hidden="true" aria-label="Previous Page"></span>
+                                </a>
+                                <div class="form-group">
+                                    <select name="_p" th:attr="name=${pageControl.pageNumberParamName}" class="form-control" style="width:auto" onchange="this.form.submit()">
+                                        <option th:each="link : ${pageControl.pageRequestLinks}" 
+                                                th:selected="${link.active}"
+                                                th:value="${link.pageNumber}"
+                                                th:text="${link.displayedPageNumber}">1</option>
+                                    </select>
+                                </div>
+                                <a href="#" 
+                                   th:href="@{${pageControl.pagination.nextPageLink.url}}" 
+                                   class="btn btn-default disabled" 
+                                   th:class="${pageControl.pagination.nextPageLink.active}? 'btn btn-default' : 'btn btn-default disabled'"
+                                   role="button">
+                                    <span class="glyphicon glyphicon-plus-sign" aria-hidden="true" aria-label="Next Page"></span>
+                                </a>
+                            </form>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+        </nav>
+        
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>
+                        <span>Resource</span>
+                        <span>
+                            <a class="dropup" href="#" 
+                               th:href="@{entries.html(c='resourceId,asc|remoteHost,asc',q=${pageControl.page.pageRequest.query},s=${pageControl.page.pageRequest.pageSize},p=${pageControl.page.pageRequest.pageNumber})}">
+                                <span class="caret"></span>
+                            </a>
+                            <a class="dropdown" href="#" 
+                               th:href="@{entries.html(c='resourceId,desc|remoteHost,desc',q=${pageControl.page.pageRequest.query},s=${pageControl.page.pageRequest.pageSize},p=${pageControl.page.pageRequest.pageNumber})}">
+                                <span class="caret"></span>
+                            </a>
+                        </span>
+                    </th>
+                    <th>
+                        <span>Remote Host</span>
+                        <span>
+                            <a class="dropup" href="#" 
+                               th:href="@{entries.html(c='remoteHost,asc|resourceId,asc',q=${pageControl.page.pageRequest.query},s=${pageControl.page.pageRequest.pageSize},p=${pageControl.page.pageRequest.pageNumber})}">
+                                <span class="caret"></span>
+                            </a>
+                            <a class="dropdown" href="#" 
+                               th:href="@{entries.html(c='remoteHost,desc|resourceId,desc',q=${pageControl.page.pageRequest.query},s=${pageControl.page.pageRequest.pageSize},p=${pageControl.page.pageRequest.pageNumber})}">
+                                <span class="caret"></span>
+                            </a>
+                        </span>
+                    </th>
+                    <th>
+                        <span>Creation Date</span>
+                        <span>
+                            <a class="dropup" href="#" 
+                               th:href="@{entries.html(c='creationDate,asc',q=${pageControl.page.pageRequest.query},s=${pageControl.page.pageRequest.pageSize},p=${pageControl.page.pageRequest.pageNumber})}">
+                                <span class="caret"></span>
+                            </a>
+                            <a class="dropdown" href="#" 
+                               th:href="@{entries.html(c='creationDate,desc',q=${pageControl.page.pageRequest.query},s=${pageControl.page.pageRequest.pageSize},p=${pageControl.page.pageRequest.pageNumber})}">
+                                <span class="caret"></span>
+                            </a>
+                        </span>
+                    </th>
+                    <th>
+                        <span>Modification Date</span>
+                        <span>
+                            <a class="dropup" href="#" 
+                               th:href="@{entries.html(c='modificationDate,asc',q=${pageControl.page.pageRequest.query},s=${pageControl.page.pageRequest.pageSize},p=${pageControl.page.pageRequest.pageNumber})}">
+                                <span class="caret"></span>
+                            </a>
+                            <a class="dropdown" href="#" 
+                               th:href="@{entries.html(c='modificationDate,desc',q=${pageControl.page.pageRequest.query},s=${pageControl.page.pageRequest.pageSize},p=${pageControl.page.pageRequest.pageNumber})}">
+                                <span class="caret"></span>
+                            </a>
+                        </span>
+                    </th>
+                    <th>
+                        <span>Counter</span>
+                        <span>
+                            <a class="dropup" href="#" 
+                               th:href="@{entries.html(c='counter,asc',q=${pageControl.page.pageRequest.query},s=${pageControl.page.pageRequest.pageSize},p=${pageControl.page.pageRequest.pageNumber})}">
+                                <span class="caret"></span>
+                            </a>
+                            <a class="dropdown" href="#" 
+                               th:href="@{entries.html(c='counter,desc',q=${pageControl.page.pageRequest.query},s=${pageControl.page.pageRequest.pageSize},p=${pageControl.page.pageRequest.pageNumber})}">
+                                <span class="caret"></span>
+                            </a>
+                        </span>
+                    </th>
+                    <th><span>Access Granted</span></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="entry : ${pageControl.page.entries}">
+                    <td>
+                        <a href="resource.html"
+                           th:href="@{resource.html(resourceId=${entry.resourceId},c=${pageControl.comparatorParamValue},q=${pageControl.page.pageRequest.query},s=${pageControl.page.pageRequest.pageSize},p=${pageControl.page.pageRequest.pageNumber})}">
+                        <span>Visit</span>
+                        </a>
+                    </td>
+                    <td th:text="${entry.resourceId}">resourceId</td>
+                    <td th:text="${entry.remoteHost}">remoteHost</td>
+                    <td th:text="${entry.creationDate}">creationDate</td>
+                    <td th:text="${entry.modificationDate}">modificationDate</td>
+                    <td th:text="${entry.counter}">0</td>
+                    <td>
+                        <img class="add-img" src="../static/img/true.gif" th:src="(${entry.counter} > ${counterThreshold})? @{/img/false.gif} : @{/img/true.gif}" alt=""/>
+                    </td>
+                    <td>
+                        <a href="#"
+                           title="Increments the failed access counter."
+                           th:href="@{accessFailed.html(resourceId=${entry.resourceId},c=${pageControl.comparatorParamValue},q=${pageControl.page.pageRequest.query},s=${pageControl.page.pageRequest.pageSize},p=${pageControl.page.pageRequest.pageNumber})}"
+                           class="btn btn-default"
+                           role="button">
+                            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true" aria-label="Inc"></span>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="#"
+                           th:href="@{accessSucceeded.html(resourceId=${entry.resourceId},c=${pageControl.comparatorParamValue},q=${pageControl.page.pageRequest.query},s=${pageControl.page.pageRequest.pageSize},p=${pageControl.page.pageRequest.pageNumber})}"
+                           title="Removes the failed access entry."
+                           class="btn btn-default"
+                           th:class="(${entry.counter} > ${counterThreshold})? 'btn btn-default disabled' : 'btn btn-default'"
+                           role="button">
+                        <span th:text="(${entry.counter} > ${counterThreshold})? 'Grant access is denied' : 'Grant access'">Grant access</span>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="#"
+                           th:href="@{remove.html(resourceId=${entry.resourceId},c=${pageControl.comparatorParamValue},q=${pageControl.page.pageRequest.query},s=${pageControl.page.pageRequest.pageSize},p=${pageControl.page.pageRequest.pageNumber})}">
+                            <img src="../static/img/delete.gif" th:src="@{/img/delete.gif}" alt="Remove"/>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="panel panel-default">
+            <div class="panel-heading">Failed Access Counter State</div>
+            <div class="panel-body">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>Failed access counter threshold:</td>
+                            <td style="padding-left: 8px;" th:text="${counterThreshold}">10</td>
+                        </tr>
+                        <tr>
+                            <td>Remove failed entries interval (millis):</td>
+                            <td style="padding-left: 8px;" th:text="${removeFailedEntriesInterval}">3600000</td>
+                        </tr>
+                        <tr>
+                            <td>Failed access entry lifetime (millis):</td>
+                            <td style="padding-left: 8px;" th:text="${removeFailedAccessEntriesAfterMillis}">7200000</td>
+                        </tr>
+                        <tr>
+                            <td>Last run of removing failed entries:</td>
+                            <td style="padding-left: 8px;" th:text="${lastRemovingOfFailedEntries}">24.12.2015 14:52:43.761</td>
+                        </tr>
+                        <tr>
+                            <td>Duration (millis):</td>
+                            <td style="padding-left: 8px;" th:text="${lastRemovingOfFailedEntriesDuration}">1158</td>
+                        </tr>
+                        <tr>
+                            <td>Removed entries:</td>
+                            <td style="padding-left: 8px;" th:text="${lastRemovingOfFailedEntriesSize}">8</td>
+                        </tr>
+                        <tr>
+                            <td>Total removed entries:</td>
+                            <td style="padding-left: 8px;" th:text="${removedFailedEntriesTotalSize}">16</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <a style="margin-top: 12px;"
+                   href="#"
+                   th:href="@{removeObsolete.html(c=${pageControl.comparatorParamValue},q=${pageControl.page.pageRequest.query},s=${pageControl.page.pageRequest.pageSize},p=${pageControl.page.pageRequest.pageNumber})}"
+                   title="Remove obsolete entries."
+                   class="btn btn-default"
+                   role="button">
+                <span>Run</span>
+                </a>
+            </div>
+        </div>
+        
+    </div>
+</body>
+</html>

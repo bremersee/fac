@@ -212,10 +212,10 @@ code for these subcomponents is subject to the terms and
 conditions of the following licenses.
 
 javax.inject javax.inject 1 jar The Apache Software License, Version 2.0 
+javax.interceptor javax.interceptor-api 1.2 jar CDDL + GPLv2 with classpath exception
 javax.transaction javax.transaction-api 1.2 jar CDDL + GPLv2 with classpath exception 
-org.bremersee bremersee-objectlock 1.0.0 jar Apache License, Version 2.0 
-org.bremersee bremersee-pagebuilder 1.0.0 jar Apache License, Version 2.0 
-org.bremersee bremersee-utils 1.0.1 jar Apache License, Version 2.0 
+org.bremersee bremersee-pagebuilder 1.0.3 jar Apache License, Version 2.0 
+org.bremersee bremersee-utils 1.0.2 jar Apache License, Version 2.0 
 org.hibernate.javax.persistence hibernate-jpa-2.1-api 1.0.0.Final jar Eclipse Public License (EPL), Version 1.0-Eclipse Distribution License (EDL), Version 1.0 
 org.ldaptive ldaptive 1.0.7 jar Apache 2-GNU Lesser General Public License 
 org.slf4j slf4j-api 1.7.11 jar MIT License 
@@ -225,5 +225,3 @@ junit junit 4.12 jar Eclipse Public License 1.0
 org.apache.logging.log4j log4j-api 2.1 jar The Apache Software License, Version 2.0 
 org.apache.logging.log4j log4j-core 2.1 jar The Apache Software License, Version 2.0 
 org.apache.logging.log4j log4j-slf4j-impl 2.1 jar The Apache Software License, Version 2.0 
-org.hamcrest hamcrest-library 1.3 jar New BSD License 
-org.mockito mockito-core 1.10.19 jar The MIT License 

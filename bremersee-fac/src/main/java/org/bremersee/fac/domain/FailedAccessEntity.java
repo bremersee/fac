@@ -16,6 +16,8 @@
 
 package org.bremersee.fac.domain;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -27,6 +29,10 @@ import javax.persistence.UniqueConstraint;
 import org.bremersee.fac.model.FailedAccess;
 
 /**
+ * <p>
+ * Entity to persist failed access entries.
+ * </p>
+ * 
  * @author Christian Bremer
  */
 @Entity
@@ -48,19 +54,29 @@ public class FailedAccessEntity extends AbstractFailedAccessEntity {
         super();
     }
 
+    /**
+     * Creates a {@link FailedAccessEntity} from the given {@link FailedAccess}
+     * instance.
+     * 
+     * @param failedAccess
+     *            the {@link FailedAccess} instance
+     */
     public FailedAccessEntity(FailedAccess failedAccess) {
         super(failedAccess);
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.bremersee.fac.domain.AbstractFailedAccessEntity#update(org.bremersee.
+     * fac.model.FailedAccess)
+     */
     @Override
     protected void update(FailedAccess failedAccess) {
         if (failedAccess != null) {
-            if (failedAccess.getId() != null) {
-                try {
-                    setId(Long.parseLong(failedAccess.getId().toString()));
-                } catch (Exception ignored) {
-                    // ignored
-                }
+            if (isNumber(failedAccess.getId())) {
+                setId(Long.parseLong(failedAccess.getId().toString()));
             }
             setCounter(failedAccess.getCounter());
             setCreationDate(failedAccess.getCreationDate());
@@ -70,11 +86,31 @@ public class FailedAccessEntity extends AbstractFailedAccessEntity {
         }
     }
 
+    private boolean isNumber(Serializable id) {
+        if (id == null) {
+            return false;
+        }
+        try {
+            Long.parseLong(id.toString());
+            return true;
+        } catch (Throwable t) {
+            return false;
+        }
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.bremersee.fac.domain.AbstractFailedAccessEntity#getId()
+     */
     @Override
     public Long getId() {
         return id;
     }
 
+    /**
+     * Sets the id.
+     */
     protected void setId(Long id) {
         this.id = id;
     }

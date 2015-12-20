@@ -195,13 +195,13 @@ public class FailedAccessDto implements FailedAccess, Cloneable {
     @Override
     public int compareTo(FailedAccess o) {
         String s1 = getResourceId() == null ? "" : getResourceId();
-        String s2 = o == null ? "" : (o.getResourceId() == null ? "" : o.getResourceId());
+        String s2 = o == null ? "" : o.getResourceId() == null ? "" : o.getResourceId();
         int c = s1.compareTo(s2);
         if (c != 0) {
             return c;
         }
         s1 = remoteHost == null ? "" : remoteHost;
-        s2 = o == null ? "" : (o.getRemoteHost() == null ? "" : o.getRemoteHost());
+        s2 = o == null ? "" : o.getRemoteHost() == null ? "" : o.getRemoteHost();
         c = s1.compareTo(s2);
         if (c != 0) {
             return c;
@@ -219,7 +219,7 @@ public class FailedAccessDto implements FailedAccess, Cloneable {
             }
         }
         s1 = id == null ? "" : id;
-        s2 = o == null ? "" : (o.getId() == null ? "" : o.getId().toString());
+        s2 = o == null ? "" : o.getId() == null ? "" : o.getId().toString();
         return s1.compareTo(s2);
     }
 

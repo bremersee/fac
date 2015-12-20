@@ -25,7 +25,7 @@ import java.util.Date;
  */
 public interface ResourceDescription extends Serializable, Cloneable, Comparable<ResourceDescription> {
     
-    final String UNKNOWN_RESOURCE = "_UNKNOWN_RESOURCE_";
+    String UNKNOWN_RESOURCE = "_UNKNOWN_RESOURCE_";
 
     String getResourceId();
     

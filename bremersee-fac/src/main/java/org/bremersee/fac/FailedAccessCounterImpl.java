@@ -51,8 +51,6 @@ import org.slf4j.LoggerFactory;
  */
 public class FailedAccessCounterImpl implements FailedAccessCounter {
     
-    //javax.interceptor.InterceptorBinding n;
-
     /**
      * The logger
      */
@@ -423,7 +421,7 @@ public class FailedAccessCounterImpl implements FailedAccessCounter {
     @Override
     public AccessResultDto accessSucceeded(String resourceId, String remoteHost, Long timeInMillis) {
 
-        Date modificationDate = (timeInMillis == null || timeInMillis <= 0) ? new Date() : new Date(timeInMillis);
+        Date modificationDate = timeInMillis == null || timeInMillis <= 0 ? new Date() : new Date(timeInMillis);
         FailedAccess entity = failedAccessDao.getByResourceIdAndRemoteHost(resourceId, remoteHost);
         boolean accessGranted = isAccessGranted(entity);
         if (accessGranted && entity != null) {
@@ -441,7 +439,7 @@ public class FailedAccessCounterImpl implements FailedAccessCounter {
     @Override
     public AccessResultDto accessFailed(String resourceId, String remoteHost, Long timeInMillis) {
 
-        Date modificationDate = (timeInMillis == null || timeInMillis <= 0) ? new Date() : new Date(timeInMillis);
+        Date modificationDate = timeInMillis == null || timeInMillis <= 0 ? new Date() : new Date(timeInMillis);
         FailedAccess entity = failedAccessDao.getByResourceIdAndRemoteHost(resourceId, remoteHost);
         FailedAccessDto dto;
         if (entity == null) {
@@ -451,7 +449,6 @@ public class FailedAccessCounterImpl implements FailedAccessCounter {
             dto.setModificationDate(modificationDate);
             dto.setRemoteHost(remoteHost);
             dto.setResourceId(resourceId);
-            ;
         } else {
             dto = new FailedAccessDto(entity);
             dto.setModificationDate(modificationDate);

@@ -141,13 +141,13 @@ public class ResourceDescriptionDto implements ResourceDescription {
     @Override
     public int compareTo(ResourceDescription o) {
         String s1 = getResourceId() == null ? "" : getResourceId();
-        String s2 = o == null ? "" : (o.getResourceId() == null ? "" : o.getResourceId());
+        String s2 = o == null ? "" : o.getResourceId() == null ? "" : o.getResourceId();
         int c = s1.compareTo(s2);
         if (c != 0) {
             return c;
         }
         s1 = remoteHost == null ? "" : remoteHost;
-        s2 = o == null ? "" : (o.getRemoteHost() == null ? "" : o.getRemoteHost());
+        s2 = o == null ? "" : o.getRemoteHost() == null ? "" : o.getRemoteHost();
         c = s1.compareTo(s2);
         if (c != 0) {
             return c;

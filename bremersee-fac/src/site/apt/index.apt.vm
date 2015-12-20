@@ -1,3 +1,131 @@
 Bremersee Failed Access Counter
 
   This project contains a small protection against brute-force-attacks.
+
+  A failed access counter stores failed access entries of a resource for a
+  remote host, that wants to access the resource. The resource may be, for
+  example, the login page. When the login has failed, this may be stored in the
+  failed access counter. When the counter of the failed access entry has
+  reached a threshold the login can be blocked for a while.
+  
+  The failed access counter needs a DAO (interface FailedAccessDao) to persist
+  the failed access entries. Currently there are three DAO implementations
+  available (see package org.bremersee.fac.domain):
+  
+  * FailedAccessInMemoryDao: Persists the entries in memory.
+  
+  * FailedAccessJpaDao: Persists the entries in a database.
+  
+  * FailedAccessLdapDao: Persists the entries in a LDAP server.
+  
+  
+* Configuration (in a Spring environment)
+
+  To configure a failed access counter just create a bean, set the DAO
+  and the properties that match your requirements:
+  
++-----------------------------------------------------------------------+
+@Configuration
+public class FacConfig {
+
+    @Bean
+    public FailedAccessCounter failedAccessCounter() {
+        FailedAccessCounterImpl fac = new FailedAccessCounterImpl();
+        
+        // set the properties (these are the default values):
+        fac.setFailedAccessCounterThreshold(5);
+        fac.setRemoveFailedAccessEntriesAfterMillis(1000L * 60L * 60L * 23L);
+        fac.setRemoveFailedEntriesInterval(1000L * 60L * 60L);
+        
+        // set the DAO:
+        fac.setFailedAccessDao(failedAccessDao());
+        return fac;
+    }
+    
+    @Bean
+    public FailedAccessDao failedAccessDao() {
+        FailedAccessInMemoryDao dao = new FailedAccessInMemoryDao();
+        return dao;
+    }
+}
++-----------------------------------------------------------------------+
+
+
+** Configuration of the FailedAccessJpaDao
+
+  The configuration of the the data source, entity manager etc. is skipped here.
+
++-----------------------------------------------------------------------+
+@Configuration
+@EntityScan(basePackages = {"org.bremersee.fac.domain"})
+public class FacConfig {
+
+    @Bean
+    public FailedAccessCounter failedAccessCounter() {
+        FailedAccessCounterImpl fac = new FailedAccessCounterImpl();
+        fac.setFailedAccessDao(failedAccessDao());
+        return fac;
+    }
+    
+    @Bean
+    public FailedAccessDao failedAccessDao() {
+        FailedAccessJpaDao dao = new FailedAccessJpaDao();
+        return dao;
+    }
+}
++-----------------------------------------------------------------------+
+
+
+** Configuration of the FailedAccessLdapDao
+
+  The FailedAccessLdapDao uses the ldaptive library ({{http://www.ldaptive.org/}})
+  to access the LDAP server. The configuration of the connection factory is 
+  skipped here. See the documentation at ldaptive.org.
+  
+  A LDAP schema of the failed access entries can be download
+  {{{http://bremersee.github.io/ldapschemas/bremersee-fac.schema}here}}.
+
++-----------------------------------------------------------------------+
+@Configuration
+public class FacConfig {
+
+    @Bean
+    public FailedAccessCounter failedAccessCounter() {
+        FailedAccessCounterImpl fac = new FailedAccessCounterImpl();
+        fac.setFailedAccessDao(failedAccessDao());
+        return fac;
+    }
+    
+    @Bean
+    public FailedAccessDao failedAccessDao() {
+        FailedAccessLdapDao dao = new FailedAccessLdapDao();
+        dao.setFailedAccessLdapMapper(failedAccessLdapMapper());
+        dao.setSearchRequest(searchRequest());
+        dao.setConnectionFactory(connectionFactory());
+        return dao;
+    }
+
+    @Bean
+    public FailedAccessLdapMapper failedAccessLdapMapper() {
+        FailedAccessDefaultLdapMapper mapper = new FailedAccessDefaultLdapMapper();
+        // configure the mapper if you don't use the bremersee-fac.schema
+        // or use your own implementation
+        return mapper;
+    }
+
+    @Bean
+    public SearchRequest searchRequest() {
+        SearchRequest searchRequest = new SearchRequest();
+        searchRequest.setBaseDn("ou=Access Failed Entries,dc=example,dc=org");
+        return searchRequest;
+    }
+    
+    @Bean
+    public ConnectionFactory connectionFactory() {
+        
+        DefaultConnectionFactory factory = new DefaultConnectionFactory();
+        // configure the connection factory
+        return factory;
+    }
+}
++-----------------------------------------------------------------------+

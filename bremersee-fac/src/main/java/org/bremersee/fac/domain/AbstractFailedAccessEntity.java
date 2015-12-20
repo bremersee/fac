@@ -116,13 +116,13 @@ public abstract class AbstractFailedAccessEntity implements FailedAccess {
     @Override
     public int compareTo(FailedAccess o) {
         String s1 = resourceId == null ? "" : resourceId;
-        String s2 = o == null ? "" : (o.getResourceId() == null ? "" : o.getResourceId());
+        String s2 = o == null ? "" : o.getResourceId() == null ? "" : o.getResourceId();
         int c = s1.compareTo(s2);
         if (c != 0) {
             return c;
         }
         s1 = remoteHost == null ? "" : remoteHost;
-        s2 = o == null ? "" : (o.getRemoteHost() == null ? "" : o.getRemoteHost());
+        s2 = o == null ? "" : o.getRemoteHost() == null ? "" : o.getRemoteHost();
         c = s1.compareTo(s2);
         if (c != 0) {
             return c;

@@ -28,7 +28,7 @@ import org.bremersee.pagebuilder.model.PageRequestDto;
 /**
  * <p>
  * A failed access counter stores failed access entries of a resource for a
- * remote host, that wants to access this resource. The resource may be, for
+ * remote host, that wants to access the resource. The resource may be, for
  * example, the login page. When the login has failed, this may be stored in the
  * failed access counter. When the counter of the failed access entry has
  * reached a threshold the login can be blocked for a while.<br/>

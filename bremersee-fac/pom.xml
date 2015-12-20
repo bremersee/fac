@@ -6,7 +6,7 @@
     <version>1.0.1-SNAPSHOT</version>
     <name>Bremersee Failed Access Counter</name>
     <description>Failed access counter project</description>
-    <url>http://bremersee.github.io/sms/</url>
+    <url>http://bremersee.github.io/fac/</url>
 
     <properties>
         <github.global.server>github</github.global.server>
@@ -54,13 +54,13 @@
     </licenses>
 
     <scm>
-        <url>https://github.com/bremersee/sms</url>
-        <connection>scm:git:git://github.com/bremersee/sms.git</connection>
-        <developerConnection>scm:git:git@github.com:bremersee/sms.git</developerConnection>
+        <url>https://github.com/bremersee/fac</url>
+        <connection>scm:git:git://github.com/bremersee/fac.git</connection>
+        <developerConnection>scm:git:git@github.com:bremersee/fac.git</developerConnection>
     </scm>
 
     <issueManagement>
-        <url>https://github.com/bremersee/sms/issues</url>
+        <url>https://github.com/bremersee/fac/issues</url>
         <system>GitHub Issues</system>
     </issueManagement>
 

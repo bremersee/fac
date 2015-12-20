@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bremersee</groupId>
     <artifactId>bremersee-fac</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.1</version>
     <name>Bremersee Failed Access Counter</name>
     <description>Failed access counter project</description>
     <url>http://bremersee.github.io/fac/</url>

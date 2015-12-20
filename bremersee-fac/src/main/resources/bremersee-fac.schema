@@ -1,0 +1,45 @@
+attributetype ( 1.3.6.1.4.1.44514.3.2.1.1 NAME 'facResourceId'
+	DESC 'Failed Access Counter ResourceId'
+	EQUALITY caseIgnoreMatch
+	ORDERING caseIgnoreOrderingMatch
+	SUBSTR caseExactSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256}
+	USAGE userApplications
+)
+attributetype ( 1.3.6.1.4.1.44514.3.2.1.2 NAME 'facRemoteHost'
+	DESC 'Failed Access Counter Remote Host'
+	EQUALITY caseIgnoreMatch
+	ORDERING caseIgnoreOrderingMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{1024}
+	USAGE userApplications
+)
+attributetype ( 1.3.6.1.4.1.44514.3.2.1.3 NAME 'facValue'
+	DESC 'Failed Access Counter Value'
+	EQUALITY integerMatch
+	ORDERING integerOrderingMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+	USAGE userApplications
+)
+attributetype ( 1.3.6.1.4.1.44514.3.2.1.4 NAME 'facCreationDate'
+	DESC 'Failed Access Creation Date'
+	EQUALITY caseIgnoreMatch
+	ORDERING caseIgnoreOrderingMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{32}
+	USAGE userApplications
+)
+attributetype ( 1.3.6.1.4.1.44514.3.2.1.5 NAME 'facModificationDate'
+	DESC 'Failed Access Counter Modification Date'
+	EQUALITY caseIgnoreMatch
+	ORDERING caseIgnoreOrderingMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{32}
+	USAGE userApplications
+)
+objectclass ( 1.3.6.1.4.1.44514.3.2.2.1 NAME 'facEntry'
+	DESC 'Failed Access Counter Entry'
+	SUP top
+	STRUCTURAL
+	MUST ( facCreationDate $ facModificationDate $ facRemoteHost $ facResourceId $ facValue $ uid )
+)

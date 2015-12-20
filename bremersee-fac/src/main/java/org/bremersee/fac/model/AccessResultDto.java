@@ -41,23 +41,11 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "accessResult")
-@XmlType(name = "accessResultType", propOrder = {
-        "accessGranted",
-        "timestamp", 
-        "accessDeniedUntil" 
-})
+@XmlType(name = "accessResultType", propOrder = { "accessGranted", "timestamp", "accessDeniedUntil" })
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(Include.ALWAYS)
-@JsonAutoDetect(fieldVisibility = Visibility.ANY, 
-    getterVisibility = Visibility.NONE, 
-    creatorVisibility = Visibility.NONE, 
-    isGetterVisibility = Visibility.NONE, 
-    setterVisibility = Visibility.NONE)
-@JsonPropertyOrder(value = {
-        "accessGranted",
-        "timestamp", 
-        "accessDeniedUntil" 
-})
+@JsonAutoDetect(fieldVisibility = Visibility.ANY, getterVisibility = Visibility.NONE, creatorVisibility = Visibility.NONE, isGetterVisibility = Visibility.NONE, setterVisibility = Visibility.NONE)
+@JsonPropertyOrder(value = { "accessGranted", "timestamp", "accessDeniedUntil" })
 public class AccessResultDto implements AccessResult, Cloneable {
 
     private static final long serialVersionUID = 1L;
@@ -198,6 +186,11 @@ public class AccessResultDto implements AccessResult, Cloneable {
         return new AccessResultDto(this);
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.bremersee.fac.model.AccessResult#isAccessGranted()
+     */
     @Override
     public boolean isAccessGranted() {
         return accessGranted;
@@ -213,6 +206,11 @@ public class AccessResultDto implements AccessResult, Cloneable {
         this.accessGranted = accessGranted;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.bremersee.fac.model.AccessResult#getTimestamp()
+     */
     @Override
     public Long getTimestamp() {
         return timestamp;
@@ -228,6 +226,11 @@ public class AccessResultDto implements AccessResult, Cloneable {
         this.timestamp = timestamp;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.bremersee.fac.model.AccessResult#getAccessDeniedUntil()
+     */
     @Override
     public Date getAccessDeniedUntil() {
         return accessDeniedUntil;

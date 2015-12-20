@@ -21,16 +21,27 @@ import java.util.Date;
 
 /**
  * @author Christian Bremer
- *
  */
 public interface ResourceDescription extends Serializable, Cloneable, Comparable<ResourceDescription> {
-    
+
+    /**
+     * Unknown resource ID.
+     */
     String UNKNOWN_RESOURCE = "_UNKNOWN_RESOURCE_";
 
+    /**
+     * Returns the resource ID.
+     */
     String getResourceId();
-    
+
+    /**
+     * Returns the remote host.
+     */
     String getRemoteHost();
-    
+
+    /**
+     * Returns the access time (can be {@code null}).
+     */
     Date getAccessTime();
 
 }

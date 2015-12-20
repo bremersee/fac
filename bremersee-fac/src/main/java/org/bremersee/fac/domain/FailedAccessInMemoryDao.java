@@ -38,6 +38,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * <p>
+ * This DAO implementation uses a {@link ConcurrentHashMap} to store the failed
+ * access entries.
+ * </p>
+ * 
  * @author Christian Bremer
  */
 @Named("failedAccessInMemoryDao")
@@ -74,6 +79,13 @@ public class FailedAccessInMemoryDao implements FailedAccessDao {
         return resourceId + "@" + remoteHost;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.bremersee.fac.domain.FailedAccessDao#save(org.bremersee.fac.model.
+     * FailedAccess)
+     */
     @Override
     public FailedAccessDto save(FailedAccess failedAccess) {
 
@@ -90,11 +102,24 @@ public class FailedAccessInMemoryDao implements FailedAccessDao {
         return entity;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.bremersee.fac.domain.FailedAccessDao#getById(java.io.Serializable)
+     */
     @Override
     public FailedAccessDto getById(Serializable id) {
         return map.get(id);
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.bremersee.fac.domain.FailedAccessDao#getByResourceIdAndRemoteHost(
+     * java.lang.String, java.lang.String)
+     */
     @Override
     public FailedAccessDto getByResourceIdAndRemoteHost(String resourceId, String remoteHost) {
         return map.get(createKey(resourceId, remoteHost));
@@ -115,6 +140,13 @@ public class FailedAccessInMemoryDao implements FailedAccessDao {
         return map.remove(id) != null;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.bremersee.fac.domain.FailedAccessDao#removeByResourceIdAndRemoteHost(
+     * java.lang.String, java.lang.String)
+     */
     @Override
     public boolean removeByResourceIdAndRemoteHost(String resourceId, String remoteHost) {
 
@@ -131,6 +163,13 @@ public class FailedAccessInMemoryDao implements FailedAccessDao {
         return Integer.valueOf(find(searchValue).size()).longValue();
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.bremersee.fac.domain.FailedAccessDao#find(java.lang.String,
+     * java.lang.Integer, java.lang.Integer,
+     * org.bremersee.comparator.model.ComparatorItem)
+     */
     @Override
     public List<? extends FailedAccessDto> find(String searchValue, Integer firstResult, Integer maxResults,
             ComparatorItem comparatorItem) {

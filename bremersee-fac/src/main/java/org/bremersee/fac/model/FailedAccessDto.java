@@ -41,29 +41,12 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "failedAccess")
-@XmlType(name = "failedAccessType", propOrder = {
-        "id",
-        "resourceId",
-        "remoteHost",
-        "counter",
-        "creationDate",
-        "modificationDate"
-})
+@XmlType(name = "failedAccessType", propOrder = { "id", "resourceId", "remoteHost", "counter", "creationDate",
+        "modificationDate" })
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(Include.ALWAYS)
-@JsonAutoDetect(fieldVisibility = Visibility.ANY, 
-    getterVisibility = Visibility.NONE, 
-    creatorVisibility = Visibility.NONE, 
-    isGetterVisibility = Visibility.NONE, 
-    setterVisibility = Visibility.NONE)
-@JsonPropertyOrder(value = {
-        "id",
-        "resourceId",
-        "remoteHost",
-        "counter",
-        "creationDate",
-        "modificationDate"
-})
+@JsonAutoDetect(fieldVisibility = Visibility.ANY, getterVisibility = Visibility.NONE, creatorVisibility = Visibility.NONE, isGetterVisibility = Visibility.NONE, setterVisibility = Visibility.NONE)
+@JsonPropertyOrder(value = { "id", "resourceId", "remoteHost", "counter", "creationDate", "modificationDate" })
 public class FailedAccessDto implements FailedAccess, Cloneable {
 
     private static final long serialVersionUID = 1L;
@@ -240,6 +223,11 @@ public class FailedAccessDto implements FailedAccess, Cloneable {
         }
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.bremersee.fac.model.FailedAccess#getId()
+     */
     @Override
     public String getId() {
         return id;
@@ -255,6 +243,11 @@ public class FailedAccessDto implements FailedAccess, Cloneable {
         this.id = id;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.bremersee.fac.model.FailedAccess#getResourceId()
+     */
     @Override
     public String getResourceId() {
         if (resourceId == null || resourceId.trim().length() == 0) {
@@ -273,6 +266,11 @@ public class FailedAccessDto implements FailedAccess, Cloneable {
         this.resourceId = resourceId;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.bremersee.fac.model.FailedAccess#getRemoteHost()
+     */
     @Override
     public String getRemoteHost() {
         return remoteHost;
@@ -288,6 +286,11 @@ public class FailedAccessDto implements FailedAccess, Cloneable {
         this.remoteHost = remoteHost;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.bremersee.fac.model.FailedAccess#getCounter()
+     */
     @Override
     public int getCounter() {
         return counter;
@@ -303,6 +306,11 @@ public class FailedAccessDto implements FailedAccess, Cloneable {
         this.counter = failedAccessCounter;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.bremersee.fac.model.FailedAccess#getCreationDate()
+     */
     @Override
     public Date getCreationDate() {
         return creationDate;
@@ -318,6 +326,11 @@ public class FailedAccessDto implements FailedAccess, Cloneable {
         this.creationDate = creationDate;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.bremersee.fac.model.FailedAccess#getModificationDate()
+     */
     @Override
     public Date getModificationDate() {
         return modificationDate;

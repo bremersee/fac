@@ -36,8 +36,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * <p>
+ * Default implementation of a {@link FailedAccessLdapMapper}.
+ * </p>
+ * 
  * @author Christian Bremer
- *
  */
 @Named("defaultLdapFailedAccessMapper")
 public class FailedAccessDefaultLdapMapper implements FailedAccessLdapMapper {
@@ -79,6 +82,12 @@ public class FailedAccessDefaultLdapMapper implements FailedAccessLdapMapper {
         log.info(getClass().getSimpleName() + " successfully initialized.");
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.bremersee.fac.domain.FailedAccessLdapMapper#getSimpleDateFormat()
+     */
     @Override
     public SimpleDateFormat getSimpleDateFormat() {
         return simpleDateFormat;
@@ -92,6 +101,12 @@ public class FailedAccessDefaultLdapMapper implements FailedAccessLdapMapper {
         }
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.bremersee.fac.domain.FailedAccessLdapMapper#getResourceIdAttribute()
+     */
     @Override
     public String getResourceIdAttribute() {
         return resourceIdAttribute;
@@ -101,6 +116,12 @@ public class FailedAccessDefaultLdapMapper implements FailedAccessLdapMapper {
         this.resourceIdAttribute = resourceIdAttribute;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.bremersee.fac.domain.FailedAccessLdapMapper#getRemoteHostAttribute()
+     */
     @Override
     public String getRemoteHostAttribute() {
         return remoteHostAttribute;
@@ -126,6 +147,12 @@ public class FailedAccessDefaultLdapMapper implements FailedAccessLdapMapper {
         this.creationDateAttribute = creationDateAttribute;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.bremersee.fac.domain.FailedAccessLdapMapper#
+     * getModificationDateAttribute()
+     */
     @Override
     public String getModificationDateAttribute() {
         return modificationDateAttribute;
@@ -135,6 +162,11 @@ public class FailedAccessDefaultLdapMapper implements FailedAccessLdapMapper {
         this.modificationDateAttribute = modificationDateAttribute;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.bremersee.fac.domain.FailedAccessLdapMapper#getObjectClass()
+     */
     @Override
     public String getObjectClass() {
         return objectClass;
@@ -144,6 +176,11 @@ public class FailedAccessDefaultLdapMapper implements FailedAccessLdapMapper {
         this.objectClass = objectClass;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.bremersee.fac.domain.FailedAccessLdapMapper#getIdAttribute()
+     */
     @Override
     public String getIdAttribute() {
         return idAttribute;
@@ -153,6 +190,12 @@ public class FailedAccessDefaultLdapMapper implements FailedAccessLdapMapper {
         this.idAttribute = idAttribute;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.bremersee.fac.domain.FailedAccessLdapMapper#
+     * mapToFailedAccessLdapEntity(org.ldaptive.LdapEntry)
+     */
     @Override
     public FailedAccessDto mapToFailedAccessLdapEntity(LdapEntry entry) {
 
@@ -179,6 +222,13 @@ public class FailedAccessDefaultLdapMapper implements FailedAccessLdapMapper {
         return entity;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.bremersee.fac.domain.FailedAccessLdapMapper#
+     * mapFromFailedAccessLdapEntity(java.lang.String,
+     * org.bremersee.fac.model.FailedAccess)
+     */
     @Override
     public LdapEntry mapFromFailedAccessLdapEntity(String dn, FailedAccess failedAccess) {
 
@@ -212,6 +262,13 @@ public class FailedAccessDefaultLdapMapper implements FailedAccessLdapMapper {
         return new LdapEntry(newDn, attrs);
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.bremersee.fac.domain.FailedAccessLdapMapper#
+     * getDnForFailedAccessLdapEntity(java.lang.String,
+     * org.bremersee.fac.model.FailedAccess)
+     */
     @Override
     public String getDnForFailedAccessLdapEntity(final String parentDn, final FailedAccess entity) {
         return String.format("%s=%s,%s", this.idAttribute, entity.getId(), parentDn);

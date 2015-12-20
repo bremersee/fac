@@ -37,35 +37,23 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "resourceDescription")
-@XmlType(name = "resourceDescriptionType", propOrder = {
-        "resourceId",
-        "remoteHost",
-        "accessTime"
-})
+@XmlType(name = "resourceDescriptionType", propOrder = { "resourceId", "remoteHost", "accessTime" })
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(Include.ALWAYS)
-@JsonAutoDetect(fieldVisibility = Visibility.ANY, 
-    getterVisibility = Visibility.NONE, 
-    creatorVisibility = Visibility.NONE, 
-    isGetterVisibility = Visibility.NONE, 
-    setterVisibility = Visibility.NONE)
-@JsonPropertyOrder(value = {
-        "resourceId",
-        "remoteHost",
-        "accessTime"
-})
+@JsonAutoDetect(fieldVisibility = Visibility.ANY, getterVisibility = Visibility.NONE, creatorVisibility = Visibility.NONE, isGetterVisibility = Visibility.NONE, setterVisibility = Visibility.NONE)
+@JsonPropertyOrder(value = { "resourceId", "remoteHost", "accessTime" })
 public class ResourceDescriptionDto implements ResourceDescription {
 
     private static final long serialVersionUID = 1L;
-    
+
     @XmlAttribute(name = "resourceId", required = true)
     @JsonProperty(value = "resourceId", required = true)
     private String resourceId = UNKNOWN_RESOURCE;
-    
+
     @XmlAttribute(name = "remoteHost", required = true)
     @JsonProperty(value = "remoteHost", required = true)
     private String remoteHost;
-    
+
     @XmlAttribute(name = "accessTimeInMillis", required = false)
     @JsonProperty(value = "accessTimeInMillis", required = false)
     private Date accessTime;
@@ -90,12 +78,22 @@ public class ResourceDescriptionDto implements ResourceDescription {
         this.accessTime = accessTime;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#toString()
+     */
     @Override
     public String toString() {
-        return "ResourceDescriptionDto [resourceId=" + resourceId + ", remoteHost=" + remoteHost
-                + ", accessTime=" + accessTime + "]";
+        return "ResourceDescriptionDto [resourceId=" + resourceId + ", remoteHost=" + remoteHost + ", accessTime="
+                + accessTime + "]";
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#hashCode()
+     */
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -106,6 +104,11 @@ public class ResourceDescriptionDto implements ResourceDescription {
         return result;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -133,11 +136,21 @@ public class ResourceDescriptionDto implements ResourceDescription {
         return true;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#clone()
+     */
     @Override
     public ResourceDescriptionDto clone() {
         return new ResourceDescriptionDto(this);
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Comparable#compareTo(java.lang.Object)
+     */
     @Override
     public int compareTo(ResourceDescription o) {
         String s1 = getResourceId() == null ? "" : getResourceId();
@@ -158,7 +171,9 @@ public class ResourceDescriptionDto implements ResourceDescription {
         return c;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.bremersee.fac.model.ResourceDescription#getResourceId()
      */
     @Override
@@ -173,7 +188,9 @@ public class ResourceDescriptionDto implements ResourceDescription {
         this.resourceId = resourceId;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.bremersee.fac.model.ResourceDescription#getRemoteHost()
      */
     @Override
@@ -185,6 +202,11 @@ public class ResourceDescriptionDto implements ResourceDescription {
         this.remoteHost = remoteHost;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.bremersee.fac.model.ResourceDescription#getAccessTime()
+     */
     @Override
     public Date getAccessTime() {
         return accessTime;

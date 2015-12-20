@@ -60,7 +60,6 @@ import org.slf4j.LoggerFactory;
 
 /**
  * @author Christian Bremer
- *
  */
 @Named("failedAccessLdapDao")
 public class FailedAccessLdapDao implements FailedAccessDao {
@@ -354,6 +353,13 @@ public class FailedAccessLdapDao implements FailedAccessDao {
         }
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.bremersee.fac.domain.FailedAccessDao#save(org.bremersee.fac.model.
+     * FailedAccess)
+     */
     @Override
     public FailedAccessDto save(FailedAccess failedAccess) {
 
@@ -385,6 +391,12 @@ public class FailedAccessLdapDao implements FailedAccessDao {
         }
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.bremersee.fac.domain.FailedAccessDao#getById(java.io.Serializable)
+     */
     @Override
     public FailedAccessDto getById(Serializable _id) {
 
@@ -412,11 +424,24 @@ public class FailedAccessLdapDao implements FailedAccessDao {
         }
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.bremersee.fac.domain.FailedAccessDao#getByResourceIdAndRemoteHost(
+     * java.lang.String, java.lang.String)
+     */
     @Override
     public FailedAccessDto getByResourceIdAndRemoteHost(String resourceId, String remoteHost) {
         return getById(createUid(resourceId, remoteHost));
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.bremersee.fac.domain.FailedAccessDao#removeById(java.io.Serializable)
+     */
     @Override
     public boolean removeById(Serializable _id) {
 
@@ -448,16 +473,35 @@ public class FailedAccessLdapDao implements FailedAccessDao {
         }
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.bremersee.fac.domain.FailedAccessDao#removeByResourceIdAndRemoteHost(
+     * java.lang.String, java.lang.String)
+     */
     @Override
     public boolean removeByResourceIdAndRemoteHost(String resourceId, String remoteHost) {
         return removeById(createUid(resourceId, remoteHost));
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.bremersee.fac.domain.FailedAccessDao#count(java.lang.String)
+     */
     @Override
     public long count(String searchValue) {
         return Integer.valueOf(find(searchValue).size()).longValue();
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.bremersee.fac.domain.FailedAccessDao#find(java.lang.String,
+     * java.lang.Integer, java.lang.Integer,
+     * org.bremersee.comparator.model.ComparatorItem)
+     */
     @Override
     public List<? extends FailedAccessDto> find(String searchValue, Integer firstResult, Integer maxResults,
             ComparatorItem comparatorItem) {
@@ -543,6 +587,11 @@ public class FailedAccessLdapDao implements FailedAccessDao {
         return list;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.bremersee.fac.domain.FailedAccessDao#findObsolete(long)
+     */
     @Override
     public List<? extends FailedAccessDto> findObsolete(long removeFailedAccessEntriesAfterMillis) {
 

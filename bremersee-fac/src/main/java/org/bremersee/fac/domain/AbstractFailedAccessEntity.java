@@ -56,12 +56,20 @@ public abstract class AbstractFailedAccessEntity implements FailedAccess {
         this.modificationDate = ct;
     }
 
+    /**
+     * Creates a failed access entry with the values of the given one.
+     * 
+     * @param failedAccess
+     *            the failed access entry source
+     */
     public AbstractFailedAccessEntity(FailedAccess failedAccess) {
         this();
         update(failedAccess);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see java.lang.Object#toString()
      */
     @Override
@@ -71,7 +79,9 @@ public abstract class AbstractFailedAccessEntity implements FailedAccess {
                 + ", modificationDate=" + getModificationDate() + "]";
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see java.lang.Object#hashCode()
      */
     @Override
@@ -83,7 +93,9 @@ public abstract class AbstractFailedAccessEntity implements FailedAccess {
         return result;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
@@ -142,6 +154,12 @@ public abstract class AbstractFailedAccessEntity implements FailedAccess {
         return 0;
     }
 
+    /**
+     * Updates this failed access entry with the given one.
+     * 
+     * @param failedAccess
+     *            the update source
+     */
     protected abstract void update(FailedAccess failedAccess);
 
     /*
@@ -162,6 +180,9 @@ public abstract class AbstractFailedAccessEntity implements FailedAccess {
         return new Date(creationDate);
     }
 
+    /**
+     * Sets the the creation date.
+     */
     public void setCreationDate(Date date) {
         if (date != null) {
             this.creationDate = date.getTime();
@@ -178,6 +199,9 @@ public abstract class AbstractFailedAccessEntity implements FailedAccess {
         return new Date(modificationDate);
     }
 
+    /**
+     * Sets the the modification date.
+     */
     public void setModificationDate(Date date) {
         if (date != null) {
             this.modificationDate = date.getTime();
@@ -194,6 +218,9 @@ public abstract class AbstractFailedAccessEntity implements FailedAccess {
         return resourceId;
     }
 
+    /**
+     * Sets the the resource identifier.
+     */
     public void setResourceId(String resourceId) {
         this.resourceId = resourceId;
     }
@@ -208,6 +235,9 @@ public abstract class AbstractFailedAccessEntity implements FailedAccess {
         return remoteHost;
     }
 
+    /**
+     * Sets the remote host.
+     */
     public void setRemoteHost(String remoteHost) {
         this.remoteHost = remoteHost;
     }
@@ -222,6 +252,9 @@ public abstract class AbstractFailedAccessEntity implements FailedAccess {
         return counter;
     }
 
+    /**
+     * Sets the counter.
+     */
     public void setCounter(int counter) {
         this.counter = counter;
     }

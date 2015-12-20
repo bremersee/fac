@@ -104,6 +104,13 @@ public class FailedAccessJpaDao implements FailedAccessDao {
         }
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.bremersee.fac.domain.FailedAccessDao#save(org.bremersee.fac.model.
+     * FailedAccess)
+     */
     @Transactional
     @Override
     public AbstractFailedAccessEntity save(FailedAccess failedAccess) {
@@ -120,6 +127,12 @@ public class FailedAccessJpaDao implements FailedAccessDao {
         return entity;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.bremersee.fac.domain.FailedAccessDao#getById(java.io.Serializable)
+     */
     @Transactional
     @Override
     public AbstractFailedAccessEntity getById(Serializable _id) {
@@ -153,6 +166,13 @@ public class FailedAccessJpaDao implements FailedAccessDao {
         }
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.bremersee.fac.domain.FailedAccessDao#getByResourceIdAndRemoteHost(
+     * java.lang.String, java.lang.String)
+     */
     @Transactional
     @Override
     public AbstractFailedAccessEntity getByResourceIdAndRemoteHost(String resourceId, String remoteHost) {
@@ -190,6 +210,12 @@ public class FailedAccessJpaDao implements FailedAccessDao {
         }
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.bremersee.fac.domain.FailedAccessDao#removeById(java.io.Serializable)
+     */
     @Transactional
     @Override
     public boolean removeById(Serializable _id) {
@@ -214,6 +240,13 @@ public class FailedAccessJpaDao implements FailedAccessDao {
         return false;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.bremersee.fac.domain.FailedAccessDao#removeByResourceIdAndRemoteHost(
+     * java.lang.String, java.lang.String)
+     */
     @Transactional
     @Override
     public boolean removeByResourceIdAndRemoteHost(String resourceId, String remoteHost) {
@@ -239,6 +272,11 @@ public class FailedAccessJpaDao implements FailedAccessDao {
         return false;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.bremersee.fac.domain.FailedAccessDao#count(java.lang.String)
+     */
     @Transactional
     @Override
     public long count(String searchValue) {
@@ -271,6 +309,13 @@ public class FailedAccessJpaDao implements FailedAccessDao {
         return size;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.bremersee.fac.domain.FailedAccessDao#find(java.lang.String,
+     * java.lang.Integer, java.lang.Integer,
+     * org.bremersee.comparator.model.ComparatorItem)
+     */
     @Transactional
     @Override
     public List<? extends AbstractFailedAccessEntity> find(String searchValue, Integer firstResult, Integer maxResults,
@@ -372,6 +417,11 @@ public class FailedAccessJpaDao implements FailedAccessDao {
         return queryBuilder;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.bremersee.fac.domain.FailedAccessDao#findObsolete(long)
+     */
     @Transactional
     @Override
     public List<? extends AbstractFailedAccessEntity> findObsolete(long removeFailedAccessEntriesAfterMillis) {

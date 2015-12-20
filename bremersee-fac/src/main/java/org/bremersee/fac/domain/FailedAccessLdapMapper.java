@@ -27,10 +27,29 @@ import org.ldaptive.LdapEntry;
  */
 public interface FailedAccessLdapMapper {
 
+    /**
+     * Transforms a LDAP entry into a failed access entry.
+     * 
+     * @param entry
+     *            the LDAP entry
+     * @return the failed access entry
+     */
     FailedAccessDto mapToFailedAccessLdapEntity(LdapEntry entry);
 
+    /**
+     * Transforms a failed access entry into a LDAP entry.
+     * 
+     * @param dn
+     *            the distinguished name
+     * @param failedAccess
+     *            the failed access antry
+     * @return the LDAP entry
+     */
     LdapEntry mapFromFailedAccessLdapEntity(String dn, FailedAccess failedAccess);
 
+    /**
+     * Returns the date formatter to transform date objects.
+     */
     SimpleDateFormat getSimpleDateFormat();
 
     /**
@@ -60,10 +79,25 @@ public interface FailedAccessLdapMapper {
      */
     String getIdAttribute();
 
+    /**
+     * Gets the name of the LDAP attribute that stores the modification date.
+     * 
+     * @return the name of the LDAP attribute that stores the modification date
+     */
     String getModificationDateAttribute();
 
+    /**
+     * Gets the name of the LDAP attribute that stores the resource ID.
+     * 
+     * @return the name of the LDAP attribute that stores the resource ID
+     */
     String getResourceIdAttribute();
 
+    /**
+     * Gets the name of the LDAP attribute that stores the remote host.
+     * 
+     * @return the name of the LDAP attribute that stores the remote host
+     */
     String getRemoteHostAttribute();
 
 }

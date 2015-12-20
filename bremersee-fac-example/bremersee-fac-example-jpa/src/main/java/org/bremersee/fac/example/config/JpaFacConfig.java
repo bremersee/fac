@@ -23,14 +23,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @author Christian Bremer <a href="mailto:christian@bremersee.org">christian@bremersee.org</a>
- *
+ * @author Christian Bremer
  */
 @Configuration
-@EntityScan(basePackages = {"org.bremersee.fac.domain"})
+@EntityScan(basePackages = { "org.bremersee.fac.domain" })
 public class JpaFacConfig extends AbstractFacConfig {
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.bremersee.fac.example.config.AbstractFacConfig#failedAccessDao()
      */
     @Bean

@@ -20,12 +20,11 @@ import org.ldaptive.pool.PoolConfig;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * @author Christian Bremer <a href="mailto:christian@bremersee.org">christian@bremersee.org</a>
- *
+ * @author Christian Bremer
  */
 @ConfigurationProperties(prefix = "bremersee.ldaptive")
 public class LdaptiveProperties {
-    
+
     /** URL to the LDAP(s). */
     private String ldapUrl = "ldap://localhost:1389";
 
@@ -41,8 +40,8 @@ public class LdaptiveProperties {
     /** Connect to LDAP using startTLS. */
     private boolean useStartTLS;
 
-    
-    // X509CredentialConfig, but there may be more to create a org.ldaptive.ssl.CredentialConfig
+    // X509CredentialConfig, but there may be more to create a
+    // org.ldaptive.ssl.CredentialConfig
     /** Name of the trust certificates to use for the SSL connection. */
     private String trustCertificates;
     /** Name of the authentication certificate to use for the SSL connection. */
@@ -50,25 +49,25 @@ public class LdaptiveProperties {
     /** Name of the key to use for the SSL connection. */
     private String authenticationKey;
 
-
     // BindConnectionInitializer, sasl is not supported at the moment
     /** DN to bind as before performing operations. */
     private String bindDn;
     /** Credential for the bind DN. */
     private String bindCredential;
-    //    /** Configuration for bind SASL authentication. */
-    //    private SaslConfig bindSaslConfig;
+    // /** Configuration for bind SASL authentication. */
+    // private SaslConfig bindSaslConfig;
 
-    
     private boolean pooled = false;
-            
+
     /** Minimum pool size. */
     private int minPoolSize = PoolConfig.DEFAULT_MIN_POOL_SIZE;
 
     /** Maximum pool size. */
     private int maxPoolSize = PoolConfig.DEFAULT_MAX_POOL_SIZE;
 
-    /** Whether the ldap object should be validated when returned to the pool. */
+    /**
+     * Whether the ldap object should be validated when returned to the pool.
+     */
     private boolean validateOnCheckIn = PoolConfig.DEFAULT_VALIDATE_ON_CHECKIN;
 
     /** Whether the ldap object should be validated when given from the pool. */
@@ -80,18 +79,15 @@ public class LdaptiveProperties {
     /** Time in seconds that the validate pool should repeat. */
     private long validatePeriod = PoolConfig.DEFAULT_VALIDATE_PERIOD;
 
-    
     /** Prune period in seconds. */
     private long prunePeriod = 300L;
 
     /** Idle time in seconds. */
     private long idleTime = 600L;
 
-
     /** Time in milliseconds to wait for an available connection. */
     private long blockWaitTime = 10000L;
-    
-    
+
     public String getLdapUrl() {
         return ldapUrl;
     }

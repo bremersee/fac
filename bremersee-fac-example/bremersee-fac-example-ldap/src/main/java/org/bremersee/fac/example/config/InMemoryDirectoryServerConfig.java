@@ -41,74 +41,75 @@ import com.unboundid.util.ssl.SSLUtil;
 import com.unboundid.util.ssl.TrustStoreTrustManager;
 
 /**
- * @author Christian Bremer <a href="mailto:christian@bremersee.org">christian@bremersee.org</a>
+ * @author Christian Bremer
  *
  */
 @Configuration
-@ConditionalOnProperty(prefix = "bremersee.unboundid.ldap.server", name="embedded", havingValue = "true", matchIfMissing = false)
+@ConditionalOnProperty(prefix = "bremersee.unboundid.ldap.server", name = "embedded", havingValue = "true", matchIfMissing = false)
 @EnableConfigurationProperties(InMemoryDirectoryServerProperties.class)
 public class InMemoryDirectoryServerConfig {
-    
+
     private static final String CLASSPATH_PREFIX = "classpath:";
-    
+
     @Autowired
     private InMemoryDirectoryServerProperties properties;
 
     @Bean(name = "inMemoryDirectoryServerBean", destroyMethod = "shutdown")
     public InMemoryDirectoryServerBean inMemoryDirectoryServerBean() {
-        
+
         try {
-            final com.unboundid.ldap.listener.InMemoryDirectoryServerConfig config =
-                    new com.unboundid.ldap.listener.InMemoryDirectoryServerConfig(properties.getRootDn());
-            
+            final com.unboundid.ldap.listener.InMemoryDirectoryServerConfig config = new com.unboundid.ldap.listener.InMemoryDirectoryServerConfig(
+                    properties.getRootDn());
+
             if (StringUtils.hasText(properties.getManagerDn())) {
                 config.addAdditionalBindCredentials(properties.getManagerDn(), properties.getManagerPassword());
             }
 
-            final InetAddress ldapAddress = StringUtils.hasText(properties.getLdapAddress()) ? InetAddress.getByName(properties.getLdapAddress()) : null;
-            final InetAddress ldapsAddress = StringUtils.hasText(properties.getLdapsAddress()) ? InetAddress.getByName(properties.getLdapsAddress()) : null;
-            
+            final InetAddress ldapAddress = StringUtils.hasText(properties.getLdapAddress())
+                    ? InetAddress.getByName(properties.getLdapAddress()) : null;
+            final InetAddress ldapsAddress = StringUtils.hasText(properties.getLdapsAddress())
+                    ? InetAddress.getByName(properties.getLdapsAddress()) : null;
+
             KeyManager keyManager = null;
             TrustManager trustManager = null;
-            
+
             if (StringUtils.hasText(properties.getKeyStoreLocation())) {
-                
+
                 String location = properties.getKeyStoreLocation();
                 if (location.toLowerCase().startsWith(CLASSPATH_PREFIX)) {
                     final File keyStoreFile = File.createTempFile("ldapServerKey", "Store");
                     keyStoreFile.deleteOnExit();
                     try (final OutputStream outputStream = new FileOutputStream(keyStoreFile)) {
-                        IOUtils.copy(new ClassPathResource(location.substring(CLASSPATH_PREFIX.length())).getInputStream(), outputStream);
+                        IOUtils.copy(
+                                new ClassPathResource(location.substring(CLASSPATH_PREFIX.length())).getInputStream(),
+                                outputStream);
                     }
                     location = keyStoreFile.getCanonicalPath();
                 }
-                final char[] password = StringUtils.hasText(properties.getKeyStorePassword()) ? properties.getKeyStorePassword().toCharArray() : null;
-                keyManager = new KeyStoreKeyManager(
-                        location, 
-                        password,
-                        properties.getKeyStoreFormat(),
+                final char[] password = StringUtils.hasText(properties.getKeyStorePassword())
+                        ? properties.getKeyStorePassword().toCharArray() : null;
+                keyManager = new KeyStoreKeyManager(location, password, properties.getKeyStoreFormat(),
                         properties.getKeyAlias());
             }
-            
+
             if (StringUtils.hasText(properties.getTrustStoreLocation())) {
-                
+
                 String location = properties.getTrustStoreLocation();
                 if (location.toLowerCase().startsWith(CLASSPATH_PREFIX)) {
                     final File trustStoreFile = File.createTempFile("ldapServerTrust", "Store");
                     trustStoreFile.deleteOnExit();
                     try (final OutputStream outputStream = new FileOutputStream(trustStoreFile)) {
-                        IOUtils.copy(new ClassPathResource(location.substring(CLASSPATH_PREFIX.length())).getInputStream(), outputStream);
+                        IOUtils.copy(
+                                new ClassPathResource(location.substring(CLASSPATH_PREFIX.length())).getInputStream(),
+                                outputStream);
                     }
                     location = trustStoreFile.getCanonicalPath();
                 }
-                final char[] password = StringUtils.hasText(properties.getTrustStorePassword()) ? properties.getTrustStorePassword().toCharArray() : null;
-                trustManager = new TrustStoreTrustManager(
-                        location, 
-                        password, 
-                        properties.getTrustStoreFormat(), 
-                        true);
+                final char[] password = StringUtils.hasText(properties.getTrustStorePassword())
+                        ? properties.getTrustStorePassword().toCharArray() : null;
+                trustManager = new TrustStoreTrustManager(location, password, properties.getTrustStoreFormat(), true);
             }
-            
+
             if (keyManager == null || trustManager == null) {
                 final File keyStoreFile = File.createTempFile("ldapServerKeyStore", ".jks");
                 keyStoreFile.deleteOnExit();
@@ -125,7 +126,8 @@ public class InMemoryDirectoryServerConfig {
 
             final SSLUtil serverSSLUtil = new SSLUtil(keyManager, trustManager);
             final SSLUtil clientSSLUtil = new SSLUtil(trustManager);
-            
+
+            //@formatter:off
             config.setListenerConfigs(
                     InMemoryListenerConfig.createLDAPConfig(properties.getLdapListenerName(), // Listener name
                             ldapAddress, // Listen address. (null = listen on all interfaces)
@@ -136,6 +138,7 @@ public class InMemoryDirectoryServerConfig {
                             properties.getLdapsPort(), // Listen port (0 = automatically choose an available port)
                             serverSSLUtil.createSSLServerSocketFactory(), // Server factory
                             clientSSLUtil.createSSLSocketFactory())); // Client factory
+            //@formatter:on
 
             config.setEnforceSingleStructuralObjectClass(false);
             config.setEnforceAttributeSyntaxCompliance(true);
@@ -147,7 +150,8 @@ public class InMemoryDirectoryServerConfig {
                         final File schemaFile = File.createTempFile("ldapServer", ".schema");
                         schemaFile.deleteOnExit();
                         try (final OutputStream outputStream = new FileOutputStream(schemaFile)) {
-                            IOUtils.copy(new ClassPathResource(schemaLocations[i].substring(CLASSPATH_PREFIX.length())).getInputStream(), outputStream);
+                            IOUtils.copy(new ClassPathResource(schemaLocations[i].substring(CLASSPATH_PREFIX.length()))
+                                    .getInputStream(), outputStream);
                         }
                         schemaLocations[i] = schemaFile.getCanonicalPath();
                     }
@@ -158,7 +162,6 @@ public class InMemoryDirectoryServerConfig {
 
             InMemoryDirectoryServer directoryServer = new InMemoryDirectoryServer(config);
 
-            
             String[] ldifLocations = properties.getLdifLocationsAsArray();
             if (ldifLocations.length > 0) {
                 for (int i = 0; i < ldifLocations.length; i++) {
@@ -167,44 +170,45 @@ public class InMemoryDirectoryServerConfig {
                         final File ldifFile = File.createTempFile("ldapServer", ".ldif");
                         ldifFile.deleteOnExit();
                         try (final OutputStream outputStream = new FileOutputStream(ldifFile)) {
-                            IOUtils.copy(new ClassPathResource(location.substring(CLASSPATH_PREFIX.length())).getInputStream(), outputStream);
+                            IOUtils.copy(new ClassPathResource(location.substring(CLASSPATH_PREFIX.length()))
+                                    .getInputStream(), outputStream);
                         }
                         location = ldifFile.getCanonicalPath();
                     }
                     directoryServer.importFromLDIF(true, location);
                 }
-                
+
                 directoryServer.restartServer();
-                
+
             } else {
-                
+
                 directoryServer.startListening();
             }
 
             return new InMemoryDirectoryServerBean(directoryServer);
-            
+
         } catch (final Exception e) {
             throw new RuntimeException(e);
         }
     }
-    
+
     public static class InMemoryDirectoryServerBean {
-        
+
         private final InMemoryDirectoryServer server;
-        
+
         private InMemoryDirectoryServerBean(InMemoryDirectoryServer server) {
             this.server = server;
         }
-        
+
         public InMemoryDirectoryServer getServer() {
             return server;
         }
-        
+
         public void shutdown() {
             if (server != null) {
                 server.shutDown(true);
             }
         }
     }
-    
+
 }

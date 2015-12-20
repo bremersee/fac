@@ -28,13 +28,12 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 
 /**
- * @author Christian Bremer <a href="mailto:christian@bremersee.org">christian@bremersee.org</a>
- *
+ * @author Christian Bremer
  */
 public abstract class AbstractFacConfig {
-    
+
     public abstract FailedAccessDao failedAccessDao();
-    
+
     @Bean
     @ConfigurationProperties(prefix = "failedAccessCounter")
     public FailedAccessCounter failedAccessCounter() {
@@ -47,15 +46,15 @@ public abstract class AbstractFacConfig {
     public ObjectComparatorFactory objectComparatorFactory() {
         return ObjectComparatorFactory.newInstance();
     }
-    
+
     @Bean
     public PageBuilder pageBuilder() {
         return new PageBuilderImpl();
     }
-    
+
     @Bean
     public ComparatorItemTransformer comparatorItemTransformer() {
         return new ComparatorItemTransformerImpl();
     }
-    
+
 }

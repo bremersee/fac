@@ -27,16 +27,17 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @author Christian Bremer <a href="mailto:christian@bremersee.org">christian@bremersee.org</a>
- *
+ * @author Christian Bremer
  */
 @Configuration
 public class LdapFacConfig extends AbstractFacConfig {
-    
+
     @Autowired
     private ConnectionFactory connectionFactory;
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.bremersee.fac.example.config.AbstractFacConfig#failedAccessDao()
      */
     @Bean
@@ -48,7 +49,7 @@ public class LdapFacConfig extends AbstractFacConfig {
         dao.setConnectionFactory(connectionFactory);
         return dao;
     }
-    
+
     @Bean
     public FailedAccessLdapMapper failedAccessLdapMapper() {
         FailedAccessDefaultLdapMapper mapper = new FailedAccessDefaultLdapMapper();
@@ -61,5 +62,5 @@ public class LdapFacConfig extends AbstractFacConfig {
         searchRequest.setBaseDn("ou=Access Failed Entries,dc=example,dc=org");
         return searchRequest;
     }
-    
+
 }

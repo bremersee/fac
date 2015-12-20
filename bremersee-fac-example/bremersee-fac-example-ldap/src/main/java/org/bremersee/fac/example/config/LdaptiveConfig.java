@@ -42,27 +42,26 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @author Christian Bremer <a href="mailto:christian@bremersee.org">christian@bremersee.org</a>
- *
+ * @author Christian Bremer
  */
 @Configuration
 @EnableConfigurationProperties(LdaptiveProperties.class)
 public class LdaptiveConfig {
-    
+
     @Autowired
     private LdaptiveProperties properties;
-    
+
     @Autowired(required = false)
     @Qualifier("inMemoryDirectoryServerBean")
     private Object inMemoryDirectoryServerBean;
 
     @Bean
     public ConnectionFactory connectionFactory() {
-        
+
         if (inMemoryDirectoryServerBean != null) {
             return defaultConnectionFactory(new UnboundIDProvider());
         }
-        
+
         if (properties.isPooled()) {
             return pooledConnectionFactory(null);
         }
@@ -77,7 +76,7 @@ public class LdaptiveConfig {
         }
         return factory;
     }
-    
+
     private ConnectionConfig connectionConfig() {
         ConnectionConfig cc = new ConnectionConfig();
         cc.setLdapUrl(properties.getLdapUrl());
@@ -85,29 +84,29 @@ public class LdaptiveConfig {
         cc.setResponseTimeout(properties.getResponseTimeout());
         cc.setUseSSL(properties.isUseSSL());
         cc.setUseStartTLS(properties.isUseStartTLS());
-        
+
         if (properties.isUseSSL() || properties.isUseStartTLS()) {
             cc.setSslConfig(sslConfig());
         }
-        
+
         if (StringUtils.isNotBlank(properties.getBindDn())) {
             cc.setConnectionInitializer(connectionInitializer());
         }
-        
+
         return cc;
     }
-    
+
     private SslConfig sslConfig() {
         SslConfig sc = new SslConfig();
         sc.setCredentialConfig(sslCredentialConfig());
         // there may be other ways
-        //        sc.setEnabledCipherSuites(suites);
-        //        sc.setEnabledProtocols(protocols);
-        //        sc.setHandshakeCompletedListeners(listeners);
-        //        sc.setTrustManagers(managers);
+        // sc.setEnabledCipherSuites(suites);
+        // sc.setEnabledProtocols(protocols);
+        // sc.setHandshakeCompletedListeners(listeners);
+        // sc.setTrustManagers(managers);
         return sc;
     }
-    
+
     private CredentialConfig sslCredentialConfig() {
         // there may be other ways
         X509CredentialConfig x509 = new X509CredentialConfig();
@@ -116,7 +115,7 @@ public class LdaptiveConfig {
         x509.setTrustCertificates(properties.getTrustCertificates());
         return x509;
     }
-    
+
     private ConnectionInitializer connectionInitializer() {
         // sasl is not supported at the moment
         BindConnectionInitializer bci = new BindConnectionInitializer();
@@ -124,14 +123,13 @@ public class LdaptiveConfig {
         bci.setBindCredential(new Credential(properties.getBindCredential()));
         return bci;
     }
-    
 
     private PooledConnectionFactory pooledConnectionFactory(Provider<?> provider) {
         PooledConnectionFactory factory = new PooledConnectionFactory();
         factory.setConnectionPool(connectionPool(provider));
         return factory;
     }
-    
+
     private ConnectionPool connectionPool(Provider<?> provider) {
         BlockingConnectionPool pool = new BlockingConnectionPool();
         pool.setConnectionFactory(defaultConnectionFactory(provider));
@@ -142,7 +140,7 @@ public class LdaptiveConfig {
         pool.initialize();
         return pool;
     }
-    
+
     private PoolConfig poolConfig() {
         PoolConfig pc = new PoolConfig();
         pc.setMaxPoolSize(properties.getMaxPoolSize());
@@ -153,7 +151,7 @@ public class LdaptiveConfig {
         pc.setValidatePeriodically(properties.isValidatePeriodically());
         return pc;
     }
-    
+
     private PruneStrategy pruneStrategy() {
         // there may be other ways
         IdlePruneStrategy ips = new IdlePruneStrategy();
@@ -161,10 +159,10 @@ public class LdaptiveConfig {
         ips.setPrunePeriod(properties.getPrunePeriod());
         return ips;
     }
-    
+
     private SearchValidator searchValidator() {
         SearchValidator sv = new SearchValidator();
         return sv;
     }
-    
+
 }

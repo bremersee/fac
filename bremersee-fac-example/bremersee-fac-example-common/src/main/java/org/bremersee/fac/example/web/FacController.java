@@ -42,27 +42,26 @@ import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
- * @author Christian Bremer <a href="mailto:christian@bremersee.org">christian@bremersee.org</a>
- *
+ * @author Christian Bremer
  */
 @Controller
 public class FacController {
-    
+
     public static final String SUCCESS_MESSAGES_KEY = "SUCCESS_MESSAGES";
-    
+
     private static int resourceCounter = 0;
-    
+
     protected static synchronized String getNextResourceName() {
         resourceCounter = resourceCounter + 1;
         return "resource_" + resourceCounter;
     }
-    
+
     @Inject
     protected FailedAccessCounter failedAccessCounter;
-    
+
     @Inject
     protected ComparatorItemTransformer comparatorItemTransformer;
-    
+
     // no equivalent for @Inject
     @Autowired(required = false)
     protected LocaleResolver localeResolver;
@@ -71,6 +70,7 @@ public class FacController {
 
     @PostConstruct
     public void init() {
+        //@formatter:off
         pageControlFactory = PageControlFactory.newInstance()
                 .setComparatorItemTransformer(comparatorItemTransformer)
                 .setComparatorParamName("c")
@@ -83,8 +83,9 @@ public class FacController {
                 .setQueryParamName("q")
                 .setQuerySupported(true)
                 .setSelectAllEntriesAvailable(true);
+        //@formatter:on
     }
-    
+
     protected Locale resolveLocale(HttpServletRequest request) {
         Locale locale;
         if (localeResolver != null) {
@@ -99,7 +100,7 @@ public class FacController {
     }
 
     protected void addSuccessMessages(RedirectAttributes redirectAttrs, String... messages) {
-        
+
         if (redirectAttrs != null && messages != null && messages.length > 0) {
             if (messages.length == 1) {
                 redirectAttrs.addFlashAttribute(SUCCESS_MESSAGES_KEY, messages[0]);
@@ -108,17 +109,16 @@ public class FacController {
             }
         }
     }
-    
+
     @RequestMapping(value = "/entries.html", method = RequestMethod.GET)
     public String displayFailedAccessEntries(HttpServletRequest request,
             @RequestParam(value = "q", defaultValue = "") String query,
             @RequestParam(value = "s", defaultValue = "20") int pageSize,
             @RequestParam(value = "p", defaultValue = "0") int pageNumber,
-            @RequestParam(value = "c", defaultValue = "resourceId,asc|remoteHost,asc") String comparator, 
-            Model model) {
+            @RequestParam(value = "c", defaultValue = "resourceId,asc|remoteHost,asc") String comparator, Model model) {
 
         ComparatorItem comparatorItem = comparatorItemTransformer.fromString(comparator, false, null);
-        
+
         PageRequestDto pageRequest = new PageRequestDto(pageNumber, pageSize, comparatorItem, query, null);
 
         PageDto pageDto = failedAccessCounter.getFailedAccessEntries(pageRequest);
@@ -126,153 +126,149 @@ public class FacController {
         PageControlDto pageControl = pageControlFactory.newPageControl(pageDto, "entries.html", resolveLocale(request));
 
         model.addAttribute("pageControl", pageControl);
-        
+
         model.addAttribute("counterThreshold", failedAccessCounter.getFailedAccessCounterThreshold());
-        
-        model.addAttribute("removeFailedAccessEntriesAfterMillis", failedAccessCounter.getRemoveFailedAccessEntriesAfterMillis());
+
+        model.addAttribute("removeFailedAccessEntriesAfterMillis",
+                failedAccessCounter.getRemoveFailedAccessEntriesAfterMillis());
         model.addAttribute("removeFailedEntriesInterval", failedAccessCounter.getRemoveFailedEntriesInterval());
-        
+
         model.addAttribute("lastRemovingOfFailedEntries", failedAccessCounter.getLastRemovingOfFailedEntries());
-        model.addAttribute("lastRemovingOfFailedEntriesDuration", failedAccessCounter.getLastRemovingOfFailedEntriesDuration());
+        model.addAttribute("lastRemovingOfFailedEntriesDuration",
+                failedAccessCounter.getLastRemovingOfFailedEntriesDuration());
         model.addAttribute("lastRemovingOfFailedEntriesSize", failedAccessCounter.getLastRemovingOfFailedEntriesSize());
 
         model.addAttribute("removedFailedEntriesTotalSize", failedAccessCounter.getRemovedFailedEntriesTotalSize());
-        
+
         return "entries";
     }
-    
+
     @RequestMapping(value = "/accessFailed.html", method = RequestMethod.GET)
-    public String accessFailed(HttpServletRequest request, 
-            @RequestParam(value = "q", defaultValue = "") String query,
+    public String accessFailed(HttpServletRequest request, @RequestParam(value = "q", defaultValue = "") String query,
             @RequestParam(value = "s", defaultValue = "20") int pageSize,
             @RequestParam(value = "p", defaultValue = "0") int pageNumber,
             @RequestParam(value = "c", defaultValue = "") String comparator,
-            @RequestParam(value = "resourceId", defaultValue = "") String resourceId,
-            Model model,
+            @RequestParam(value = "resourceId", defaultValue = "") String resourceId, Model model,
             RedirectAttributes redirectAttrs) {
-        
+
         String remoteHost = request.getRemoteHost();
         if (StringUtils.isBlank(remoteHost)) {
             remoteHost = "_unknown_";
         }
-        
+
         if (StringUtils.isBlank(resourceId)) {
             resourceId = getNextResourceName();
         }
-        
+
         failedAccessCounter.accessFailed(resourceId, remoteHost, System.currentTimeMillis());
-        
+
         redirectAttrs.addAttribute("c", comparator);
         redirectAttrs.addAttribute("q", query);
         redirectAttrs.addAttribute("s", pageSize);
         redirectAttrs.addAttribute("p", pageNumber);
-        
+
         return "redirect:entries.html";
     }
-    
+
     @RequestMapping(value = "/accessSucceeded.html", method = RequestMethod.GET)
-    public String accessSucceeded(HttpServletRequest request, 
+    public String accessSucceeded(HttpServletRequest request,
             @RequestParam(value = "q", defaultValue = "") String query,
             @RequestParam(value = "s", defaultValue = "20") int pageSize,
             @RequestParam(value = "p", defaultValue = "0") int pageNumber,
             @RequestParam(value = "c", defaultValue = "") String comparator,
-            @RequestParam(value = "resourceId", defaultValue = "") String resourceId,
-            Model model,
+            @RequestParam(value = "resourceId", defaultValue = "") String resourceId, Model model,
             RedirectAttributes redirectAttrs) {
-        
+
         String remoteHost = request.getRemoteHost();
         if (StringUtils.isBlank(remoteHost)) {
             remoteHost = "_unknown_";
         }
-        
+
         if (StringUtils.isNotBlank(resourceId)) {
             failedAccessCounter.accessSucceeded(resourceId, remoteHost, System.currentTimeMillis());
         }
-        
+
         redirectAttrs.addAttribute("c", comparator);
         redirectAttrs.addAttribute("q", query);
         redirectAttrs.addAttribute("s", pageSize);
         redirectAttrs.addAttribute("p", pageNumber);
-        
+
         return "redirect:entries.html";
     }
-    
+
     @RequestMapping(value = "/remove.html", method = RequestMethod.GET)
-    public String removeAccessFailedEntry(HttpServletRequest request, 
+    public String removeAccessFailedEntry(HttpServletRequest request,
             @RequestParam(value = "q", defaultValue = "") String query,
             @RequestParam(value = "s", defaultValue = "20") int pageSize,
             @RequestParam(value = "p", defaultValue = "0") int pageNumber,
             @RequestParam(value = "c", defaultValue = "") String comparator,
-            @RequestParam(value = "resourceId", defaultValue = "") String resourceId,
-            Model model,
+            @RequestParam(value = "resourceId", defaultValue = "") String resourceId, Model model,
             RedirectAttributes redirectAttrs) {
-        
+
         String remoteHost = request.getRemoteHost();
         if (StringUtils.isBlank(remoteHost)) {
             remoteHost = "_unknown_";
         }
-        
+
         if (StringUtils.isNotBlank(resourceId)) {
             failedAccessCounter.removeFailedAccessEntry(resourceId, remoteHost);
         }
-        
+
         redirectAttrs.addAttribute("c", comparator);
         redirectAttrs.addAttribute("q", query);
         redirectAttrs.addAttribute("s", pageSize);
         redirectAttrs.addAttribute("p", pageNumber);
-        
+
         return "redirect:entries.html";
     }
-    
+
     @RequestMapping(value = "/removeObsolete.html", method = RequestMethod.GET)
-    public String removeObsoleteAccessFailedEntries(HttpServletRequest request, 
+    public String removeObsoleteAccessFailedEntries(HttpServletRequest request,
             @RequestParam(value = "q", defaultValue = "") String query,
             @RequestParam(value = "s", defaultValue = "20") int pageSize,
             @RequestParam(value = "p", defaultValue = "0") int pageNumber,
-            @RequestParam(value = "c", defaultValue = "") String comparator,
-            Model model,
+            @RequestParam(value = "c", defaultValue = "") String comparator, Model model,
             RedirectAttributes redirectAttrs) {
-        
+
         failedAccessCounter.removeObsoleteFailedAccessEntries();
-        
+
         redirectAttrs.addAttribute("c", comparator);
         redirectAttrs.addAttribute("q", query);
         redirectAttrs.addAttribute("s", pageSize);
         redirectAttrs.addAttribute("p", pageNumber);
-        
+
         return "redirect:entries.html";
     }
-    
+
     @RequestMapping(value = "/resource.html", method = RequestMethod.GET)
-    public String displayResource(HttpServletRequest request, 
+    public String displayResource(HttpServletRequest request,
             @RequestParam(value = "q", defaultValue = "") String query,
             @RequestParam(value = "s", defaultValue = "20") int maxResults,
             @RequestParam(value = "p", defaultValue = "0") int pageNumber,
             @RequestParam(value = "c", defaultValue = "") String comparator,
-            @RequestParam(value = "resourceId", defaultValue = "") String resourceId,
-            Model model,
+            @RequestParam(value = "resourceId", defaultValue = "") String resourceId, Model model,
             RedirectAttributes redirectAttrs) {
-        
+
         if (StringUtils.isBlank(resourceId)) {
             return "redirect:entries.html";
         }
-        
+
         String remoteHost = request.getRemoteHost();
         if (StringUtils.isBlank(remoteHost)) {
             remoteHost = "_unknown_";
         }
-        
+
         AccessResultDto result = failedAccessCounter.isAccessGranted(resourceId, remoteHost);
-        
+
         model.addAttribute("resourceId", resourceId);
         model.addAttribute("result", result);
-        
+
         model.addAttribute("c", comparator);
         model.addAttribute("q", query);
         model.addAttribute("s", maxResults);
         model.addAttribute("p", pageNumber);
-        
+
         return "resource";
     }
-    
+
 }

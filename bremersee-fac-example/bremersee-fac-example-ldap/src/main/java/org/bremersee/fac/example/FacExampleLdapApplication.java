@@ -20,13 +20,13 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
- * @author Christian Bremer <a href="mailto:christian@bremersee.org">christian@bremersee.org</a>
+ * @author Christian Bremer
  */
 @SpringBootApplication
 public class FacExampleLdapApplication {
-    
+
     public static void main(String[] args) {
         SpringApplication.run(FacExampleLdapApplication.class, args);
     }
-    
+
 }

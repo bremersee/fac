@@ -58,7 +58,7 @@
         <url>https://github.com/bremersee/fac/issues</url>
         <system>GitHub Issues</system>
     </issueManagement>
-    
+
     <distributionManagement>
         <site>
             <id>target</id>
@@ -75,7 +75,7 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-    
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -90,7 +90,7 @@
         <module>bremersee-fac-example-jpa</module>
         <module>bremersee-fac-example-ldap</module>
     </modules>
-    
+
     <build>
         <resources>
             <resource>

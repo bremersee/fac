@@ -22,24 +22,23 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.util.StringUtils;
 
 /**
- * @author Christian Bremer <a href="mailto:christian@bremersee.org">christian@bremersee.org</a>
- *
+ * @author Christian Bremer
  */
 @ConfigurationProperties(prefix = "bremersee.unboundid.ldap.server")
 public class InMemoryDirectoryServerProperties {
-    
+
     private boolean embedded = true;
-    
+
     private String rootDn = "dc=example,dc=org";
-    
+
     private String managerDn = "cn=admin,dc=example,dc=org";
-    
+
     private String managerPassword = "changeit";
-    
+
     private String trustStoreLocation;
     private String trustStorePassword;
     private String trustStoreFormat;
-    
+
     private String keyStoreLocation;
     private String keyStorePassword;
     private String keyStoreFormat;
@@ -52,9 +51,9 @@ public class InMemoryDirectoryServerProperties {
     private String ldapsListenerName = "LDAPS";
     private String ldapsAddress = null;
     private int ldapsPort = 1636;
-    
+
     private String schemaLocations;
-    
+
     private String ldifLocations;
 
     public boolean isEmbedded() {
@@ -209,7 +208,7 @@ public class InMemoryDirectoryServerProperties {
     public void setSchemaLocations(String schemaLocations) {
         this.schemaLocations = schemaLocations;
     }
-    
+
     public String[] getSchemaLocationsAsArray() {
         if (StringUtils.hasText(schemaLocations)) {
             return schemaLocations.split(Pattern.quote(","));
@@ -224,7 +223,7 @@ public class InMemoryDirectoryServerProperties {
     public void setLdifLocations(String ldifLocations) {
         this.ldifLocations = ldifLocations;
     }
-    
+
     public String[] getLdifLocationsAsArray() {
         if (StringUtils.hasText(ldifLocations)) {
             return ldifLocations.split(Pattern.quote(","));

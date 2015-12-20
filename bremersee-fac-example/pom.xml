@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bremersee</groupId>
     <artifactId>bremersee-fac-example</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.1</version>
     <packaging>pom</packaging>
     <name>Bremersee Failed Access Counter Examples</name>
     <description>Examples of failed access counter project</description>
@@ -19,7 +19,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.7</java.version>
-        <bremersee-fac.version>1.0.1-SNAPSHOT</bremersee-fac.version>
+        <bremersee-fac.version>1.0.1</bremersee-fac.version>
     </properties>
 
     <developers>

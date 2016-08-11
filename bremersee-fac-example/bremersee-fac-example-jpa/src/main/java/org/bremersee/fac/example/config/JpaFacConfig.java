@@ -17,7 +17,7 @@
 package org.bremersee.fac.example.config;
 
 import org.bremersee.fac.domain.FailedAccessDao;
-import org.bremersee.fac.domain.FailedAccessJpaDao;
+import org.bremersee.fac.domain.jpa.FailedAccessJpaDao;
 import org.springframework.boot.orm.jpa.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,7 +26,7 @@ import org.springframework.context.annotation.Configuration;
  * @author Christian Bremer
  */
 @Configuration
-@EntityScan(basePackages = { "org.bremersee.fac.domain" })
+@EntityScan(basePackages = { "org.bremersee.fac.domain.jpa" })
 public class JpaFacConfig extends AbstractFacConfig {
 
     /*

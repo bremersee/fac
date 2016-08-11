@@ -3,28 +3,33 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bremersee</groupId>
     <artifactId>bremersee-fac</artifactId>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.1.0-SNAPSHOT</version>
     <name>Bremersee Failed Access Counter</name>
     <description>Failed access counter project</description>
     <url>http://bremersee.github.io/fac/</url>
+    <packaging>pom</packaging>
 
     <properties>
         <github.global.server>github</github.global.server>
-        <java.version>1.7</java.version>
+        <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <product.vendor>bremersee.org</product.vendor>
         <bremersee-pagebuilder.version>1.0.3</bremersee-pagebuilder.version>
         <bremersee-utils.version>1.0.2</bremersee-utils.version>
         <commons-lang3.version>3.4</commons-lang3.version>
-        <jackson2.version>2.4.6</jackson2.version>
+        <jackson2.version>2.6.6</jackson2.version>
         <javax.inject.version>1</javax.inject.version>
         <javax.interceptor.version>1.2</javax.interceptor.version>
         <javax.transaction-api.version>1.2</javax.transaction-api.version>
         <hibernate-jpa-21-api.version>1.0.0.Final</hibernate-jpa-21-api.version>
         <junit.version>4.12</junit.version>
-        <ldaptive.version>1.0.7</ldaptive.version>
+        <ldaptive.version>1.2.0</ldaptive.version>
         <log4j2.version>2.1</log4j2.version>
         <slf4j.version>1.7.11</slf4j.version>
+        <spring.version>4.2.6.RELEASE</spring.version>
+        <!-- <spring-data.version>1.9.2.RELEASE</spring-data.version> -->
+        <spring-data.version>1.8.4.RELEASE</spring-data.version>
+        <swagger.version>1.5.9</swagger.version>
     </properties>
 
     <developers>
@@ -70,7 +75,122 @@
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
+    
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.bremersee</groupId>
+                <artifactId>bremersee-pagebuilder</artifactId>
+                <version>${bremersee-pagebuilder.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.bremersee</groupId>
+                <artifactId>bremersee-utils</artifactId>
+                <version>${bremersee-utils.version}</version>
+            </dependency>
+        
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+            
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons-lang3.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>${jackson2.version}</version>
+                <type>jar</type>
+            </dependency>
+            
+            <dependency>
+                <groupId>javax.inject</groupId>
+                <artifactId>javax.inject</artifactId>
+                <version>${javax.inject.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.interceptor</groupId>
+                <artifactId>javax.interceptor-api</artifactId>
+                <version>${javax.interceptor.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.transaction</groupId>
+                <artifactId>javax.transaction-api</artifactId>
+                <version>${javax.transaction-api.version}</version>
+            </dependency>
+            
+            <dependency>
+                <groupId>org.hibernate.javax.persistence</groupId>
+                <artifactId>hibernate-jpa-2.1-api</artifactId>
+                <version>${hibernate-jpa-21-api.version}</version>
+            </dependency>
+            
+            <dependency>
+                <groupId>org.ldaptive</groupId>
+                <artifactId>ldaptive</artifactId>
+                <version>${ldaptive.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            
+            <dependency>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-annotations</artifactId>
+                <version>${swagger.version}</version>
+            </dependency>
+    
+            <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-mongodb</artifactId>
+                <version>${spring-data.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson2.version}</version>
+            <type>jar</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+            <version>${log4j2.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>${log4j2.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j2.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
+
+    <!--  
     <dependencies>
         <dependency>
             <groupId>org.bremersee</groupId>
@@ -82,11 +202,13 @@
             <artifactId>bremersee-utils</artifactId>
             <version>${bremersee-utils.version}</version>
         </dependency>
+        
         <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>
             <artifactId>hibernate-jpa-2.1-api</artifactId>
             <version>${hibernate-jpa-21-api.version}</version>
         </dependency>
+        
         <dependency>
             <groupId>javax.inject</groupId>
             <artifactId>javax.inject</artifactId>
@@ -102,6 +224,7 @@
             <artifactId>javax.transaction-api</artifactId>
             <version>${javax.transaction-api.version}</version>
         </dependency>
+        
         <dependency>
             <groupId>org.ldaptive</groupId>
             <artifactId>ldaptive</artifactId>
@@ -113,10 +236,16 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-annotations</artifactId>
+            <version>${swagger.version}</version>
         </dependency>
 
         <dependency>
@@ -150,7 +279,13 @@
             <version>${log4j2.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-mongodb</artifactId>
+            <version>1.9.2.RELEASE</version>
+        </dependency>
     </dependencies>
+    -->
 
     <build>
         <resources>
@@ -377,4 +512,11 @@
             </build>
         </profile>
     </profiles>
+    
+    <modules>
+        <module>bremersee-fac-api</module>
+        <module>bremersee-fac-data-jpa</module>
+        <module>bremersee-fac-data-ldap</module>
+        <module>bremersee-fac-data-mongodb</module>
+    </modules>
 </project>

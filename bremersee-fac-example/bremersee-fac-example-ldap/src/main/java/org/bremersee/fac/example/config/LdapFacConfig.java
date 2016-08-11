@@ -17,9 +17,9 @@
 package org.bremersee.fac.example.config;
 
 import org.bremersee.fac.domain.FailedAccessDao;
-import org.bremersee.fac.domain.FailedAccessDefaultLdapMapper;
-import org.bremersee.fac.domain.FailedAccessLdapDao;
-import org.bremersee.fac.domain.FailedAccessLdapMapper;
+import org.bremersee.fac.domain.ldap.FailedAccessDefaultLdapMapper;
+import org.bremersee.fac.domain.ldap.FailedAccessLdapDao;
+import org.bremersee.fac.domain.ldap.FailedAccessLdapMapper;
 import org.ldaptive.ConnectionFactory;
 import org.ldaptive.SearchRequest;
 import org.springframework.beans.factory.annotation.Autowired;

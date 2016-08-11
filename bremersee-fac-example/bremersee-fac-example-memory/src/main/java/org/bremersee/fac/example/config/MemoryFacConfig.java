@@ -17,7 +17,7 @@
 package org.bremersee.fac.example.config;
 
 import org.bremersee.fac.domain.FailedAccessDao;
-import org.bremersee.fac.domain.FailedAccessInMemoryDao;
+import org.bremersee.fac.domain.mem.FailedAccessInMemoryDao;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

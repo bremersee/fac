@@ -76,8 +76,9 @@ public class LdaptiveProperties {
     /** Whether the pool should be validated periodically. */
     private boolean validatePeriodically = PoolConfig.DEFAULT_VALIDATE_PERIODICALLY;
 
+    // TODO
     /** Time in seconds that the validate pool should repeat. */
-    private long validatePeriod = PoolConfig.DEFAULT_VALIDATE_PERIOD;
+    private long validatePeriod = PoolConfig.DEFAULT_VALIDATE_PERIOD.toMillis();
 
     /** Prune period in seconds. */
     private long prunePeriod = 300L;

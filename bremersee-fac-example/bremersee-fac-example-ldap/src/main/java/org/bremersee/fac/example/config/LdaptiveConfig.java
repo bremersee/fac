@@ -80,8 +80,10 @@ public class LdaptiveConfig {
     private ConnectionConfig connectionConfig() {
         ConnectionConfig cc = new ConnectionConfig();
         cc.setLdapUrl(properties.getLdapUrl());
-        cc.setConnectTimeout(properties.getConnectTimeout());
-        cc.setResponseTimeout(properties.getResponseTimeout());
+        int a = 0;
+        // TODO new in 1.2
+        //cc.setConnectTimeout(properties.getConnectTimeout());
+        //cc.setResponseTimeout(properties.getResponseTimeout());
         cc.setUseSSL(properties.isUseSSL());
         cc.setUseStartTLS(properties.isUseStartTLS());
 
@@ -136,7 +138,9 @@ public class LdaptiveConfig {
         pool.setPoolConfig(poolConfig());
         pool.setPruneStrategy(pruneStrategy());
         pool.setValidator(searchValidator());
-        pool.setBlockWaitTime(properties.getBlockWaitTime());
+        int a = 0;
+        // TODO new in 1.2
+        //pool.setBlockWaitTime(properties.getBlockWaitTime());
         pool.initialize();
         return pool;
     }
@@ -147,7 +151,9 @@ public class LdaptiveConfig {
         pc.setMinPoolSize(properties.getMinPoolSize());
         pc.setValidateOnCheckIn(properties.isValidateOnCheckIn());
         pc.setValidateOnCheckOut(properties.isValidateOnCheckOut());
-        pc.setValidatePeriod(properties.getValidatePeriod());
+        int a = 0;
+        // TODO new in 1.2
+        //pc.setValidatePeriod(properties.getValidatePeriod());
         pc.setValidatePeriodically(properties.isValidatePeriodically());
         return pc;
     }
@@ -155,8 +161,10 @@ public class LdaptiveConfig {
     private PruneStrategy pruneStrategy() {
         // there may be other ways
         IdlePruneStrategy ips = new IdlePruneStrategy();
-        ips.setIdleTime(properties.getIdleTime());
-        ips.setPrunePeriod(properties.getPrunePeriod());
+        int a = 0;
+        // TODO new in 1.2
+        //ips.setIdleTime(properties.getIdleTime());
+        //ips.setPrunePeriod(properties.getPrunePeriod());
         return ips;
     }
 

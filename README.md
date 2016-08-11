@@ -39,4 +39,4 @@ Than go to one of the modules and run the application (all examples use an in-me
 $ cd bremersee-fac-example-ldap
 $ mvn spring-boot:run
 ```
-After the application is started you can open [http://localhost:8080/main.html](http://localhost:8080/entries.html) in your favorite browser and have a look at the demonstration.
+After the application is started you can open [http://localhost:8080/entries.html](http://localhost:8080/entries.html) in your favorite browser and have a look at the demonstration.

@@ -69,9 +69,9 @@ public class FailedAccessCounterImpl implements FailedAccessCounter {
     /**
      * The page builder
      */
-    private PageBuilder pageBuilder = new PageBuilderImpl();
+    private PageBuilder pageBuilder;
 
-    private int failedAccessCounterThreshold = 10;
+    private int failedAccessCounterThreshold;
 
     private long removeFailedAccessEntriesAfterMillis;
 
@@ -110,6 +110,8 @@ public class FailedAccessCounterImpl implements FailedAccessCounter {
      * Default constructor.
      */
     public FailedAccessCounterImpl() {
+        pageBuilder = new PageBuilderImpl();
+        failedAccessCounterThreshold = 10;
         removeFailedAccessEntriesAfterMillis = Duration.ofHours(23L).toMillis();
         removeFailedEntriesInterval = Duration.ofHours(1L).toMillis();
         lastRemovingOfFailedEntries = System.currentTimeMillis();

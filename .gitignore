@@ -31,3 +31,4 @@ buildNumber.properties
 
 # IntelliJ configuration files
 *.iml
+.idea/

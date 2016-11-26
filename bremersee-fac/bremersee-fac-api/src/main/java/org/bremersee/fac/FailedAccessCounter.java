@@ -170,7 +170,7 @@ public interface FailedAccessCounter {
      *            the current time stamp (may be {@code null})
      * @return the access result
      */
-    AccessResultDto accessFailed(String resourceId, String remoteHost, Long timeInMillis); // TODO ResourceDescription?
+    AccessResultDto accessFailed(String resourceId, String remoteHost, Long timeInMillis);
 
     /**
      * Returns whether the access to the specified resource is granted for the

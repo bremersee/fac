@@ -17,7 +17,7 @@
 package org.bremersee.fac;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.time.Duration;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -34,6 +34,9 @@ import org.bremersee.fac.model.FailedAccess;
 import org.bremersee.fac.model.FailedAccessDto;
 import org.bremersee.pagebuilder.PageBuilder;
 import org.bremersee.pagebuilder.PageBuilderImpl;
+import org.bremersee.pagebuilder.PageBuilderUtils;
+import org.bremersee.pagebuilder.PageEntryTransformer;
+import org.bremersee.pagebuilder.model.Page;
 import org.bremersee.pagebuilder.model.PageDto;
 import org.bremersee.pagebuilder.model.PageRequestDto;
 import org.slf4j.Logger;
@@ -56,33 +59,33 @@ public class FailedAccessCounterImpl implements FailedAccessCounter {
     /**
      * The logger
      */
-    protected final Logger log = LoggerFactory.getLogger(getClass());
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
     /**
      * The failed access DAO
      */
-    protected FailedAccessDao failedAccessDao;
+    private FailedAccessDao failedAccessDao;
 
     /**
      * The page builder
      */
-    protected PageBuilder pageBuilder = new PageBuilderImpl();
+    private PageBuilder pageBuilder = new PageBuilderImpl();
 
     private int failedAccessCounterThreshold = 10;
 
-    private long removeFailedAccessEntriesAfterMillis = 1000L * 60L * 60L * 23L;
+    private long removeFailedAccessEntriesAfterMillis;
 
-    private long removeFailedEntriesInterval = 1000L * 60L * 60L * 1L;
+    private long removeFailedEntriesInterval;
 
-    private volatile long lastRemovingOfFailedEntries = System.currentTimeMillis();
+    private volatile long lastRemovingOfFailedEntries;
 
-    private volatile long lastRemovingOfFailedEntriesDuration = 0L;
+    private volatile long lastRemovingOfFailedEntriesDuration;
 
-    private volatile int lastRemovingOfFailedEntriesSize = 0;
+    private volatile int lastRemovingOfFailedEntriesSize;
 
-    private volatile long removedFailedEntriesTotalSize = 0L;
+    private volatile long removedFailedEntriesTotalSize;
 
-    private volatile boolean removingRunnning = false;
+    private volatile boolean removingRunnning;
 
     /**
      * The thread for removing obsolete failed access entries.
@@ -102,6 +105,19 @@ public class FailedAccessCounterImpl implements FailedAccessCounter {
             }
         }
     };
+
+    /**
+     * Default constructor.
+     */
+    public FailedAccessCounterImpl() {
+        removeFailedAccessEntriesAfterMillis = Duration.ofHours(23L).toMillis();
+        removeFailedEntriesInterval = Duration.ofHours(1L).toMillis();
+        lastRemovingOfFailedEntries = System.currentTimeMillis();
+        lastRemovingOfFailedEntriesDuration = 0L;
+        lastRemovingOfFailedEntriesSize = 0;
+        removedFailedEntriesTotalSize = 0L;
+        removingRunnning = false;
+    }
 
     /**
      * Starts the failed access counter.
@@ -228,7 +244,7 @@ public class FailedAccessCounterImpl implements FailedAccessCounter {
      * @return {@code true} if the access to the resource is not blocked for the
      *         remote host, otherwise {@code false}
      */
-    protected boolean isAccessGranted(FailedAccess failedAccess) {
+    private boolean isAccessGranted(FailedAccess failedAccess) {
         return failedAccess == null || failedAccess.getCounter() <= this.failedAccessCounterThreshold;
     }
 
@@ -240,7 +256,7 @@ public class FailedAccessCounterImpl implements FailedAccessCounter {
      * @return the date until the resource is blocked for the remote host or
      *         {@code null}, if the resource is not blocked
      */
-    protected Date calculateAccessDeniedUntil(FailedAccess failedAccess) {
+    private Date calculateAccessDeniedUntil(FailedAccess failedAccess) {
         if (isAccessGranted(failedAccess) || failedAccess.getModificationDate() == null) {
             return null;
         }
@@ -327,14 +343,11 @@ public class FailedAccessCounterImpl implements FailedAccessCounter {
                         pageRequest.getComparatorItem());
         //@formatter:on
 
-        List<FailedAccessDto> entries = new ArrayList<>();
-        for (FailedAccess entity : entities) {
-            entries.add(new FailedAccessDto(entity));
-        }
+        Page<? extends  FailedAccess> page = pageBuilder.buildPage(entities, pageRequest, totalSize);
 
-        PageDto page = pageBuilder.buildPage(entries, pageRequest, totalSize);
-
-        return page;
+        return PageBuilderUtils.createPageDto(
+                page,
+                (PageEntryTransformer<FailedAccessDto, FailedAccess>) source -> new FailedAccessDto(source));
     }
 
     /*
@@ -488,6 +501,9 @@ public class FailedAccessCounterImpl implements FailedAccessCounter {
         long timestamp = entity != null ? entity.getModificationDate().getTime() : System.currentTimeMillis();
         boolean accessGranted = isAccessGranted(entity);
         AccessResultDto dto = new AccessResultDto(accessGranted, timestamp, calculateAccessDeniedUntil(entity));
+        if (log.isDebugEnabled()) {
+            log.debug("Is access granted [resource ID = " + resourceId + ", remote host = " + remoteHost + "]? " + dto);
+        }
         return dto;
     }
 

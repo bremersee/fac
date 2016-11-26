@@ -12,12 +12,13 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.3.7.RELEASE</version>
+        <version>1.4.1.RELEASE</version>
         <relativePath /> <!-- lookup parent from repository -->
     </parent>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <product.vendor>bremersee.org</product.vendor>
         <java.version>1.8</java.version>
         <bremersee-fac.version>1.1.0-SNAPSHOT</bremersee-fac.version>
     </properties>
@@ -152,6 +153,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
                 <configuration>
+                    <!--
                     <reportPlugins>
                         <plugin>
                             <groupId>org.apache.maven.plugins</groupId>
@@ -200,6 +202,7 @@
                             </configuration>
                         </plugin>
                     </reportPlugins>
+                    -->
                 </configuration>
             </plugin>
             <plugin>
@@ -215,9 +218,11 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <configuration>
+                    <!--
                     <source>${java.version}</source>
                     <target>${java.version}</target>
                     <encoding>${project.build.sourceEncoding}</encoding>
+                    -->
                     <archive>
                         <addMavenDescriptor>true</addMavenDescriptor>
                         <index>true</index>
@@ -265,7 +270,7 @@
                 <configuration>
                     <show>protected</show>
                     <quiet>true</quiet>
-                    <test-aggregate>false</test-aggregate>
+                    <!-- <test-aggregate>false</test-aggregate> -->
                     <failOnError>false</failOnError>
                 </configuration>
                 <executions>

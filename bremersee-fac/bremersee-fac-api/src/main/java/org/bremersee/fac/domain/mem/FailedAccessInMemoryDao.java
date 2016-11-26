@@ -18,7 +18,6 @@ package org.bremersee.fac.domain.mem;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -27,6 +26,7 @@ import javax.annotation.PostConstruct;
 import javax.inject.Named;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Validate;
 import org.bremersee.comparator.ObjectComparator;
 import org.bremersee.comparator.ObjectComparatorFactory;
 import org.bremersee.comparator.model.ComparatorItem;
@@ -50,9 +50,9 @@ public class FailedAccessInMemoryDao implements FailedAccessDao {
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
-    private final Map<String, FailedAccessDto> map = new ConcurrentHashMap<String, FailedAccessDto>();
+    private final Map<String, FailedAccessDto> map = new ConcurrentHashMap<>();
 
-    protected ObjectComparatorFactory objectComparatorFactory = ObjectComparatorFactory.newInstance();
+    private ObjectComparatorFactory objectComparatorFactory = ObjectComparatorFactory.newInstance();
 
     @PostConstruct
     public void init() {
@@ -109,6 +109,7 @@ public class FailedAccessInMemoryDao implements FailedAccessDao {
      */
     @Override
     public FailedAccessDto getById(Serializable id) {
+        id = Validate.notNull(id, "ID must not be null.");
         return map.get(id);
     }
 
@@ -133,10 +134,7 @@ public class FailedAccessInMemoryDao implements FailedAccessDao {
     @Override
     public boolean removeById(Serializable id) {
 
-        if (id == null) {
-            return false;
-        }
-        return map.remove(id) != null;
+        return id != null && map.remove(id) != null;
     }
 
     /*
@@ -184,7 +182,7 @@ public class FailedAccessInMemoryDao implements FailedAccessDao {
 
         if (comparatorItem != null && StringUtils.isNotBlank(comparatorItem.getField())) {
             ObjectComparator objectComparator = objectComparatorFactory.newObjectComparator(comparatorItem);
-            Collections.sort(entities, objectComparator);
+            entities.sort(objectComparator);
         }
 
         if (firstResult == 0 && maxResults == Integer.MAX_VALUE) {
@@ -192,7 +190,7 @@ public class FailedAccessInMemoryDao implements FailedAccessDao {
         }
 
         List<FailedAccessDto> resultList = new ArrayList<>();
-        int tmp = Long.valueOf((long) maxResults + (long) firstResult) > (long) Integer.MAX_VALUE ? Integer.MAX_VALUE
+        int tmp = (long) maxResults + (long) firstResult > (long) Integer.MAX_VALUE ? Integer.MAX_VALUE
                 : maxResults + firstResult;
         for (int i = firstResult; i < tmp && i < entities.size(); i++) {
             resultList.add(entities.get(i));

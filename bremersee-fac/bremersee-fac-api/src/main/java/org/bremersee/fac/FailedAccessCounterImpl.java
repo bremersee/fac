@@ -25,6 +25,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
+import org.apache.commons.lang3.Validate;
 import org.bremersee.comparator.ObjectComparatorFactory;
 import org.bremersee.fac.domain.FailedAccessDao;
 import org.bremersee.fac.domain.mem.FailedAccessInMemoryDao;
@@ -51,11 +52,11 @@ import org.slf4j.LoggerFactory;
  * {@link FailedAccessCounterImpl#start()} and
  * {@link FailedAccessCounterImpl#stop()}).
  * </p>
- * 
+ *
  * @author Christian Bremer
  */
 public class FailedAccessCounterImpl implements FailedAccessCounter {
-    
+
     /**
      * The logger
      */
@@ -154,21 +155,19 @@ public class FailedAccessCounterImpl implements FailedAccessCounter {
 
     /**
      * Sets the failed access DAO.
-     * 
-     * @param failedAccessDao
-     *            the failed access DAO
+     *
+     * @param failedAccessDao the failed access DAO
      */
-    public void setFailedAccessDao(FailedAccessDao failedAccessDao) {
+    public void setFailedAccessDao(final FailedAccessDao failedAccessDao) {
         this.failedAccessDao = failedAccessDao;
     }
 
     /**
      * Sets the page builder.
-     * 
-     * @param pageBuilder
-     *            the page builder
+     *
+     * @param pageBuilder the page builder
      */
-    public void setPageBuilder(PageBuilder pageBuilder) {
+    public void setPageBuilder(final PageBuilder pageBuilder) {
         if (pageBuilder != null) {
             this.pageBuilder = pageBuilder;
         }
@@ -187,11 +186,10 @@ public class FailedAccessCounterImpl implements FailedAccessCounter {
 
     /**
      * Sets the counter threshold.
-     * 
-     * @param failedAccessCounterThreshold
-     *            the counter threshold
+     *
+     * @param failedAccessCounterThreshold the counter threshold
      */
-    public void setFailedAccessCounterThreshold(int failedAccessCounterThreshold) {
+    public void setFailedAccessCounterThreshold(final int failedAccessCounterThreshold) {
         this.failedAccessCounterThreshold = failedAccessCounterThreshold;
     }
 
@@ -208,11 +206,10 @@ public class FailedAccessCounterImpl implements FailedAccessCounter {
 
     /**
      * Sets the lifetime of a failed access entry.
-     * 
-     * @param removeFailedAccessEntriesAfterMillis
-     *            the lifetime of a failed access entry
+     *
+     * @param removeFailedAccessEntriesAfterMillis the lifetime of a failed access entry
      */
-    public void setRemoveFailedAccessEntriesAfterMillis(long removeFailedAccessEntriesAfterMillis) {
+    public void setRemoveFailedAccessEntriesAfterMillis(final long removeFailedAccessEntriesAfterMillis) {
         this.removeFailedAccessEntriesAfterMillis = removeFailedAccessEntriesAfterMillis;
     }
 
@@ -229,22 +226,20 @@ public class FailedAccessCounterImpl implements FailedAccessCounter {
 
     /**
      * Sets the interval of removing obsolete failed access entries.
-     * 
-     * @param removeFailedEntriesInterval
-     *            the interval of removing obsolete failed access entries
+     *
+     * @param removeFailedEntriesInterval the interval of removing obsolete failed access entries
      */
-    public void setRemoveFailedEntriesInterval(long removeFailedEntriesInterval) {
+    public void setRemoveFailedEntriesInterval(final long removeFailedEntriesInterval) {
         this.removeFailedEntriesInterval = removeFailedEntriesInterval;
     }
 
     /**
      * Returns {@code true} if the access to the resource is not blocked for the
      * remote host, otherwise {@code false}.
-     * 
-     * @param failedAccess
-     *            the failed access entry
+     *
+     * @param failedAccess the failed access entry
      * @return {@code true} if the access to the resource is not blocked for the
-     *         remote host, otherwise {@code false}
+     * remote host, otherwise {@code false}
      */
     private boolean isAccessGranted(FailedAccess failedAccess) {
         return failedAccess == null || failedAccess.getCounter() <= this.failedAccessCounterThreshold;
@@ -252,13 +247,12 @@ public class FailedAccessCounterImpl implements FailedAccessCounter {
 
     /**
      * Calculates how log the resource is blocked for the remote host.
-     * 
-     * @param failedAccess
-     *            the failed access entry
+     *
+     * @param failedAccess the failed access entry
      * @return the date until the resource is blocked for the remote host or
-     *         {@code null}, if the resource is not blocked
+     * {@code null}, if the resource is not blocked
      */
-    private Date calculateAccessDeniedUntil(FailedAccess failedAccess) {
+    private Date calculateAccessDeniedUntil(final FailedAccess failedAccess) {
         if (isAccessGranted(failedAccess) || failedAccess.getModificationDate() == null) {
             return null;
         }
@@ -337,19 +331,23 @@ public class FailedAccessCounterImpl implements FailedAccessCounter {
         }
 
         //@formatter:off
-        Long totalSize = failedAccessDao.count(pageRequest.getQuery());
-        List<? extends FailedAccess> entities = failedAccessDao
-                .find(pageRequest.getQuery(), 
-                        pageRequest.getFirstResult(), 
-                        pageRequest.getPageSize(), 
+        final Long totalSize = failedAccessDao.count(pageRequest.getQuery());
+        final List<? extends FailedAccess> entities = failedAccessDao
+                .find(pageRequest.getQuery(),
+                        pageRequest.getFirstResult(),
+                        pageRequest.getPageSize(),
                         pageRequest.getComparatorItem());
         //@formatter:on
 
-        Page<? extends  FailedAccess> page = pageBuilder.buildPage(entities, pageRequest, totalSize);
+        final Page<? extends FailedAccess> page = pageBuilder.buildPage(entities, pageRequest, totalSize);
 
         return PageBuilderUtils.createPageDto(
                 page,
                 (PageEntryTransformer<FailedAccessDto, FailedAccess>) source -> new FailedAccessDto(source));
+    }
+
+    private FailedAccessDto createFailedAccessDto(FailedAccess source) {
+        return source == null ? null : new FailedAccessDto(source);
     }
 
     /*
@@ -359,13 +357,14 @@ public class FailedAccessCounterImpl implements FailedAccessCounter {
      * Serializable)
      */
     @Override
-    public FailedAccessDto getFailedAccessEntry(Serializable id) {
+    public FailedAccessDto getFailedAccessEntry(final Serializable id) {
 
-        FailedAccess entity = failedAccessDao.getById(id);
-        if (entity == null) {
-            return null;
+        Validate.notNull(id, "ID must not be null.");
+        final FailedAccess entity = failedAccessDao.getById(id);
+        final FailedAccessDto dto = createFailedAccessDto(entity);
+        if (log.isDebugEnabled()) {
+            log.debug("Returning failed access DTO with ID [" + id + "]: " + dto);
         }
-        FailedAccessDto dto = new FailedAccessDto(entity);
         return dto;
     }
 
@@ -377,13 +376,14 @@ public class FailedAccessCounterImpl implements FailedAccessCounter {
      * String, java.lang.String)
      */
     @Override
-    public FailedAccessDto getFailedAccessEntry(String resourceId, String remoteHost) {
+    public FailedAccessDto getFailedAccessEntry(final String resourceId, final String remoteHost) {
 
         FailedAccess entity = failedAccessDao.getByResourceIdAndRemoteHost(resourceId, remoteHost);
-        if (entity == null) {
-            return null;
+        final FailedAccessDto dto = createFailedAccessDto(entity);
+        if (log.isDebugEnabled()) {
+            log.debug("Returning failed access DTO with resource ID [" + resourceId
+                    + "] and remote host [" + remoteHost + "]: " + dto);
         }
-        FailedAccessDto dto = new FailedAccessDto(entity);
         return dto;
     }
 

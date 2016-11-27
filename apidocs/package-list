@@ -1,3 +1,7 @@
 org.bremersee.fac
 org.bremersee.fac.domain
+org.bremersee.fac.domain.jpa
+org.bremersee.fac.domain.ldap
+org.bremersee.fac.domain.mem
+org.bremersee.fac.domain.mongo
 org.bremersee.fac.model

@@ -9,7 +9,11 @@
     <artifactId>bremersee-fac-api</artifactId>
     <name>bremersee-fac-api</name>
     <description>Enter description here</description>
-    
+
+    <properties>
+        <main.basedir>${basedir}/..</main.basedir>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.bremersee</groupId>

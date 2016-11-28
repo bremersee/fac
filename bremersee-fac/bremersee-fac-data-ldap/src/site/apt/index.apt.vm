@@ -1,0 +1,56 @@
+Bremersee Failed Access Counter: LDAP Module
+
+* Configuration of the FailedAccessLdapDao
+
+The FailedAccessLdapDao uses the ldaptive library ({{http://www.ldaptive.org/}})
+to access the LDAP server. The configuration of the connection factory is
+skipped here. See the documentation at ldaptive.org.
+
+A LDAP schema of the failed access entries can be download
+{{{http://bremersee.github.io/ldapschemas/bremersee-fac.schema}here}}.
+
++-----------------------------------------------------------------------+
+@Configuration
+public class FacConfig {
+
+    @Bean
+    public FailedAccessCounter failedAccessCounter() {
+        FailedAccessCounterImpl fac = new FailedAccessCounterImpl();
+        fac.setFailedAccessDao(failedAccessDao());
+        return fac;
+    }
+
+    @Bean
+    public FailedAccessDao failedAccessDao() {
+        FailedAccessLdapDao dao = new FailedAccessLdapDao();
+        dao.setFailedAccessLdapMapper(failedAccessLdapMapper());
+        dao.setSearchRequest(searchRequest());
+        dao.setConnectionFactory(connectionFactory);
+        return dao;
+    }
+
+    @Bean
+    public FailedAccessLdapMapper failedAccessLdapMapper() {
+        FailedAccessDefaultLdapMapper mapper = new FailedAccessDefaultLdapMapper();
+        // configure the mapper if you don't use the bremersee-fac.schema
+        // or use your own implementation
+        return mapper;
+    }
+
+    @Bean
+    public SearchRequest searchRequest() {
+        SearchRequest searchRequest = new SearchRequest();
+        searchRequest.setBaseDn("ou=Access Failed Entries,dc=example,dc=org");
+        return searchRequest;
+    }
+
+    @Bean
+    public ConnectionFactory connectionFactory() {
+        DefaultConnectionFactory factory = new DefaultConnectionFactory();
+        // configure the connection factory
+        return factory;
+    }
+}
++-----------------------------------------------------------------------+
+
+Have a look to the bremersee-fac-example-ldap module for more details.

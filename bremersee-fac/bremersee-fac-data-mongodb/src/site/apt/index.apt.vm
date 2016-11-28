@@ -1,0 +1,24 @@
+Bremersee Failed Access Counter: MongoDB Module
+
+* Configuration of the FailedAccessMongoDao
+
++-----------------------------------------------------------------------+
+@Configuration
+@EnableMongoRepositories(basePackages = "org.bremersee.fac.domain.mongo")
+public class FacConfig {
+
+    @Bean
+    public FailedAccessCounter failedAccessCounter() {
+        FailedAccessCounterImpl fac = new FailedAccessCounterImpl();
+        fac.setFailedAccessDao(failedAccessDao());
+        return fac;
+    }
+
+    @Bean
+    public FailedAccessDao failedAccessDao() {
+        FailedAccessMongoDao dao = new FailedAccessMongoDao();
+        return dao;
+    }
+
+}
++-----------------------------------------------------------------------+

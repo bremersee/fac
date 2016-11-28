@@ -17,18 +17,13 @@
         <bremersee-pagebuilder.version>1.2.2</bremersee-pagebuilder.version>
         <bremersee-utils.version>1.0.3</bremersee-utils.version>
         <commons-lang3.version>3.4</commons-lang3.version>
-        <jackson2.version>2.8.2</jackson2.version>
         <javax.inject.version>1</javax.inject.version>
         <javax.interceptor.version>1.2</javax.interceptor.version>
-        <javax.transaction-api.version>1.2</javax.transaction-api.version>
         <hibernate-jpa-21-api.version>1.0.0.Final</hibernate-jpa-21-api.version>
-        <junit.version>4.12</junit.version>
         <ldaptive.version>1.2.0</ldaptive.version>
-        <log4j2.version>2.6.2</log4j2.version>
-        <slf4j.version>1.7.21</slf4j.version>
-        <spring.version>4.2.6.RELEASE</spring.version>
-        <!-- <spring-data.version>1.9.2.RELEASE</spring-data.version> -->
-        <spring-data.version>1.8.4.RELEASE</spring-data.version>
+        <lombok.version>1.16.10</lombok.version>
+        <spring-boot.version>1.4.1.RELEASE</spring-boot.version>
+        <spring.version>4.3.3.RELEASE</spring.version>
         <swagger.version>1.5.9</swagger.version>
         <main.basedir>${basedir}</main.basedir>
     </properties>
@@ -77,14 +72,26 @@
         </snapshotRepository>
         <site>
             <id>${project.artifactId}-site</id>
-            <!-- <name>${project.artifactId}-site</name> -->
-            <!--<url>file://${project.build.directory}/mysites</url>-->
-            <url>file://${main.basedir}/target/new-staging</url>
+            <url>file://${main.basedir}/target/deploy-stage</url>
         </site>
     </distributionManagement>
     
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <!-- Import dependency management from Spring Boot -->
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.bremersee</groupId>
                 <artifactId>bremersee-pagebuilder</artifactId>
@@ -95,47 +102,22 @@
                 <artifactId>bremersee-utils</artifactId>
                 <version>${bremersee-utils.version}</version>
             </dependency>
-        
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-api</artifactId>
-                <version>${slf4j.version}</version>
-            </dependency>
-            
+
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
                 <version>${commons-lang3.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-annotations</artifactId>
-                <version>${jackson2.version}</version>
-                <type>jar</type>
-            </dependency>
-            
-            <dependency>
                 <groupId>javax.inject</groupId>
                 <artifactId>javax.inject</artifactId>
                 <version>${javax.inject.version}</version>
             </dependency>
             <dependency>
-                <groupId>javax.interceptor</groupId>
-                <artifactId>javax.interceptor-api</artifactId>
-                <version>${javax.interceptor.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>javax.transaction</groupId>
-                <artifactId>javax.transaction-api</artifactId>
-                <version>${javax.transaction-api.version}</version>
-            </dependency>
-            
-            <dependency>
                 <groupId>org.hibernate.javax.persistence</groupId>
                 <artifactId>hibernate-jpa-2.1-api</artifactId>
                 <version>${hibernate-jpa-21-api.version}</version>
             </dependency>
-            
             <dependency>
                 <groupId>org.ldaptive</groupId>
                 <artifactId>ldaptive</artifactId>
@@ -147,17 +129,10 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-            
             <dependency>
                 <groupId>io.swagger</groupId>
                 <artifactId>swagger-annotations</artifactId>
                 <version>${swagger.version}</version>
-            </dependency>
-    
-            <dependency>
-                <groupId>org.springframework.data</groupId>
-                <artifactId>spring-data-mongodb</artifactId>
-                <version>${spring-data.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -166,33 +141,32 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>${jackson2.version}</version>
             <type>jar</type>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-slf4j-impl</artifactId>
-            <version>${log4j2.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
-            <version>${log4j2.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
-            <version>${log4j2.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
         </dependency>
     </dependencies>
 
@@ -290,11 +264,6 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>2.6</version>
                 <configuration>
-                    <!--
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                    <encoding>${project.build.sourceEncoding}</encoding>
-                    -->
                     <archive>
                         <addMavenDescriptor>true</addMavenDescriptor>
                         <index>true</index>

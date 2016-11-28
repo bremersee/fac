@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+	<body>
+		<!--<menu name="My Inherited Menu" inherit="top" />-->
+		<menu ref="parent" />
+		<menu ref="reports" />
+	</body>
+</project>

@@ -1,0 +1,25 @@
+Bremersee Failed Access Counter: JPA Module
+
+* Configuration of the FailedAccessJpaDao
+
+The configuration of the data source, entity manager etc. is skipped here.
+
++-----------------------------------------------------------------------+
+@Configuration
+@EntityScan(basePackages = {"org.bremersee.fac.domain.jpa"})
+public class FacConfig {
+
+    @Bean
+    public FailedAccessCounter failedAccessCounter() {
+        FailedAccessCounterImpl fac = new FailedAccessCounterImpl();
+        fac.setFailedAccessDao(failedAccessDao());
+        return fac;
+    }
+
+    @Bean
+    public FailedAccessDao failedAccessDao() {
+        FailedAccessJpaDao dao = new FailedAccessJpaDao();
+        return dao;
+    }
+}
++-----------------------------------------------------------------------+

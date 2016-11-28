@@ -27,7 +27,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
  */
 @Configuration
 @EnableMongoRepositories(basePackages = "org.bremersee.fac.domain.mongo")
-public class JpaFacConfig extends AbstractFacConfig {
+public class MongoFacConfig extends AbstractFacConfig {
 
     /*
      * (non-Javadoc)

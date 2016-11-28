@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/bremersee-fac" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bremersee-fac-example" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bremersee-fac-example/bremersee-fac-example-common" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bremersee-fac-example/bremersee-fac-example-jpa" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bremersee-fac-example/bremersee-fac-example-ldap" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bremersee-fac-example/bremersee-fac-example-memory" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bremersee-fac-example/bremersee-fac-example-mongodb" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bremersee-fac/bremersee-fac-api" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bremersee-fac/bremersee-fac-data-jpa" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bremersee-fac/bremersee-fac-data-ldap" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bremersee-fac/bremersee-fac-data-mongodb" charset="UTF-8" />
+  </component>
+</project>

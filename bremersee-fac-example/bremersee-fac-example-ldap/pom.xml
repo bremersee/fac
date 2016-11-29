@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.bremersee</groupId>
         <artifactId>bremersee-fac-example</artifactId>
-        <version>1.1.0</version>
+        <version>1.1.1-SNAPSHOT</version>
     </parent>
     <artifactId>bremersee-fac-example-ldap</artifactId>
     <name>Bremersee Failed Access Counter LDAP Example</name>

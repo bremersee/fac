@@ -2,7 +2,7 @@ Bremersee Failed Access Counter: JPA Module
 
 * Configuration of the FailedAccessJpaDao
 
-The configuration of the data source, entity manager etc. is skipped here.
+  The configuration of the data source, entity manager etc. is skipped here.
 
 +-----------------------------------------------------------------------+
 @Configuration

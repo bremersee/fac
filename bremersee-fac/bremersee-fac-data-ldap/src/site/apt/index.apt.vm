@@ -2,12 +2,12 @@ Bremersee Failed Access Counter: LDAP Module
 
 * Configuration of the FailedAccessLdapDao
 
-The FailedAccessLdapDao uses the ldaptive library ({{http://www.ldaptive.org/}})
-to access the LDAP server. The configuration of the connection factory is
-skipped here. See the documentation at ldaptive.org.
+  The FailedAccessLdapDao uses the ldaptive library ({{http://www.ldaptive.org/}})
+  to access the LDAP server. The configuration of the connection factory is
+  skipped here. See the documentation at ldaptive.org.
 
-A LDAP schema of the failed access entries can be download
-{{{http://bremersee.github.io/ldapschemas/bremersee-fac.schema}here}}.
+  A LDAP schema of the failed access entries can be download
+  {{{http://bremersee.github.io/ldapschemas/bremersee-fac.schema}here}}.
 
 +-----------------------------------------------------------------------+
 @Configuration
@@ -53,4 +53,4 @@ public class FacConfig {
 }
 +-----------------------------------------------------------------------+
 
-Have a look to the bremersee-fac-example-ldap module for more details.
+  Have a look to the bremersee-fac-example-ldap module for more details.

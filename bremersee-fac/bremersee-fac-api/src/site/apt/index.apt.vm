@@ -1,1 +1,34 @@
 Bremersee Failed Access Counter API
+
+  This project contains the Model and the API.
+
+* Configuration (in a Spring environment)
+
+  To configure a failed access counter just create a bean, set the DAO
+  and the properties that match your requirements:
+
++-----------------------------------------------------------------------+
+@Configuration
+public class FacConfig {
+
+    @Bean
+    public FailedAccessCounter failedAccessCounter() {
+        FailedAccessCounterImpl fac = new FailedAccessCounterImpl();
+
+        // set the properties (these are the default values):
+        fac.setFailedAccessCounterThreshold(5);
+        fac.setRemoveFailedAccessEntriesAfterMillis(1000L * 60L * 60L * 23L);
+        fac.setRemoveFailedEntriesInterval(1000L * 60L * 60L);
+
+        // set the DAO:
+        fac.setFailedAccessDao(failedAccessDao());
+        return fac;
+    }
+
+    @Bean
+    public FailedAccessDao failedAccessDao() {
+        FailedAccessInMemoryDao dao = new FailedAccessInMemoryDao();
+        return dao;
+    }
+}
++-----------------------------------------------------------------------+

@@ -16,43 +16,35 @@
 
 package org.bremersee.fac.model;
 
-import java.util.Date;
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
-
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+import javax.xml.bind.annotation.*;
+import java.util.Date;
 
 /**
  * <p>
  * Data transfer object of a {@link FailedAccess}.
  * </p>
- * 
+ *
  * @author Christian Bremer
  */
+@SuppressWarnings("unused")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "failedAccess")
-@XmlType(name = "failedAccessType", propOrder = { "id", "resourceId", "remoteHost", "counter", "creationDate",
-        "modificationDate" })
+@XmlType(name = "failedAccessType", propOrder = {"id", "resourceId", "remoteHost", "counter", "creationDate",
+        "modificationDate"})
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(Include.ALWAYS)
 @JsonAutoDetect(fieldVisibility = Visibility.ANY, getterVisibility = Visibility.NONE, creatorVisibility = Visibility.NONE, isGetterVisibility = Visibility.NONE, setterVisibility = Visibility.NONE)
-@JsonPropertyOrder(value = { "id", "resourceId", "remoteHost", "counter", "creationDate", "modificationDate" })
+@JsonPropertyOrder(value = {"id", "resourceId", "remoteHost", "counter", "creationDate", "modificationDate"})
 public class FailedAccessDto implements FailedAccess, Cloneable {
 
     private static final long serialVersionUID = 1L;
 
-    @XmlAttribute(name = "id", required = false)
-    @JsonProperty(value = "id", required = false)
+    @XmlAttribute(name = "id")
+    @JsonProperty(value = "id")
     private String id;
 
     @XmlAttribute(name = "resourceId", required = true)
@@ -67,12 +59,12 @@ public class FailedAccessDto implements FailedAccess, Cloneable {
     @JsonProperty(value = "counter", required = true)
     private int counter;
 
-    @XmlAttribute(name = "creationDate", required = false)
-    @JsonProperty(value = "creationDate", required = false)
+    @XmlAttribute(name = "creationDate")
+    @JsonProperty(value = "creationDate")
     private Date creationDate;
 
-    @XmlAttribute(name = "modificationDate", required = false)
-    @JsonProperty(value = "modificationDate", required = false)
+    @XmlAttribute(name = "modificationDate")
+    @JsonProperty(value = "modificationDate")
     private Date modificationDate;
 
     /**
@@ -85,11 +77,9 @@ public class FailedAccessDto implements FailedAccess, Cloneable {
 
     /**
      * Constructs an instance with the specified parameters.
-     * 
-     * @param resourceId
-     *            the ID of the resource
-     * @param remoteHost
-     *            the remote host
+     *
+     * @param resourceId the ID of the resource
+     * @param remoteHost the remote host
      */
     public FailedAccessDto(String resourceId, String remoteHost) {
         this();
@@ -99,31 +89,20 @@ public class FailedAccessDto implements FailedAccess, Cloneable {
 
     /**
      * Constructs a clone of the specified {@link FailedAccess}.
-     * 
-     * @param failedAccess
-     *            the failed access
+     *
+     * @param failedAccess the failed access
      */
     public FailedAccessDto(FailedAccess failedAccess) {
         this();
         update(failedAccess);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#toString()
-     */
     @Override
     public String toString() {
         return "FailedAccessDto [id=" + id + ", resourceId=" + resourceId + ", remoteHost=" + remoteHost + ", counter="
                 + counter + ", creationDate=" + creationDate + ", modificationDate=" + modificationDate + "]";
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#hashCode()
-     */
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -133,11 +112,6 @@ public class FailedAccessDto implements FailedAccess, Cloneable {
         return result;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -160,58 +134,23 @@ public class FailedAccessDto implements FailedAccess, Cloneable {
         return true;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#clone()
-     */
+    @SuppressWarnings("MethodDoesntCallSuperMethod")
     @Override
-    public FailedAccessDto clone() {
+    public FailedAccessDto clone() { // NOSONAR
         return new FailedAccessDto(this);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Comparable#compareTo(java.lang.Object)
-     */
     @Override
     public int compareTo(FailedAccess o) {
-        String s1 = getResourceId() == null ? "" : getResourceId();
-        String s2 = o == null ? "" : o.getResourceId() == null ? "" : o.getResourceId();
-        int c = s1.compareTo(s2);
-        if (c != 0) {
-            return c;
-        }
-        s1 = remoteHost == null ? "" : remoteHost;
-        s2 = o == null ? "" : o.getRemoteHost() == null ? "" : o.getRemoteHost();
-        c = s1.compareTo(s2);
-        if (c != 0) {
-            return c;
-        }
-        if (modificationDate != null && o != null && o.getModificationDate() != null) {
-            c = modificationDate.compareTo(o.getModificationDate());
-            if (c != 0) {
-                return c;
-            }
-        }
-        if (o != null) {
-            c = counter - o.getCounter();
-            if (c != 0) {
-                return c;
-            }
-        }
-        s1 = id == null ? "" : id;
-        s2 = o == null ? "" : o.getId() == null ? "" : o.getId().toString();
-        return s1.compareTo(s2);
+        return new FailedAccessHelper().compare(this, o);
     }
 
     /**
      * Updates this failed access by another one.
-     * 
-     * @param failedAccess
-     *            another failed access
+     *
+     * @param failedAccess another failed access
      */
+    @SuppressWarnings("Duplicates")
     public void update(FailedAccess failedAccess) {
         if (failedAccess != null) {
             this.counter = failedAccess.getCounter();
@@ -223,11 +162,6 @@ public class FailedAccessDto implements FailedAccess, Cloneable {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.bremersee.fac.model.FailedAccess#getId()
-     */
     @Override
     public String getId() {
         return id;
@@ -235,19 +169,13 @@ public class FailedAccessDto implements FailedAccess, Cloneable {
 
     /**
      * Sets the ID.
-     * 
-     * @param id
-     *            the ID
+     *
+     * @param id the ID
      */
     public void setId(String id) {
         this.id = id;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.bremersee.fac.model.FailedAccess#getResourceId()
-     */
     @Override
     public String getResourceId() {
         if (resourceId == null || resourceId.trim().length() == 0) {
@@ -258,19 +186,13 @@ public class FailedAccessDto implements FailedAccess, Cloneable {
 
     /**
      * Sets the ID of the resource.
-     * 
-     * @param resourceId
-     *            the ID of the resource
+     *
+     * @param resourceId the ID of the resource
      */
     public void setResourceId(String resourceId) {
         this.resourceId = resourceId;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.bremersee.fac.model.FailedAccess#getRemoteHost()
-     */
     @Override
     public String getRemoteHost() {
         return remoteHost;
@@ -278,19 +200,13 @@ public class FailedAccessDto implements FailedAccess, Cloneable {
 
     /**
      * Sets the remote host.
-     * 
-     * @param remoteHost
-     *            the remote host
+     *
+     * @param remoteHost the remote host
      */
     public void setRemoteHost(String remoteHost) {
         this.remoteHost = remoteHost;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.bremersee.fac.model.FailedAccess#getCounter()
-     */
     @Override
     public int getCounter() {
         return counter;
@@ -298,19 +214,13 @@ public class FailedAccessDto implements FailedAccess, Cloneable {
 
     /**
      * Sets the counter.
-     * 
-     * @param failedAccessCounter
-     *            the counter
+     *
+     * @param failedAccessCounter the counter
      */
     public void setCounter(int failedAccessCounter) {
         this.counter = failedAccessCounter;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.bremersee.fac.model.FailedAccess#getCreationDate()
-     */
     @Override
     public Date getCreationDate() {
         return creationDate;
@@ -318,19 +228,13 @@ public class FailedAccessDto implements FailedAccess, Cloneable {
 
     /**
      * Sets the creation date.
-     * 
-     * @param creationDate
-     *            the creation date
+     *
+     * @param creationDate the creation date
      */
     public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.bremersee.fac.model.FailedAccess#getModificationDate()
-     */
     @Override
     public Date getModificationDate() {
         return modificationDate;
@@ -338,9 +242,8 @@ public class FailedAccessDto implements FailedAccess, Cloneable {
 
     /**
      * Sets the last modification date.
-     * 
-     * @param modificationDate
-     *            the last modification date
+     *
+     * @param modificationDate the last modification date
      */
     public void setModificationDate(Date modificationDate) {
         this.modificationDate = modificationDate;

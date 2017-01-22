@@ -22,9 +22,10 @@ import javax.xml.bind.annotation.XmlRegistry;
  * <p>
  * XML object factory.
  * </p>
- * 
+ *
  * @author Christian Bremer
  */
+@SuppressWarnings("unused")
 @XmlRegistry
 public class ObjectFactory {
 
@@ -39,7 +40,7 @@ public class ObjectFactory {
     public FailedAccessDto createFailedAccessDto() {
         return new FailedAccessDto();
     }
-    
+
     public ResourceDescriptionDto createResourceDescriptionDto() {
         return new ResourceDescriptionDto();
     }

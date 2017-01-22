@@ -16,19 +16,6 @@
 
 package org.bremersee.fac.domain.jpa;
 
-import java.io.Serializable;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.PostConstruct;
-import javax.inject.Named;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import javax.transaction.Transactional;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.bremersee.comparator.model.ComparatorItem;
@@ -38,9 +25,22 @@ import org.bremersee.utils.TagUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.PostConstruct;
+import javax.inject.Named;
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.transaction.Transactional;
+import java.io.Serializable;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * @author Christian Bremer
  */
+@SuppressWarnings({"WeakerAccess", "unused"})
 @Named("failedAccessJpaDao")
 public class FailedAccessJpaDao implements FailedAccessDao {
 
@@ -67,9 +67,8 @@ public class FailedAccessJpaDao implements FailedAccessDao {
 
     /**
      * Configure the entity manager to be used.
-     * 
-     * @param entityManager
-     *            the {@link EntityManager} to set.
+     *
+     * @param entityManager the {@link EntityManager} to set.
      */
     public void setEntityManager(EntityManager entityManager) {
         this.entityManager = entityManager;
@@ -91,7 +90,7 @@ public class FailedAccessJpaDao implements FailedAccessDao {
         return entityClass;
     }
 
-    protected Long getId(Serializable id) {
+    protected Long getId(final Serializable id) {
         if (id == null) {
             return null;
         }
@@ -100,21 +99,14 @@ public class FailedAccessJpaDao implements FailedAccessDao {
         }
         try {
             return Long.parseLong(id.toString());
-        } catch (Exception e) {
+        } catch (Exception e) { // NOSONAR
             return null;
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.bremersee.fac.domain.FailedAccessDao#save(org.bremersee.fac.model.
-     * FailedAccess)
-     */
     @Transactional
     @Override
-    public AbstractFailedAccessEntity save(FailedAccess failedAccess) {
+    public AbstractFailedAccessEntity save(final FailedAccess failedAccess) {
         if (log.isDebugEnabled()) {
             log.debug("Persisting " + failedAccess + " ...");
         }
@@ -128,37 +120,32 @@ public class FailedAccessJpaDao implements FailedAccessDao {
         return entity;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.bremersee.fac.domain.FailedAccessDao#getById(java.io.Serializable)
-     */
     @Transactional
     @Override
-    public AbstractFailedAccessEntity getById(Serializable _id) {
+    public AbstractFailedAccessEntity getById(final Serializable _id) { // NOSONAR
 
-        Class<? extends AbstractFailedAccessEntity> entityClass = getEntityClass();
+        Class<? extends AbstractFailedAccessEntity> entityClass = getEntityClass(); // NOSONAR
         if (log.isDebugEnabled()) {
-            log.debug("Getting " + entityClass.getSimpleName() + " by id [" + _id + "] ...");
+            log.debug("Getting " + entityClass.getSimpleName() + " by id [" + _id + "] ..."); // NOSONAR
         }
         Long id = getId(_id);
         if (id == null) {
             if (log.isDebugEnabled()) {
                 log.debug(
-                        "Getting " + entityClass.getSimpleName() + " by id [" + id + "]: Id is null, returning null.");
+                        "Getting " + entityClass.getSimpleName() + " by id: Id is null, returning null.");
             }
             return null;
         }
         try {
-            AbstractFailedAccessEntity entity = (AbstractFailedAccessEntity) getEntityManager().find(entityClass, id);
+            AbstractFailedAccessEntity entity = getEntityManager().find(entityClass, id);
 
             if (log.isDebugEnabled()) {
-                log.debug("Getting " + entityClass.getSimpleName() + " by id [" + id + "]: Returning " + entity);
+                log.debug("Getting " + entityClass.getSimpleName() + " by id [" + id
+                        + "]: Returning " + entity); // NOSONAR
             }
             return entity;
 
-        } catch (NoResultException e) {
+        } catch (NoResultException e) { // NOSONAR
             if (log.isDebugEnabled()) {
                 log.debug("Getting " + entityClass.getSimpleName() + " by id [" + id
                         + "]: Entity was not found, returning null.");
@@ -167,20 +154,14 @@ public class FailedAccessJpaDao implements FailedAccessDao {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.bremersee.fac.domain.FailedAccessDao#getByResourceIdAndRemoteHost(
-     * java.lang.String, java.lang.String)
-     */
     @Transactional
     @Override
-    public AbstractFailedAccessEntity getByResourceIdAndRemoteHost(String resourceId, String remoteHost) {
+    public AbstractFailedAccessEntity getByResourceIdAndRemoteHost(final String resourceId, final String remoteHost) {
 
-        Class<? extends AbstractFailedAccessEntity> entityClass = getEntityClass();
+        Class<? extends AbstractFailedAccessEntity> entityClass = getEntityClass(); // NOSONAR
         if (log.isDebugEnabled()) {
-            log.debug("Getting " + entityClass.getSimpleName() + " by resourceId [" + resourceId + "] and remoteHost ["
+            log.debug("Getting " + entityClass.getSimpleName() + " by resourceId [" + resourceId // NOSONAR
+                    + "] and remoteHost [" // NOSONAR
                     + remoteHost + "] ...");
         }
         if (resourceId == null || remoteHost == null) {
@@ -202,7 +183,7 @@ public class FailedAccessJpaDao implements FailedAccessDao {
             }
             return entity;
 
-        } catch (NoResultException e) {
+        } catch (NoResultException e) { // NOSONAR
             if (log.isDebugEnabled()) {
                 log.debug("Getting " + entityClass.getSimpleName() + " by resourceId [" + resourceId
                         + "] and remoteHost [" + remoteHost + "]: Entity was not found, returning null.");
@@ -211,21 +192,15 @@ public class FailedAccessJpaDao implements FailedAccessDao {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.bremersee.fac.domain.FailedAccessDao#removeById(java.io.Serializable)
-     */
     @Transactional
     @Override
-    public boolean removeById(Serializable _id) {
+    public boolean removeById(final Serializable _id) { // NOSONAR
 
-        Class<? extends AbstractFailedAccessEntity> entityClass = getEntityClass();
+        Class<? extends AbstractFailedAccessEntity> entityClass = getEntityClass(); // NOSONAR
         Long id = getId(_id);
 
         if (log.isDebugEnabled()) {
-            log.debug("Removing " + entityClass.getSimpleName() + " by id [" + id + "] ...");
+            log.debug("Removing " + entityClass.getSimpleName() + " by id [" + id + "] ..."); // NOSONAR
         }
         AbstractFailedAccessEntity entity = getById(id);
         if (entity != null) {
@@ -241,18 +216,11 @@ public class FailedAccessJpaDao implements FailedAccessDao {
         return false;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.bremersee.fac.domain.FailedAccessDao#removeByResourceIdAndRemoteHost(
-     * java.lang.String, java.lang.String)
-     */
     @Transactional
     @Override
-    public boolean removeByResourceIdAndRemoteHost(String resourceId, String remoteHost) {
+    public boolean removeByResourceIdAndRemoteHost(final String resourceId, final String remoteHost) {
 
-        Class<? extends AbstractFailedAccessEntity> entityClass = getEntityClass();
+        Class<? extends AbstractFailedAccessEntity> entityClass = getEntityClass(); // NOSONAR
         if (log.isDebugEnabled()) {
             log.debug("Removing " + entityClass.getSimpleName() + " by resourceId [" + resourceId + "] and remoteHost ["
                     + remoteHost + "] ...");
@@ -273,22 +241,18 @@ public class FailedAccessJpaDao implements FailedAccessDao {
         return false;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.bremersee.fac.domain.FailedAccessDao#count(java.lang.String)
-     */
     @Transactional
     @Override
-    public long count(String searchValue) {
+    public long count(final String searchValue) {
 
-        Class<? extends AbstractFailedAccessEntity> entityClass = getEntityClass();
+        Class<? extends AbstractFailedAccessEntity> entityClass = getEntityClass(); // NOSONAR
 
         if (log.isDebugEnabled()) {
-            log.debug("Counting " + entityClass.getSimpleName() + " with searchValue [" + searchValue + "] ...");
+            log.debug("Counting " + entityClass.getSimpleName() + " with searchValue [" + searchValue // NOSONAR
+                    + "] ..."); // NOSONAR
         }
 
-        Map<String, Object> queryParams = new LinkedHashMap<String, Object>();
+        Map<String, Object> queryParams = new LinkedHashMap<>();
 
         StringBuilder queryBuilder = createQueryBuilder(searchValue, entityClass, queryParams, true);
 
@@ -310,27 +274,21 @@ public class FailedAccessJpaDao implements FailedAccessDao {
         return size;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.bremersee.fac.domain.FailedAccessDao#find(java.lang.String,
-     * java.lang.Integer, java.lang.Integer,
-     * org.bremersee.comparator.model.ComparatorItem)
-     */
     @Transactional
     @Override
-    public List<? extends AbstractFailedAccessEntity> find(String searchValue, Integer firstResult, Integer maxResults,
-            ComparatorItem comparatorItem) {
+    public List<? extends AbstractFailedAccessEntity> find(final String searchValue, // NOSONAR
+                                                           final Integer firstResult, final Integer maxResults,
+                                                           final ComparatorItem comparatorItem) {
 
-        Class<? extends AbstractFailedAccessEntity> entityClass = getEntityClass();
+        Class<? extends AbstractFailedAccessEntity> entityClass = getEntityClass(); // NOSONAR
 
         if (log.isDebugEnabled()) {
-            log.debug("Finding " + entityClass.getSimpleName() + " with searchValue [" + searchValue
-                    + "], firstResult [" + firstResult + "], maxResults [" + maxResults + "] and comparatorItem "
+            log.debug("Finding " + entityClass.getSimpleName() + " with searchValue [" + searchValue // NOSONAR
+                    + "], firstResult [" + firstResult + "], maxResults [" + maxResults + "] and comparatorItem " // NOSONAR
                     + comparatorItem + " ...");
         }
 
-        Map<String, Object> queryParams = new LinkedHashMap<String, Object>();
+        Map<String, Object> queryParams = new LinkedHashMap<>();
 
         StringBuilder queryBuilder = createQueryBuilder(searchValue, entityClass, queryParams, false);
 
@@ -338,8 +296,8 @@ public class FailedAccessJpaDao implements FailedAccessDao {
         ComparatorItem tmpComparatorItem = comparatorItem;
         while (tmpComparatorItem != null && StringUtils.isNotBlank(tmpComparatorItem.getField())) {
             String field = tmpComparatorItem.getField();
-            if ("id".equals(field) || "resourceId".equals(field) || "remoteHost".equals(field)
-                    || "counter".equals(field) || "creationDate".equals(field) || "modificationDate".equals(field)) {
+            if ("id".equals(field) || "resourceId".equals(field) || "remoteHost".equals(field) // NOSONAR
+                    || "counter".equals(field) || "creationDate".equals(field) || "modificationDate".equals(field)) { // NOSONAR
 
                 String direction = tmpComparatorItem.isAsc() ? "ASC" : "DESC";
                 if (i == 0) {
@@ -382,9 +340,10 @@ public class FailedAccessJpaDao implements FailedAccessDao {
         return list;
     }
 
-    private StringBuilder createQueryBuilder(String searchValue,
-            Class<? extends AbstractFailedAccessEntity> entityClass, Map<String, Object> queryParams,
-            boolean forCounting) {
+    private StringBuilder createQueryBuilder(final String searchValue,
+                                             final Class<? extends AbstractFailedAccessEntity> entityClass,
+                                             final Map<String, Object> queryParams,
+                                             final boolean forCounting) {
 
         StringBuilder queryBuilder = new StringBuilder();
 
@@ -401,7 +360,7 @@ public class FailedAccessJpaDao implements FailedAccessDao {
             if (tags != null && tags.length > 0) {
                 for (int i = 0; i < tags.length; i++) {
 
-                    if (i == 0) {
+                    if (i == 0) { // NOSONAR
                         queryBuilder.append(" WHERE ");
                     } else {
                         queryBuilder.append(" OR ");
@@ -418,22 +377,17 @@ public class FailedAccessJpaDao implements FailedAccessDao {
         return queryBuilder;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.bremersee.fac.domain.FailedAccessDao#findObsolete(long)
-     */
     @Transactional
     @Override
-    public List<? extends AbstractFailedAccessEntity> findObsolete(long removeFailedAccessEntriesAfterMillis) {
+    public List<? extends AbstractFailedAccessEntity> findObsolete(final long removeFailedAccessEntriesAfterMillis) {
 
         long modificationDate = System.currentTimeMillis() - removeFailedAccessEntriesAfterMillis;
         String queryStr = "SELECT e FROM " + getEntityClass().getSimpleName()
                 + " e WHERE e.modificationDate < :modificationDate";
 
         @SuppressWarnings("unchecked")
-        List<? extends AbstractFailedAccessEntity> list = getEntityManager().createQuery(queryStr)
-                .setParameter("modificationDate", modificationDate).getResultList();
+        List<? extends AbstractFailedAccessEntity> list = getEntityManager().createQuery(queryStr) // NOSONAR
+                .setParameter("modificationDate", modificationDate).getResultList(); // NOSONAR
         return list;
     }
 

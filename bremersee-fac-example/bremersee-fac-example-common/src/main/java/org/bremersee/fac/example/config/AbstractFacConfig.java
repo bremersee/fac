@@ -30,7 +30,7 @@ import org.springframework.context.annotation.Bean;
 /**
  * @author Christian Bremer
  */
-public abstract class AbstractFacConfig {
+public abstract class AbstractFacConfig { // NOSONAR
 
     public abstract FailedAccessDao failedAccessDao();
 

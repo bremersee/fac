@@ -16,14 +16,14 @@
 
 package org.bremersee.fac;
 
-import java.io.Serializable;
-import java.util.Date;
-
 import org.bremersee.fac.model.AccessResultDto;
 import org.bremersee.fac.model.BooleanDto;
 import org.bremersee.fac.model.FailedAccessDto;
 import org.bremersee.pagebuilder.model.PageDto;
 import org.bremersee.pagebuilder.model.PageRequestDto;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>
@@ -34,35 +34,36 @@ import org.bremersee.pagebuilder.model.PageRequestDto;
  * reached a threshold the login can be blocked for a while.<br/>
  * It is a small protection against brute-force-attacks.
  * </p>
- * 
+ *
  * @author Christian Bremer
  */
+@SuppressWarnings("unused")
 public interface FailedAccessCounter {
 
     /**
      * Returns the threshold of the counter.
-     * 
+     *
      * @return the threshold of the counter
      */
     int getFailedAccessCounterThreshold();
 
     /**
      * Returns the lifetime of a failed access entry.
-     * 
+     *
      * @return the lifetime of a failed access entry
      */
     long getRemoveFailedAccessEntriesAfterMillis();
 
     /**
      * Returns the interval of removing obsolete failed access entries.
-     * 
+     *
      * @return the interval of removing obsolete failed access entries
      */
     long getRemoveFailedEntriesInterval();
 
     /**
      * Returns the date of the last removing of obsolete failed access entries.
-     * 
+     *
      * @return the date of the last removing of obsolete failed access entries
      */
     Date getLastRemovingOfFailedEntries();
@@ -70,15 +71,15 @@ public interface FailedAccessCounter {
     /**
      * Returns the duration (in millis) of the last removing of obsolete failed
      * access entries.
-     * 
+     *
      * @return the duration (in millis) of the last removing of obsolete failed
-     *         access entries
+     * access entries
      */
     long getLastRemovingOfFailedEntriesDuration();
 
     /**
      * Returns the size of the last removing of obsolete failed access entries.
-     * 
+     *
      * @return the size of the last removing of obsolete failed access entries
      */
     int getLastRemovingOfFailedEntriesSize();
@@ -86,17 +87,16 @@ public interface FailedAccessCounter {
     /**
      * Returns the total size of the last removing of obsolete failed access
      * entries.
-     * 
+     *
      * @return the total size of the last removing of obsolete failed access
-     *         entries
+     * entries
      */
     long getRemovedFailedEntriesTotalSize();
 
     /**
      * Finds failed access entries.
-     * 
-     * @param pageRequest
-     *            the page request (can be {@code null})
+     *
+     * @param pageRequest the page request (can be {@code null})
      * @return a page with the found entries
      */
     PageDto getFailedAccessEntries(PageRequestDto pageRequest);
@@ -104,9 +104,8 @@ public interface FailedAccessCounter {
     /**
      * Gets the specified access failed entry or {@code null}, if there is no
      * such entry.
-     * 
-     * @param id
-     *            the id of the resource failed entry
+     *
+     * @param id the id of the resource failed entry
      * @return the access failed entry or {@code null}
      */
     FailedAccessDto getFailedAccessEntry(Serializable id);
@@ -114,24 +113,20 @@ public interface FailedAccessCounter {
     /**
      * Gets the specified access failed entry or {@code null}, if there is no
      * such entry.
-     * 
-     * @param resourceId
-     *            the resource of the access failed entry
-     * @param remoteHost
-     *            the remote host of the failed access entry
+     *
+     * @param resourceId the resource of the access failed entry
+     * @param remoteHost the remote host of the failed access entry
      * @return the access failed entry or {@code null}
      */
     FailedAccessDto getFailedAccessEntry(String resourceId, String remoteHost);
 
     /**
      * Removes the specified access failed entry.
-     * 
-     * @param resourceId
-     *            the resource of the access failed entry
-     * @param remoteHost
-     *            the remote host of the failed access entry
+     *
+     * @param resourceId the resource of the access failed entry
+     * @param remoteHost the remote host of the failed access entry
      * @return {@code true} if the resource was removed from the store otherwise
-     *         {@code false}
+     * {@code false}
      */
     BooleanDto removeFailedAccessEntry(String resourceId, String remoteHost);
 
@@ -145,13 +140,10 @@ public interface FailedAccessCounter {
      * specified resource was successfully. If the counter of the failed access
      * entry is already higher than the threshold of the store, the access to
      * the resource will stay blocked, otherwise the access is granted.
-     * 
-     * @param resourceId
-     *            the resource
-     * @param remoteHost
-     *            the remote host
-     * @param timeInMillis
-     *            the current time stamp (may be {@code null})
+     *
+     * @param resourceId   the resource
+     * @param remoteHost   the remote host
+     * @param timeInMillis the current time stamp (may be {@code null})
      * @return the access result
      */
     AccessResultDto accessSucceeded(String resourceId, String remoteHost, Long timeInMillis);
@@ -161,13 +153,10 @@ public interface FailedAccessCounter {
      * If an entry already exists, the counter will be incremented. If the
      * counter of the failed access entry is lower than the threshold of the
      * store, the access to the resource is not blocked otherwise it is blocked.
-     * 
-     * @param resourceId
-     *            the resource
-     * @param remoteHost
-     *            the remote host
-     * @param timeInMillis
-     *            the current time stamp (may be {@code null})
+     *
+     * @param resourceId   the resource
+     * @param remoteHost   the remote host
+     * @param timeInMillis the current time stamp (may be {@code null})
      * @return the access result
      */
     AccessResultDto accessFailed(String resourceId, String remoteHost, Long timeInMillis);
@@ -175,11 +164,9 @@ public interface FailedAccessCounter {
     /**
      * Returns whether the access to the specified resource is granted for the
      * specified remote host or not.
-     * 
-     * @param resourceId
-     *            the resource
-     * @param remoteHost
-     *            the remote host
+     *
+     * @param resourceId the resource
+     * @param remoteHost the remote host
      * @return the access result
      */
     AccessResultDto isAccessGranted(String resourceId, String remoteHost);

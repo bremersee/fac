@@ -22,7 +22,7 @@ import java.util.Date;
 /**
  * @author Christian Bremer
  */
-public interface ResourceDescription extends Serializable, Cloneable, Comparable<ResourceDescription> {
+public interface ResourceDescription extends Serializable, Cloneable, Comparable<ResourceDescription> { // NOSONAR
 
     /**
      * Unknown resource ID.

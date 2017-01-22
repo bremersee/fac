@@ -20,12 +20,11 @@ import java.util.List;
 
 /**
  * @author Christian Bremer
- *
  */
 public interface FailedAccessMongoRepositoryCustom {
-    
+
     long count(String searchValue);
-    
+
     List<FailedAccessMongoDoc> findObsolete(long removeFailedAccessEntriesAfterMillis);
 
 }

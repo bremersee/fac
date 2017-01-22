@@ -16,16 +16,6 @@
 
 package org.bremersee.fac.domain.ldap;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-
-import javax.annotation.PostConstruct;
-import javax.inject.Named;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.bremersee.comparator.ObjectComparator;
@@ -36,32 +26,22 @@ import org.bremersee.fac.model.FailedAccess;
 import org.bremersee.fac.model.FailedAccessDto;
 import org.bremersee.utils.CodingUtils;
 import org.bremersee.utils.TagUtils;
-import org.ldaptive.AddOperation;
-import org.ldaptive.AddRequest;
-import org.ldaptive.AttributeModification;
-import org.ldaptive.AttributeModificationType;
-import org.ldaptive.Connection;
-import org.ldaptive.ConnectionFactory;
-import org.ldaptive.DeleteOperation;
-import org.ldaptive.DeleteRequest;
-import org.ldaptive.LdapAttribute;
-import org.ldaptive.LdapEntry;
-import org.ldaptive.LdapException;
-import org.ldaptive.ModifyOperation;
-import org.ldaptive.ModifyRequest;
-import org.ldaptive.Response;
-import org.ldaptive.ResultCode;
-import org.ldaptive.ReturnAttributes;
-import org.ldaptive.SearchFilter;
-import org.ldaptive.SearchOperation;
-import org.ldaptive.SearchRequest;
-import org.ldaptive.SearchResult;
+import org.ldaptive.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.annotation.PostConstruct;
+import javax.inject.Named;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author Christian Bremer
  */
+@SuppressWarnings({"WeakerAccess", "unused"})
 @Named("failedAccessLdapDao")
 public class FailedAccessLdapDao implements FailedAccessDao {
 
@@ -104,7 +84,7 @@ public class FailedAccessLdapDao implements FailedAccessDao {
         }
         log.info("loadFilter = " + loadFilter);
         if (StringUtils.isBlank(obsoleteFilter)) {
-            String loadFilter = this.loadFilter;
+            String loadFilter = this.loadFilter; // NOSONAR
             if (!loadFilter.startsWith("(")) {
                 loadFilter = "(" + loadFilter;
             }
@@ -118,7 +98,7 @@ public class FailedAccessLdapDao implements FailedAccessDao {
         log.info(getClass().getSimpleName() + " successfully initialized.");
     }
 
-    public void setConnectionFactory(ConnectionFactory connectionFactory) {
+    public void setConnectionFactory(final ConnectionFactory connectionFactory) {
         this.connectionFactory = connectionFactory;
     }
 
@@ -126,11 +106,11 @@ public class FailedAccessLdapDao implements FailedAccessDao {
         this.searchRequest = searchRequest;
     }
 
-    public void setFailedAccessLdapMapper(FailedAccessLdapMapper failedAccessLdapMapper) {
+    public void setFailedAccessLdapMapper(final FailedAccessLdapMapper failedAccessLdapMapper) {
         this.failedAccessLdapMapper = failedAccessLdapMapper;
     }
 
-    public void setObjectComparatorFactory(ObjectComparatorFactory objectComparatorFactory) {
+    public void setObjectComparatorFactory(final ObjectComparatorFactory objectComparatorFactory) {
         this.objectComparatorFactory = objectComparatorFactory;
     }
 
@@ -138,7 +118,7 @@ public class FailedAccessLdapDao implements FailedAccessDao {
         return searchFilter;
     }
 
-    public void setSearchFilter(String searchFilter) {
+    public void setSearchFilter(final String searchFilter) {
         this.searchFilter = searchFilter;
     }
 
@@ -146,7 +126,7 @@ public class FailedAccessLdapDao implements FailedAccessDao {
         return loadFilter;
     }
 
-    public void setLoadFilter(String loadFilter) {
+    public void setLoadFilter(final String loadFilter) {
         this.loadFilter = loadFilter;
     }
 
@@ -154,23 +134,21 @@ public class FailedAccessLdapDao implements FailedAccessDao {
         return obsoleteFilter;
     }
 
-    public void setObsoleteFilter(String obsoleteFilter) {
+    public void setObsoleteFilter(final String obsoleteFilter) {
         this.obsoleteFilter = obsoleteFilter;
     }
 
-    private String createUid(FailedAccess failedAccess) {
-        if (failedAccess == null) {
-            failedAccess = new FailedAccessDto();
-        }
-        return createUid(failedAccess.getResourceId(), failedAccess.getRemoteHost());
+    private String createUid(final FailedAccess failedAccess) {
+        final FailedAccess fa = failedAccess == null ? new FailedAccessDto() : failedAccess;
+        return createUid(fa.getResourceId(), fa.getRemoteHost());
     }
 
-    private String createUid(String resourceId, String remoteHost) {
-        String uid = resourceId + "@" + remoteHost;
+    private String createUid(final String resourceId, final String remoteHost) {
+        final String uid = resourceId + "@" + remoteHost;
         if (CodingUtils.toBytesSilently(uid, "UTF-8").length < 256) {
             return uid;
         }
-        return CodingUtils.toHex(CodingUtils.digestSilenty(CodingUtils.getInstanceSilently("MD5"),
+        return CodingUtils.toHex(CodingUtils.digestSilently(CodingUtils.getMessageDigestSilently("MD5"),
                 CodingUtils.toBytesSilently(uid, "UTF-8")));
     }
 
@@ -178,8 +156,7 @@ public class FailedAccessLdapDao implements FailedAccessDao {
      * Gets connection from the factory. Opens the connection if needed.
      *
      * @return the connection
-     * @throws LdapException
-     *             the ldap exception
+     * @throws LdapException the ldap exception
      */
     private Connection getConnection() throws LdapException {
         final Connection c = this.connectionFactory.getConnection();
@@ -193,8 +170,7 @@ public class FailedAccessLdapDao implements FailedAccessDao {
      * Close the given context and ignore any thrown exception. This is useful
      * for typical finally blocks in manual Ldap statements.
      *
-     * @param context
-     *            the Ldap connection to close
+     * @param context the Ldap connection to close
      */
     private void closeConnection(final Connection context) {
         if (context != null && context.isOpen()) {
@@ -209,8 +185,7 @@ public class FailedAccessLdapDao implements FailedAccessDao {
     /**
      * Checks to see if response has a result.
      *
-     * @param response
-     *            the response
+     * @param response the response
      * @return true, if successful
      */
     private boolean hasResults(final Response<SearchResult> response) {
@@ -228,13 +203,10 @@ public class FailedAccessLdapDao implements FailedAccessDao {
     /**
      * Search for access failed entry by id.
      *
-     * @param connection
-     *            the connection
-     * @param id
-     *            the id
+     * @param connection the connection
+     * @param id         the id
      * @return the response
-     * @throws LdapException
-     *             the ldap exception
+     * @throws LdapException the ldap exception
      */
     private Response<SearchResult> searchForFailedAccessById(final Connection connection, final String id)
             throws LdapException {
@@ -247,13 +219,10 @@ public class FailedAccessLdapDao implements FailedAccessDao {
     /**
      * Execute search operation.
      *
-     * @param connection
-     *            the connection
-     * @param filter
-     *            the filter
+     * @param connection the connection
+     * @param filter     the filter
      * @return the response
-     * @throws LdapException
-     *             the ldap exception
+     * @throws LdapException the ldap exception
      */
     private Response<SearchResult> executeSearchOperation(final Connection connection, final SearchFilter filter)
             throws LdapException {
@@ -269,44 +238,37 @@ public class FailedAccessLdapDao implements FailedAccessDao {
     /**
      * Builds a new request.
      *
-     * @param filter
-     *            the filter
+     * @param filter the filter
      * @return the search request
      */
     private SearchRequest newRequest(final SearchFilter filter) {
-        
-        int a = 0;
 
         final SearchRequest sr = new SearchRequest(this.searchRequest.getBaseDn(), filter);
         sr.setBinaryAttributes(ReturnAttributes.ALL_USER.value());
         sr.setDerefAliases(this.searchRequest.getDerefAliases());
         sr.setSearchEntryHandlers(this.searchRequest.getSearchEntryHandlers());
         sr.setSearchReferenceHandlers(this.searchRequest.getSearchReferenceHandlers());
-        // TODO new in 1.2
-        //sr.setFollowReferrals(this.searchRequest.getFollowReferrals());
+
         sr.setReturnAttributes(ReturnAttributes.ALL_USER.value());
         sr.setSearchScope(this.searchRequest.getSearchScope());
         sr.setSizeLimit(this.searchRequest.getSizeLimit());
         sr.setSortBehavior(this.searchRequest.getSortBehavior());
-        // TODO new in 1.2
-        //sr.setTimeLimit(this.searchRequest.getTimeLimit());
+
         sr.setTypesOnly(this.searchRequest.getTypesOnly());
         sr.setControls(this.searchRequest.getControls());
-        
-        // TODO new in 1.2
+
         sr.setControls(this.searchRequest.getControls());
         sr.setIntermediateResponseHandlers(this.searchRequest.getIntermediateResponseHandlers());
         sr.setReferralHandler(this.searchRequest.getReferralHandler());
         sr.setTimeLimit(this.searchRequest.getTimeLimit());
-        
+
         return sr;
     }
 
     /**
      * Update the ldap entry with the given failed access.
      *
-     * @param failedAccess
-     *            the rs
+     * @param failedAccess the rs
      * @return the registered service
      */
     private FailedAccessDto update(final FailedAccess failedAccess) {
@@ -320,7 +282,7 @@ public class FailedAccessLdapDao implements FailedAccessDao {
                 final String currentDn = response.getResult().getEntry().getDn();
 
                 Connection modifyConnection = null;
-                try {
+                try { // NOSONAR
                     modifyConnection = getConnection();
                     final ModifyOperation operation = new ModifyOperation(searchConnection);
 
@@ -328,19 +290,19 @@ public class FailedAccessLdapDao implements FailedAccessDao {
 
                     final LdapEntry entry = failedAccessLdapMapper
                             .mapFromFailedAccessLdapEntity(this.searchRequest.getBaseDn(), failedAccess);
-                    for (final LdapAttribute attr : entry.getAttributes()) {
+                    for (final LdapAttribute attr : entry.getAttributes()) { // NOSONAR
                         if (!attr.getName().equals(failedAccessLdapMapper.getIdAttribute())) {
                             mods.add(new AttributeModification(AttributeModificationType.REPLACE, attr));
                         }
                     }
                     final ModifyRequest request = new ModifyRequest(currentDn,
-                            mods.toArray(new AttributeModification[] {}));
+                            mods.toArray(new AttributeModification[]{}));
                     operation.execute(request);
 
                 } catch (final LdapException e) {
-                    String message = "Updating " + failedAccess + " failed.";
+                    String message = "Updating " + failedAccess + " failed."; // NOSONAR
                     log.error(message, e);
-                    throw new RuntimeException(message, e);
+                    throw new RuntimeException(message, e); // NOSONAR
 
                 } finally {
                     closeConnection(modifyConnection);
@@ -358,22 +320,15 @@ public class FailedAccessLdapDao implements FailedAccessDao {
         } catch (final LdapException e) {
             String message = "Updating " + failedAccess + " failed.";
             log.error(message, e);
-            throw new RuntimeException(message, e);
+            throw new RuntimeException(message, e); // NOSONAR
 
         } finally {
             closeConnection(searchConnection);
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.bremersee.fac.domain.FailedAccessDao#save(org.bremersee.fac.model.
-     * FailedAccess)
-     */
     @Override
-    public FailedAccessDto save(FailedAccess failedAccess) {
+    public FailedAccessDto save(final FailedAccess failedAccess) {
 
         if (failedAccess.getId() != null) {
             return update(failedAccess);
@@ -396,21 +351,15 @@ public class FailedAccessLdapDao implements FailedAccessDao {
 
             String message = "Saving " + failedAccess + " failed.";
             log.error(message, e);
-            throw new RuntimeException(message, e);
+            throw new RuntimeException(message, e); // NOSONAR
 
         } finally {
             closeConnection(connection);
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.bremersee.fac.domain.FailedAccessDao#getById(java.io.Serializable)
-     */
     @Override
-    public FailedAccessDto getById(Serializable _id) {
+    public FailedAccessDto getById(final Serializable _id) { // NOSONAR
 
         if (_id == null) {
             return null;
@@ -429,33 +378,20 @@ public class FailedAccessLdapDao implements FailedAccessDao {
         } catch (final LdapException e) {
             String message = "Getting failed access by ID [" + _id + "] failed.";
             log.error(message, e);
-            throw new RuntimeException(message, e);
+            throw new RuntimeException(message, e); // NOSONAR
 
         } finally {
             closeConnection(connection);
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.bremersee.fac.domain.FailedAccessDao#getByResourceIdAndRemoteHost(
-     * java.lang.String, java.lang.String)
-     */
     @Override
-    public FailedAccessDto getByResourceIdAndRemoteHost(String resourceId, String remoteHost) {
+    public FailedAccessDto getByResourceIdAndRemoteHost(final String resourceId, final String remoteHost) {
         return getById(createUid(resourceId, remoteHost));
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.bremersee.fac.domain.FailedAccessDao#removeById(java.io.Serializable)
-     */
     @Override
-    public boolean removeById(Serializable _id) {
+    public boolean removeById(final Serializable _id) { // NOSONAR
 
         if (_id == null) {
             return false;
@@ -478,79 +414,57 @@ public class FailedAccessLdapDao implements FailedAccessDao {
         } catch (final LdapException e) {
             String message = "Removing failed access by ID [" + _id + "] failed.";
             log.error(message, e);
-            throw new RuntimeException(message, e);
+            throw new RuntimeException(message, e); // NOSONAR
 
         } finally {
             closeConnection(connection);
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.bremersee.fac.domain.FailedAccessDao#removeByResourceIdAndRemoteHost(
-     * java.lang.String, java.lang.String)
-     */
     @Override
-    public boolean removeByResourceIdAndRemoteHost(String resourceId, String remoteHost) {
+    public boolean removeByResourceIdAndRemoteHost(final String resourceId, final String remoteHost) {
         return removeById(createUid(resourceId, remoteHost));
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.bremersee.fac.domain.FailedAccessDao#count(java.lang.String)
-     */
     @Override
-    public long count(String searchValue) {
-        return Integer.valueOf(find(searchValue).size()).longValue();
+    public long count(final String searchValue) {
+        return (long) find(searchValue).size();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.bremersee.fac.domain.FailedAccessDao#find(java.lang.String,
-     * java.lang.Integer, java.lang.Integer,
-     * org.bremersee.comparator.model.ComparatorItem)
-     */
     @Override
-    public List<? extends FailedAccessDto> find(String searchValue, Integer firstResult, Integer maxResults,
-            ComparatorItem comparatorItem) {
+    public List<? extends FailedAccessDto> find(final String searchValue,
+                                                final Integer firstResult, final Integer maxResults,
+                                                final ComparatorItem comparatorItem) {
 
-        if (firstResult == null || firstResult < 0) {
-            firstResult = 0;
-        }
-        if (maxResults == null || maxResults <= 0) {
-            maxResults = Integer.MAX_VALUE;
-        }
+        final int first = firstResult == null || firstResult < 0 ? 0 : firstResult;
+        int max = maxResults == null || maxResults <= 0 ? Integer.MAX_VALUE : maxResults;
 
         List<FailedAccessDto> entities = find(searchValue);
 
         if (comparatorItem != null && StringUtils.isNotBlank(comparatorItem.getField())) {
             ObjectComparator objectComparator = objectComparatorFactory.newObjectComparator(comparatorItem);
-            Collections.sort(entities, objectComparator);
+            entities.sort(objectComparator);
         }
 
-        if (firstResult == 0 && maxResults == Integer.MAX_VALUE) {
+        if (first == 0 && max == Integer.MAX_VALUE) {
             return entities;
         }
 
         List<FailedAccessDto> resultList = new ArrayList<>();
-        maxResults = Math.min(maxResults, entities.size());
-        for (int i = firstResult; i - firstResult < maxResults; i++) {
+        max = Math.min(max, entities.size());
+        for (int i = first; i - first < max; i++) {
             resultList.add(entities.get(i));
         }
 
         return resultList;
     }
 
-    private List<FailedAccessDto> find(String searchValue) {
+    private List<FailedAccessDto> find(final String searchValue) { // NOSONAR
 
         Connection connection = null;
         final List<FailedAccessDto> list = new LinkedList<>();
         try {
-            String loadFilter;
+            String loadFilter; // NOSONAR
             if (StringUtils.isBlank(searchValue)) {
                 loadFilter = this.loadFilter;
             } else {
@@ -560,15 +474,15 @@ public class FailedAccessLdapDao implements FailedAccessDao {
                 } else {
                     StringBuilder sb = new StringBuilder();
                     sb.append("(&");
-                    if (!this.loadFilter.startsWith("(")) {
+                    if (!this.loadFilter.startsWith("(")) { // NOSONAR
                         sb.append("(");
                     }
                     sb.append(this.loadFilter);
-                    if (!this.loadFilter.endsWith(")")) {
+                    if (!this.loadFilter.endsWith(")")) { // NOSONAR
                         sb.append(")");
                     }
                     sb.append("(|");
-                    for (String tag : tags) {
+                    for (String tag : tags) { // NOSONAR
                         sb.append("(").append(failedAccessLdapMapper.getResourceIdAttribute()).append("=*").append(tag)
                                 .append("*)").append("(").append(failedAccessLdapMapper.getRemoteHostAttribute())
                                 .append("=*").append(tag).append("*)");
@@ -590,7 +504,7 @@ public class FailedAccessLdapDao implements FailedAccessDao {
         } catch (final LdapException e) {
             String message = "Finding failed access entries failed.";
             log.error(message, e);
-            throw new RuntimeException(message, e);
+            throw new RuntimeException(message, e); // NOSONAR
 
         } finally {
             closeConnection(connection);
@@ -599,16 +513,11 @@ public class FailedAccessLdapDao implements FailedAccessDao {
         return list;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.bremersee.fac.domain.FailedAccessDao#findObsolete(long)
-     */
     @Override
-    public List<? extends FailedAccessDto> findObsolete(long removeFailedAccessEntriesAfterMillis) {
+    public List<? extends FailedAccessDto> findObsolete(final long removeFailedAccessEntriesAfterMillis) {
 
         Connection connection = null;
-        final List<FailedAccessDto> list = new LinkedList<FailedAccessDto>();
+        final List<FailedAccessDto> list = new LinkedList<>();
         try {
             connection = getConnection();
             final Object[] params = new Object[1];
@@ -627,7 +536,7 @@ public class FailedAccessLdapDao implements FailedAccessDao {
         } catch (final LdapException e) {
             String message = "Finding obsolete failed access entries failed.";
             log.error(message, e);
-            throw new RuntimeException(message, e);
+            throw new RuntimeException(message, e); // NOSONAR
 
         } finally {
             closeConnection(connection);

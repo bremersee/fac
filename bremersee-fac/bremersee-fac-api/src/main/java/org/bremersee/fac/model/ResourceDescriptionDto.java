@@ -16,32 +16,24 @@
 
 package org.bremersee.fac.model;
 
-import java.util.Date;
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
-
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+import javax.xml.bind.annotation.*;
+import java.util.Date;
 
 /**
  * @author Christian Bremer
  */
+@SuppressWarnings({"WeakerAccess", "unused"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "resourceDescription")
-@XmlType(name = "resourceDescriptionType", propOrder = { "resourceId", "remoteHost", "accessTime" })
+@XmlType(name = "resourceDescriptionType", propOrder = {"resourceId", "remoteHost", "accessTime"})
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(Include.ALWAYS)
 @JsonAutoDetect(fieldVisibility = Visibility.ANY, getterVisibility = Visibility.NONE, creatorVisibility = Visibility.NONE, isGetterVisibility = Visibility.NONE, setterVisibility = Visibility.NONE)
-@JsonPropertyOrder(value = { "resourceId", "remoteHost", "accessTime" })
+@JsonPropertyOrder(value = {"resourceId", "remoteHost", "accessTime"})
 public class ResourceDescriptionDto implements ResourceDescription {
 
     private static final long serialVersionUID = 1L;
@@ -54,14 +46,15 @@ public class ResourceDescriptionDto implements ResourceDescription {
     @JsonProperty(value = "remoteHost", required = true)
     private String remoteHost;
 
-    @XmlAttribute(name = "accessTimeInMillis", required = false)
-    @JsonProperty(value = "accessTimeInMillis", required = false)
+    @XmlAttribute(name = "accessTimeInMillis")
+    @JsonProperty(value = "accessTimeInMillis")
     private Date accessTime;
 
     /**
      * Default constructor.
      */
     public ResourceDescriptionDto() {
+        super();
     }
 
     public ResourceDescriptionDto(ResourceDescription resourceDescription) {
@@ -141,8 +134,9 @@ public class ResourceDescriptionDto implements ResourceDescription {
      * 
      * @see java.lang.Object#clone()
      */
+    @SuppressWarnings("MethodDoesntCallSuperMethod")
     @Override
-    public ResourceDescriptionDto clone() {
+    public ResourceDescriptionDto clone() { // NOSONAR
         return new ResourceDescriptionDto(this);
     }
 
@@ -152,7 +146,7 @@ public class ResourceDescriptionDto implements ResourceDescription {
      * @see java.lang.Comparable#compareTo(java.lang.Object)
      */
     @Override
-    public int compareTo(ResourceDescription o) {
+    public int compareTo(ResourceDescription o) { // NOSONAR
         String s1 = getResourceId() == null ? "" : getResourceId();
         String s2 = o == null ? "" : o.getResourceId() == null ? "" : o.getResourceId();
         int c = s1.compareTo(s2);

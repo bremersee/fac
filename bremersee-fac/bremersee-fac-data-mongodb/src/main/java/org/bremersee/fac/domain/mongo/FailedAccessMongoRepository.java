@@ -23,13 +23,12 @@ import org.springframework.stereotype.Repository;
 
 /**
  * @author Christian Bremer
- *
  */
 @Repository("failedAccessMongoRepository")
 public interface FailedAccessMongoRepository extends MongoRepository<FailedAccessMongoDoc, String>, FailedAccessMongoRepositoryCustom {
-    
+
     FailedAccessMongoDoc findByResourceIdAndRemoteHost(String resourceId, String remoteHost);
-    
+
     Page<FailedAccessMongoDoc> findByResourceIdLikeOrRemoteHostLike(String resourceId, String remoteHost, Pageable pageable);
 
 }

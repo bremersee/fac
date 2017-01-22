@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bremersee</groupId>
     <artifactId>bremersee-fac</artifactId>
-    <version>1.1.1-SNAPSHOT</version>
+    <version>1.1.1</version>
     <name>Bremersee Failed Access Counter</name>
     <description>Failed access counter project</description>
     <url>http://bremersee.github.io/fac/</url>
@@ -14,8 +14,8 @@
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <product.vendor>bremersee.org</product.vendor>
-        <bremersee-pagebuilder.version>1.2.2</bremersee-pagebuilder.version>
-        <bremersee-utils.version>1.0.3</bremersee-utils.version>
+        <bremersee-pagebuilder.version>1.2.3</bremersee-pagebuilder.version>
+        <bremersee-utils.version>1.0.5</bremersee-utils.version>
         <commons-lang3.version>3.4</commons-lang3.version>
         <javax.inject.version>1</javax.inject.version>
         <javax.interceptor.version>1.2</javax.interceptor.version>
@@ -364,7 +364,7 @@
                                 </goals>
                                 <configuration>
                                     <keyname>${gpg.keyname}</keyname>
-                                    <passphrase>${gpg.keyname}</passphrase>
+                                    <passphrase>${gpg.passphrase}</passphrase>
                                 </configuration>
                             </execution>
                         </executions>
@@ -374,6 +374,13 @@
         </profile>
         <profile>
             <id>site-deploy</id>
+            <!--
+                I don't know how to deploy the staging directory -automatically - to the gh-pages on github.
+                Building the staging directory can be done with:
+                - mvn clean
+                - mvn site:site
+                - mvn site:stage
+            -->
             <build>
                 <plugins>
                     <plugin>
@@ -381,8 +388,7 @@
                         <artifactId>site-maven-plugin</artifactId>
                         <version>0.12</version>
                         <configuration>
-                            <message>Building site for
-                                ${project.version}</message>
+                            <message>Building site for ${project.version}</message>
                             <server>github</server>
                         </configuration>
                         <executions>

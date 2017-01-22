@@ -16,11 +16,11 @@
 
 package org.bremersee.fac.model;
 
-import java.io.Serializable;
-import java.util.Date;
-
 import org.bremersee.fac.FailedAccessCounter;
 import org.bremersee.fac.FailedAccessCounterImpl;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>

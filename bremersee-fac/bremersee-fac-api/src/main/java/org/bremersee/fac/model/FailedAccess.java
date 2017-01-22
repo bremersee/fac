@@ -23,49 +23,49 @@ import java.util.Date;
  * <p>
  * Information about failed access to a resource.
  * </p>
- * 
+ *
  * @author Christian Bremer
  */
 public interface FailedAccess extends Serializable, Comparable<FailedAccess> {
 
     /**
      * Returns the ID of the failed access entry.
-     * 
+     *
      * @return the ID of the failed access entry
      */
     Serializable getId();
 
     /**
      * Returns the date of the creation.
-     * 
+     *
      * @return the date of the creation
      */
     Date getCreationDate();
 
     /**
      * Returns the date of the last modification.
-     * 
+     *
      * @return the date of the last modification
      */
     Date getModificationDate();
 
     /**
      * Returns the ID of the resource.
-     * 
+     *
      * @return the ID of the resource
      */
     String getResourceId();
 
     /**
      * Returns the remote host.
-     * 
+     *
      * @return the remote host
      */
     String getRemoteHost();
 
     /**
      * Returns how many accesses to the resource were failed.
-     * 
+     *
      * @return how many accesses to the resource were failed
      */
     int getCounter();

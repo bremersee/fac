@@ -16,29 +16,23 @@
 
 package org.bremersee.fac.domain.jpa;
 
-import java.io.Serializable;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
-
 import org.bremersee.fac.model.FailedAccess;
+
+import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * <p>
  * Entity to persist failed access entries.
  * </p>
- * 
+ *
  * @author Christian Bremer
  */
+@SuppressWarnings("WeakerAccess")
 @Entity
 @Table(name = "failed_access", uniqueConstraints = {
-        @UniqueConstraint(name = "resource_remote_host", columnNames = { "resource_id", "remote_host" }) })
-public class FailedAccessEntity extends AbstractFailedAccessEntity {
+        @UniqueConstraint(name = "resource_remote_host", columnNames = {"resource_id", "remote_host"})})
+public class FailedAccessEntity extends AbstractFailedAccessEntity { // NOSONAR
 
     private static final long serialVersionUID = 1L;
 
@@ -57,21 +51,13 @@ public class FailedAccessEntity extends AbstractFailedAccessEntity {
     /**
      * Creates a {@link FailedAccessEntity} from the given {@link FailedAccess}
      * instance.
-     * 
-     * @param failedAccess
-     *            the {@link FailedAccess} instance
+     *
+     * @param failedAccess the {@link FailedAccess} instance
      */
     public FailedAccessEntity(FailedAccess failedAccess) {
         super(failedAccess);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.bremersee.fac.domain.AbstractFailedAccessEntity#update(org.bremersee.
-     * fac.model.FailedAccess)
-     */
     @Override
     protected void update(FailedAccess failedAccess) {
         if (failedAccess != null) {
@@ -86,6 +72,7 @@ public class FailedAccessEntity extends AbstractFailedAccessEntity {
         }
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     private boolean isNumber(Serializable id) {
         if (id == null) {
             return false;
@@ -93,16 +80,11 @@ public class FailedAccessEntity extends AbstractFailedAccessEntity {
         try {
             Long.parseLong(id.toString());
             return true;
-        } catch (Throwable t) {
+        } catch (Throwable t) { // NOSONAR
             return false;
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.bremersee.fac.domain.AbstractFailedAccessEntity#getId()
-     */
     @Override
     public Long getId() {
         return id;

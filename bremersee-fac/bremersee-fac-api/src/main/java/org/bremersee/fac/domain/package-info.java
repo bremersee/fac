@@ -19,7 +19,7 @@
  * This package contains the domain model and some data object access classes of
  * the failed access counter.
  * </p>
- * 
+ *
  * @author Christian Bremer
  */
 package org.bremersee.fac.domain;

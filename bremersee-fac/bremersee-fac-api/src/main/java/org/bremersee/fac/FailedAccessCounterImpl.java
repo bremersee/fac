@@ -16,15 +16,6 @@
 
 package org.bremersee.fac;
 
-import java.io.Serializable;
-import java.time.Duration;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-
 import org.apache.commons.lang3.Validate;
 import org.bremersee.comparator.ObjectComparatorFactory;
 import org.bremersee.fac.domain.FailedAccessDao;
@@ -39,9 +30,18 @@ import org.bremersee.pagebuilder.PageBuilderUtils;
 import org.bremersee.pagebuilder.PageEntryTransformer;
 import org.bremersee.pagebuilder.model.Page;
 import org.bremersee.pagebuilder.model.PageDto;
+import org.bremersee.pagebuilder.model.PageRequest;
 import org.bremersee.pagebuilder.model.PageRequestDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import java.io.Serializable;
+import java.time.Duration;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * <p>
@@ -55,6 +55,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Christian Bremer
  */
+@SuppressWarnings("SameParameterValue")
 public class FailedAccessCounterImpl implements FailedAccessCounter {
 
     /**
@@ -129,12 +130,12 @@ public class FailedAccessCounterImpl implements FailedAccessCounter {
     public void start() {
         log.info("Starting " + getClass().getSimpleName() + " ...");
         if (failedAccessDao == null) {
-            FailedAccessInMemoryDao failedAccessDao = new FailedAccessInMemoryDao();
+            FailedAccessInMemoryDao failedAccessDao = new FailedAccessInMemoryDao(); // NOSONAR
             failedAccessDao.setObjectComparatorFactory(ObjectComparatorFactory.newInstance());
             failedAccessDao.init();
             this.failedAccessDao = failedAccessDao;
         }
-        log.info("failedAccessDao = " + failedAccessDao.getClass().getSimpleName());
+        log.info("failedAccessDao = " + failedAccessDao.getClass().getSimpleName()); // NOSONAR
         log.info("failedAccessCounterThreshold = " + getFailedAccessCounterThreshold());
         log.info("removeFailedAccessEntriesAfterMillis = " + getRemoveFailedAccessEntriesAfterMillis());
         log.info("removeFailedEntriesInterval = " + getRemoveFailedEntriesInterval());
@@ -173,12 +174,6 @@ public class FailedAccessCounterImpl implements FailedAccessCounter {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.bremersee.fac.FailedAccessCounter#getFailedAccessCounterThreshold()
-     */
     @Override
     public int getFailedAccessCounterThreshold() {
         return failedAccessCounterThreshold;
@@ -193,12 +188,6 @@ public class FailedAccessCounterImpl implements FailedAccessCounter {
         this.failedAccessCounterThreshold = failedAccessCounterThreshold;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.bremersee.fac.FailedAccessCounter#
-     * getRemoveFailedAccessEntriesAfterMillis()
-     */
     @Override
     public long getRemoveFailedAccessEntriesAfterMillis() {
         return removeFailedAccessEntriesAfterMillis;
@@ -213,12 +202,6 @@ public class FailedAccessCounterImpl implements FailedAccessCounter {
         this.removeFailedAccessEntriesAfterMillis = removeFailedAccessEntriesAfterMillis;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.bremersee.fac.FailedAccessCounter#getRemoveFailedEntriesInterval()
-     */
     @Override
     public long getRemoveFailedEntriesInterval() {
         return removeFailedEntriesInterval;
@@ -272,63 +255,30 @@ public class FailedAccessCounterImpl implements FailedAccessCounter {
         return new Date(accessDeniedUntilMillis);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.bremersee.fac.FailedAccessCounter#getLastRemovingOfFailedEntries()
-     */
     @Override
     public Date getLastRemovingOfFailedEntries() {
         return new Date(lastRemovingOfFailedEntries);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.bremersee.fac.FailedAccessCounter#
-     * getLastRemovingOfFailedEntriesDuration()
-     */
     @Override
     public long getLastRemovingOfFailedEntriesDuration() {
         return lastRemovingOfFailedEntriesDuration;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.bremersee.fac.FailedAccessCounter#getLastRemovingOfFailedEntriesSize(
-     * )
-     */
     @Override
     public int getLastRemovingOfFailedEntriesSize() {
         return lastRemovingOfFailedEntriesSize;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.bremersee.fac.FailedAccessCounter#getRemovedFailedEntriesTotalSize()
-     */
     @Override
     public long getRemovedFailedEntriesTotalSize() {
         return removedFailedEntriesTotalSize;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.bremersee.fac.FailedAccessCounter#getFailedAccessEntries(org.
-     * bremersee.pagebuilder.model.PageRequestDto)
-     */
     @Override
-    public PageDto getFailedAccessEntries(PageRequestDto pageRequest) {
+    public PageDto getFailedAccessEntries(final PageRequestDto request) {
 
-        if (pageRequest == null) {
-            pageRequest = new PageRequestDto();
-        }
+        final PageRequest pageRequest = request == null ? new PageRequestDto() : request;
 
         //@formatter:off
         final Long totalSize = failedAccessDao.count(pageRequest.getQuery());
@@ -343,19 +293,13 @@ public class FailedAccessCounterImpl implements FailedAccessCounter {
 
         return PageBuilderUtils.createPageDto(
                 page,
-                (PageEntryTransformer<FailedAccessDto, FailedAccess>) source -> new FailedAccessDto(source));
+                (PageEntryTransformer<FailedAccessDto, FailedAccess>) FailedAccessDto::new);
     }
 
-    private FailedAccessDto createFailedAccessDto(FailedAccess source) {
+    private FailedAccessDto createFailedAccessDto(final FailedAccess source) {
         return source == null ? null : new FailedAccessDto(source);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.bremersee.fac.FailedAccessCounter#getFailedAccessEntry(java.io.
-     * Serializable)
-     */
     @Override
     public FailedAccessDto getFailedAccessEntry(final Serializable id) {
 
@@ -368,13 +312,6 @@ public class FailedAccessCounterImpl implements FailedAccessCounter {
         return dto;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.bremersee.fac.FailedAccessCounter#getFailedAccessEntry(java.lang.
-     * String, java.lang.String)
-     */
     @Override
     public FailedAccessDto getFailedAccessEntry(final String resourceId, final String remoteHost) {
 
@@ -387,13 +324,6 @@ public class FailedAccessCounterImpl implements FailedAccessCounter {
         return dto;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.bremersee.fac.FailedAccessCounter#removeFailedAccessEntry(java.lang.
-     * String, java.lang.String)
-     */
     @Override
     public BooleanDto removeFailedAccessEntry(String resourceId, String remoteHost) {
 
@@ -404,12 +334,6 @@ public class FailedAccessCounterImpl implements FailedAccessCounter {
         return new BooleanDto(value);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.bremersee.fac.FailedAccessCounter#removeObsoleteFailedAccessEntries()
-     */
     @Override
     public void removeObsoleteFailedAccessEntries() {
 
@@ -422,8 +346,9 @@ public class FailedAccessCounterImpl implements FailedAccessCounter {
             int size = 0;
             List<? extends FailedAccess> entities = failedAccessDao.findObsolete(removeFailedAccessEntriesAfterMillis);
             Iterator<? extends FailedAccess> entityIterator = entities.iterator();
-            while (entityIterator.hasNext()) {
+            while (entityIterator.hasNext()) { // NOSONAR
                 FailedAccess entity = entityIterator.next();
+                entityIterator.remove();
                 removeFailedAccessEntry(entity.getResourceId(), entity.getRemoteHost());
                 size = size + 1;
             }
@@ -435,13 +360,6 @@ public class FailedAccessCounterImpl implements FailedAccessCounter {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.bremersee.fac.FailedAccessCounter#accessSucceeded(java.lang.String,
-     * java.lang.String, java.lang.Long)
-     */
     @Override
     public AccessResultDto accessSucceeded(String resourceId, String remoteHost, Long timeInMillis) {
 
@@ -454,12 +372,6 @@ public class FailedAccessCounterImpl implements FailedAccessCounter {
         return new AccessResultDto(accessGranted, modificationDate.getTime(), calculateAccessDeniedUntil(entity));
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.bremersee.fac.FailedAccessCounter#accessFailed(java.lang.String,
-     * java.lang.String, java.lang.Long)
-     */
     @Override
     public AccessResultDto accessFailed(String resourceId, String remoteHost, Long timeInMillis) {
 
@@ -489,13 +401,6 @@ public class FailedAccessCounterImpl implements FailedAccessCounter {
         return result;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.bremersee.fac.FailedAccessCounter#isAccessGranted(java.lang.String,
-     * java.lang.String)
-     */
     @Override
     public AccessResultDto isAccessGranted(String resourceId, String remoteHost) {
 

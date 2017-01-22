@@ -23,10 +23,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author Christian Bremer
  */
 @SpringBootApplication
-public class FacExampleMemoryApplication {
-    
+public class FacExampleMemoryApplication { // NOSONAR
+
     public static void main(String[] args) {
         SpringApplication.run(FacExampleMemoryApplication.class, args);
     }
-    
+
 }

@@ -16,36 +16,28 @@
 
 package org.bremersee.fac.model;
 
-import java.util.Date;
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
-
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+import javax.xml.bind.annotation.*;
+import java.util.Date;
 
 /**
  * <p>
  * Data transfer object of an {@link AccessResult}.
  * </p>
- * 
+ *
  * @author Christian Bremer
  */
+@SuppressWarnings({"WeakerAccess", "unused"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "accessResult")
 @XmlType(name = "accessResultType")
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(Include.ALWAYS)
 @JsonAutoDetect(fieldVisibility = Visibility.ANY, getterVisibility = Visibility.NONE, creatorVisibility = Visibility.NONE, isGetterVisibility = Visibility.NONE, setterVisibility = Visibility.NONE)
-@JsonPropertyOrder(value = { "accessGranted", "timestamp", "counter", "counterThreshold", "accessDeniedUntil" })
+@JsonPropertyOrder(value = {"accessGranted", "timestamp", "counter", "counterThreshold", "accessDeniedUntil"})
 public class AccessResultDto implements AccessResult, Cloneable {
 
     private static final long serialVersionUID = 1L;
@@ -54,33 +46,33 @@ public class AccessResultDto implements AccessResult, Cloneable {
     @JsonProperty(value = "accessGranted", required = true)
     private boolean accessGranted;
 
-    @XmlAttribute(name = "timestamp", required = false)
-    @JsonProperty(value = "timestamp", required = false)
+    @XmlAttribute(name = "timestamp")
+    @JsonProperty(value = "timestamp")
     private Long timestamp = System.currentTimeMillis();
 
-    @XmlAttribute(name = "counter", required = false)
-    @JsonProperty(value = "counter", required = false)
+    @XmlAttribute(name = "counter")
+    @JsonProperty(value = "counter")
     private Integer counter;
-    
-    @XmlAttribute(name = "counterThreshold", required = false)
-    @JsonProperty(value = "counterThreshold", required = false)
+
+    @XmlAttribute(name = "counterThreshold")
+    @JsonProperty(value = "counterThreshold")
     private Integer counterThreshold;
 
-    @XmlAttribute(name = "accessDeniedUntil", required = false)
-    @JsonProperty(value = "accessDeniedUntil", required = false)
+    @XmlAttribute(name = "accessDeniedUntil")
+    @JsonProperty(value = "accessDeniedUntil")
     private Date accessDeniedUntil;
 
     /**
      * Default constructor.
      */
     public AccessResultDto() {
+        super();
     }
 
     /**
      * Constructs an instance with the specified parameter.
-     * 
-     * @param accessGranted
-     *            is access to the resource granted?
+     *
+     * @param accessGranted is access to the resource granted?
      */
     public AccessResultDto(boolean accessGranted) {
         this.accessGranted = accessGranted;
@@ -88,11 +80,9 @@ public class AccessResultDto implements AccessResult, Cloneable {
 
     /**
      * Constructs an instance with the specified parameters.
-     * 
-     * @param accessGranted
-     *            is access to the resource granted?
-     * @param timestamp
-     *            the time stamp of the decision
+     *
+     * @param accessGranted is access to the resource granted?
+     * @param timestamp     the time stamp of the decision
      */
     public AccessResultDto(boolean accessGranted, long timestamp) {
         this.accessGranted = accessGranted;
@@ -101,13 +91,10 @@ public class AccessResultDto implements AccessResult, Cloneable {
 
     /**
      * Constructs an instance with the specified parameters.
-     * 
-     * @param accessGranted
-     *            is access to the resource granted?
-     * @param timestamp
-     *            the time stamp of the decision
-     * @param accessDeniedUntil
-     *            until is the access to the resource is denied
+     *
+     * @param accessGranted     is access to the resource granted?
+     * @param timestamp         the time stamp of the decision
+     * @param accessDeniedUntil until is the access to the resource is denied
      */
     public AccessResultDto(boolean accessGranted, long timestamp, Date accessDeniedUntil) {
         this.accessGranted = accessGranted;
@@ -117,9 +104,8 @@ public class AccessResultDto implements AccessResult, Cloneable {
 
     /**
      * Constructs a clone of another {@link AccessResult}.
-     * 
-     * @param accessResult
-     *            another access result
+     *
+     * @param accessResult another access result
      */
     public AccessResultDto(AccessResult accessResult) {
         if (accessResult != null) {
@@ -150,7 +136,7 @@ public class AccessResultDto implements AccessResult, Cloneable {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(Object obj) { // NOSONAR
         if (this == obj)
             return true;
         if (obj == null)
@@ -183,21 +169,12 @@ public class AccessResultDto implements AccessResult, Cloneable {
         return true;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#clone()
-     */
+    @SuppressWarnings("MethodDoesntCallSuperMethod")
     @Override
-    public AccessResultDto clone() {
+    public AccessResultDto clone() { // NOSONAR
         return new AccessResultDto(this);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.bremersee.fac.model.AccessResult#isAccessGranted()
-     */
     @Override
     public boolean isAccessGranted() {
         return accessGranted;
@@ -205,19 +182,13 @@ public class AccessResultDto implements AccessResult, Cloneable {
 
     /**
      * Sets whether the access to the resource is granted or not.
-     * 
-     * @param accessGranted
-     *            is access to the resource granted?
+     *
+     * @param accessGranted is access to the resource granted?
      */
     public void setAccessGranted(boolean accessGranted) {
         this.accessGranted = accessGranted;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.bremersee.fac.model.AccessResult#getTimestamp()
-     */
     @Override
     public Long getTimestamp() {
         return timestamp;
@@ -225,19 +196,13 @@ public class AccessResultDto implements AccessResult, Cloneable {
 
     /**
      * Sets the time stamp.
-     * 
-     * @param timestamp
-     *            the time stamp
+     *
+     * @param timestamp the time stamp
      */
     public void setTimestamp(Long timestamp) {
         this.timestamp = timestamp;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.bremersee.fac.model.AccessResult#getAccessDeniedUntil()
-     */
     @Override
     public Date getAccessDeniedUntil() {
         return accessDeniedUntil;
@@ -245,14 +210,14 @@ public class AccessResultDto implements AccessResult, Cloneable {
 
     /**
      * Sets until the access to a resource is denied.
-     * 
-     * @param accessDeniedUntil
-     *            a date
+     *
+     * @param accessDeniedUntil a date
      */
     public void setAccessDeniedUntil(Date accessDeniedUntil) {
         this.accessDeniedUntil = accessDeniedUntil;
     }
 
+    @Override
     public Integer getCounter() {
         return counter;
     }
@@ -261,6 +226,7 @@ public class AccessResultDto implements AccessResult, Cloneable {
         this.counter = counter;
     }
 
+    @Override
     public Integer getCounterThreshold() {
         return counterThreshold;
     }

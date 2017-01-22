@@ -16,13 +16,6 @@
 
 package org.bremersee.fac.example.web;
 
-import java.util.Arrays;
-import java.util.Locale;
-
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang3.StringUtils;
 import org.bremersee.comparator.ComparatorItemTransformer;
 import org.bremersee.comparator.model.ComparatorItem;
@@ -41,20 +34,22 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
+import java.util.Locale;
+
 /**
  * @author Christian Bremer
  */
+@SuppressWarnings({"WeakerAccess", "SpringAutowiredFieldsWarningInspection", "unused"})
 @Controller
 public class FacController {
 
     public static final String SUCCESS_MESSAGES_KEY = "SUCCESS_MESSAGES";
 
     private static int resourceCounter = 0;
-
-    protected static synchronized String getNextResourceName() {
-        resourceCounter = resourceCounter + 1;
-        return "resource_" + resourceCounter;
-    }
 
     @Inject
     protected FailedAccessCounter failedAccessCounter;
@@ -67,6 +62,11 @@ public class FacController {
     protected LocaleResolver localeResolver;
 
     protected PageControlFactory pageControlFactory;
+
+    protected static synchronized String getNextResourceName() {
+        resourceCounter = resourceCounter + 1;
+        return "resource_" + resourceCounter;
+    }
 
     @PostConstruct
     public void init() {
@@ -112,10 +112,10 @@ public class FacController {
 
     @RequestMapping(value = "/entries.html", method = RequestMethod.GET)
     public String displayFailedAccessEntries(HttpServletRequest request,
-            @RequestParam(value = "q", defaultValue = "") String query,
-            @RequestParam(value = "s", defaultValue = "20") int pageSize,
-            @RequestParam(value = "p", defaultValue = "0") int pageNumber,
-            @RequestParam(value = "c", defaultValue = "resourceId,asc|remoteHost,asc") String comparator, Model model) {
+                                             @RequestParam(value = "q", defaultValue = "") String query,
+                                             @RequestParam(value = "s", defaultValue = "20") int pageSize,
+                                             @RequestParam(value = "p", defaultValue = "0") int pageNumber,
+                                             @RequestParam(value = "c", defaultValue = "resourceId,asc|remoteHost,asc") String comparator, Model model) {
 
         ComparatorItem comparatorItem = comparatorItemTransformer.fromString(comparator, false, null);
 
@@ -145,19 +145,19 @@ public class FacController {
 
     @RequestMapping(value = "/accessFailed.html", method = RequestMethod.GET)
     public String accessFailed(HttpServletRequest request, @RequestParam(value = "q", defaultValue = "") String query,
-            @RequestParam(value = "s", defaultValue = "20") int pageSize,
-            @RequestParam(value = "p", defaultValue = "0") int pageNumber,
-            @RequestParam(value = "c", defaultValue = "") String comparator,
-            @RequestParam(value = "resourceId", defaultValue = "") String resourceId, Model model,
-            RedirectAttributes redirectAttrs) {
+                               @RequestParam(value = "s", defaultValue = "20") int pageSize,
+                               @RequestParam(value = "p", defaultValue = "0") int pageNumber,
+                               @RequestParam(value = "c", defaultValue = "") String comparator,
+                               @RequestParam(value = "resourceId", defaultValue = "") String resourceId, Model model,
+                               RedirectAttributes redirectAttrs) {
 
         String remoteHost = request.getRemoteHost();
         if (StringUtils.isBlank(remoteHost)) {
-            remoteHost = "_unknown_";
+            remoteHost = "_unknown_"; // NOSONAR
         }
 
         if (StringUtils.isBlank(resourceId)) {
-            resourceId = getNextResourceName();
+            resourceId = getNextResourceName(); // NOSONAR
         }
 
         failedAccessCounter.accessFailed(resourceId, remoteHost, System.currentTimeMillis());
@@ -167,17 +167,17 @@ public class FacController {
         redirectAttrs.addAttribute("s", pageSize);
         redirectAttrs.addAttribute("p", pageNumber);
 
-        return "redirect:entries.html";
+        return "redirect:entries.html"; // NOSONAR
     }
 
     @RequestMapping(value = "/accessSucceeded.html", method = RequestMethod.GET)
     public String accessSucceeded(HttpServletRequest request,
-            @RequestParam(value = "q", defaultValue = "") String query,
-            @RequestParam(value = "s", defaultValue = "20") int pageSize,
-            @RequestParam(value = "p", defaultValue = "0") int pageNumber,
-            @RequestParam(value = "c", defaultValue = "") String comparator,
-            @RequestParam(value = "resourceId", defaultValue = "") String resourceId, Model model,
-            RedirectAttributes redirectAttrs) {
+                                  @RequestParam(value = "q", defaultValue = "") String query,
+                                  @RequestParam(value = "s", defaultValue = "20") int pageSize,
+                                  @RequestParam(value = "p", defaultValue = "0") int pageNumber,
+                                  @RequestParam(value = "c", defaultValue = "") String comparator,
+                                  @RequestParam(value = "resourceId", defaultValue = "") String resourceId, Model model,
+                                  RedirectAttributes redirectAttrs) {
 
         String remoteHost = request.getRemoteHost();
         if (StringUtils.isBlank(remoteHost)) {
@@ -198,12 +198,13 @@ public class FacController {
 
     @RequestMapping(value = "/remove.html", method = RequestMethod.GET)
     public String removeAccessFailedEntry(HttpServletRequest request,
-            @RequestParam(value = "q", defaultValue = "") String query,
-            @RequestParam(value = "s", defaultValue = "20") int pageSize,
-            @RequestParam(value = "p", defaultValue = "0") int pageNumber,
-            @RequestParam(value = "c", defaultValue = "") String comparator,
-            @RequestParam(value = "resourceId", defaultValue = "") String resourceId, Model model,
-            RedirectAttributes redirectAttrs) {
+                                          @RequestParam(value = "q", defaultValue = "") String query,
+                                          @RequestParam(value = "s", defaultValue = "20") int pageSize,
+                                          @RequestParam(value = "p", defaultValue = "0") int pageNumber,
+                                          @RequestParam(value = "c", defaultValue = "") String comparator,
+                                          @RequestParam(value = "resourceId", defaultValue = "") String resourceId,
+                                          Model model,
+                                          RedirectAttributes redirectAttrs) {
 
         String remoteHost = request.getRemoteHost();
         if (StringUtils.isBlank(remoteHost)) {
@@ -224,11 +225,12 @@ public class FacController {
 
     @RequestMapping(value = "/removeObsolete.html", method = RequestMethod.GET)
     public String removeObsoleteAccessFailedEntries(HttpServletRequest request,
-            @RequestParam(value = "q", defaultValue = "") String query,
-            @RequestParam(value = "s", defaultValue = "20") int pageSize,
-            @RequestParam(value = "p", defaultValue = "0") int pageNumber,
-            @RequestParam(value = "c", defaultValue = "") String comparator, Model model,
-            RedirectAttributes redirectAttrs) {
+                                                    @RequestParam(value = "q", defaultValue = "") String query,
+                                                    @RequestParam(value = "s", defaultValue = "20") int pageSize,
+                                                    @RequestParam(value = "p", defaultValue = "0") int pageNumber,
+                                                    @RequestParam(value = "c", defaultValue = "") String comparator,
+                                                    Model model,
+                                                    RedirectAttributes redirectAttrs) {
 
         failedAccessCounter.removeObsoleteFailedAccessEntries();
 
@@ -242,12 +244,12 @@ public class FacController {
 
     @RequestMapping(value = "/resource.html", method = RequestMethod.GET)
     public String displayResource(HttpServletRequest request,
-            @RequestParam(value = "q", defaultValue = "") String query,
-            @RequestParam(value = "s", defaultValue = "20") int maxResults,
-            @RequestParam(value = "p", defaultValue = "0") int pageNumber,
-            @RequestParam(value = "c", defaultValue = "") String comparator,
-            @RequestParam(value = "resourceId", defaultValue = "") String resourceId, Model model,
-            RedirectAttributes redirectAttrs) {
+                                  @RequestParam(value = "q", defaultValue = "") String query,
+                                  @RequestParam(value = "s", defaultValue = "20") int maxResults,
+                                  @RequestParam(value = "p", defaultValue = "0") int pageNumber,
+                                  @RequestParam(value = "c", defaultValue = "") String comparator,
+                                  @RequestParam(value = "resourceId", defaultValue = "") String resourceId, Model model,
+                                  RedirectAttributes redirectAttrs) {
 
         if (StringUtils.isBlank(resourceId)) {
             return "redirect:entries.html";

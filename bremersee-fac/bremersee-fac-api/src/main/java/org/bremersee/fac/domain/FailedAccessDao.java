@@ -16,26 +16,25 @@
 
 package org.bremersee.fac.domain;
 
-import java.io.Serializable;
-import java.util.List;
-
 import org.bremersee.comparator.model.ComparatorItem;
 import org.bremersee.fac.model.FailedAccess;
+
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * <p>
  * DAO of a failed access entry.
  * </p>
- * 
+ *
  * @author Christian Bremer
  */
 public interface FailedAccessDao {
 
     /**
      * Saves the failed access entry and returns the persisted instance.
-     * 
-     * @param failedAccess
-     *            the failed access entry
+     *
+     * @param failedAccess the failed access entry
      * @return the persisted instance
      */
     FailedAccess save(FailedAccess failedAccess);
@@ -65,36 +64,30 @@ public interface FailedAccessDao {
 
     /**
      * Counts the failed access entries.
-     * 
-     * @param searchValue
-     *            a search value (can be {@code null})
+     *
+     * @param searchValue a search value (can be {@code null})
      * @return the size
      */
     long count(String searchValue);
 
     /**
      * Returns the requested failed access entries.
-     * 
-     * @param searchValue
-     *            a search value (can be {@code null})
-     * @param firstResult
-     *            the first result number (starting with 0, can be {@code null})
-     * @param maxResults
-     *            the maximum size (can be {@code null})
-     * @param comparatorItem
-     *            a comparator item for sorting (can be {@code null})
+     *
+     * @param searchValue    a search value (can be {@code null})
+     * @param firstResult    the first result number (starting with 0, can be {@code null})
+     * @param maxResults     the maximum size (can be {@code null})
+     * @param comparatorItem a comparator item for sorting (can be {@code null})
      * @return the found failed access entries
      */
-    List<? extends FailedAccess> find(String searchValue, Integer firstResult, Integer maxResults,
-            ComparatorItem comparatorItem);
+    List<? extends FailedAccess> find(String searchValue, Integer firstResult, Integer maxResults, // NOSONAR
+                                      ComparatorItem comparatorItem);
 
     /**
      * Returns obsolete failed access entries.
-     * 
-     * @param removeFailedAccessEntriesAfterMillis
-     *            a threshold in millis
+     *
+     * @param removeFailedAccessEntriesAfterMillis a threshold in millis
      * @return the obsolete failed access entries
      */
-    List<? extends FailedAccess> findObsolete(long removeFailedAccessEntriesAfterMillis);
+    List<? extends FailedAccess> findObsolete(long removeFailedAccessEntriesAfterMillis); // NOSONAR
 
 }

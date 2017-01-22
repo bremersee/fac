@@ -16,21 +16,23 @@
 
 package org.bremersee.fac.domain.mongo;
 
-import java.util.Date;
-
 import org.bremersee.fac.model.FailedAccess;
+import org.bremersee.fac.model.FailedAccessHelper;
 import org.bremersee.fac.model.ResourceDescription;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Date;
+
 /**
  * <p>
  * Data transfer object of a {@link FailedAccess}.
  * </p>
- * 
+ *
  * @author Christian Bremer
  */
+@SuppressWarnings({"WeakerAccess", "unused"})
 @Document(collection = "failedAccess")
 public class FailedAccessMongoDoc implements FailedAccess, Cloneable {
 
@@ -62,11 +64,9 @@ public class FailedAccessMongoDoc implements FailedAccess, Cloneable {
 
     /**
      * Constructs an instance with the specified parameters.
-     * 
-     * @param resourceId
-     *            the ID of the resource
-     * @param remoteHost
-     *            the remote host
+     *
+     * @param resourceId the ID of the resource
+     * @param remoteHost the remote host
      */
     public FailedAccessMongoDoc(String resourceId, String remoteHost) {
         this();
@@ -76,9 +76,8 @@ public class FailedAccessMongoDoc implements FailedAccess, Cloneable {
 
     /**
      * Constructs a clone of the specified {@link FailedAccess}.
-     * 
-     * @param failedAccess
-     *            the failed access
+     *
+     * @param failedAccess the failed access
      */
     public FailedAccessMongoDoc(FailedAccess failedAccess) {
         this();
@@ -87,8 +86,9 @@ public class FailedAccessMongoDoc implements FailedAccess, Cloneable {
 
     @Override
     public String toString() {
-        return "FailedAccessMongoDoc [id=" + id + ", resourceId=" + resourceId + ", remoteHost=" + remoteHost + ", counter="
-                + counter + ", creationDate=" + creationDate + ", modificationDate=" + modificationDate + "]";
+        return "FailedAccessMongoDoc [id=" + id + ", resourceId=" + resourceId + ", remoteHost=" + remoteHost
+                + ", counter=" + counter + ", creationDate=" + creationDate + ", modificationDate="
+                + modificationDate + "]";
     }
 
     @Override
@@ -122,48 +122,23 @@ public class FailedAccessMongoDoc implements FailedAccess, Cloneable {
         return true;
     }
 
+    @SuppressWarnings("MethodDoesntCallSuperMethod")
     @Override
-    public FailedAccessMongoDoc clone() {
+    public FailedAccessMongoDoc clone() { // NOSONAR
         return new FailedAccessMongoDoc(this);
     }
 
     @Override
     public int compareTo(FailedAccess o) {
-        String s1 = getResourceId() == null ? "" : getResourceId();
-        String s2 = o == null ? "" : o.getResourceId() == null ? "" : o.getResourceId();
-        int c = s1.compareTo(s2);
-        if (c != 0) {
-            return c;
-        }
-        s1 = remoteHost == null ? "" : remoteHost;
-        s2 = o == null ? "" : o.getRemoteHost() == null ? "" : o.getRemoteHost();
-        c = s1.compareTo(s2);
-        if (c != 0) {
-            return c;
-        }
-        if (modificationDate != null && o != null && o.getModificationDate() != null) {
-            c = modificationDate.compareTo(o.getModificationDate());
-            if (c != 0) {
-                return c;
-            }
-        }
-        if (o != null) {
-            c = counter - o.getCounter();
-            if (c != 0) {
-                return c;
-            }
-        }
-        s1 = id == null ? "" : id;
-        s2 = o == null ? "" : o.getId() == null ? "" : o.getId().toString();
-        return s1.compareTo(s2);
+        return new FailedAccessHelper().compare(this, o);
     }
 
     /**
      * Updates this failed access by another one.
-     * 
-     * @param failedAccess
-     *            another failed access
+     *
+     * @param failedAccess another failed access
      */
+    @SuppressWarnings("Duplicates")
     public void update(FailedAccess failedAccess) {
         if (failedAccess != null) {
             this.counter = failedAccess.getCounter();
@@ -175,11 +150,6 @@ public class FailedAccessMongoDoc implements FailedAccess, Cloneable {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.bremersee.fac.model.FailedAccess#getId()
-     */
     @Override
     public String getId() {
         return id;
@@ -187,19 +157,13 @@ public class FailedAccessMongoDoc implements FailedAccess, Cloneable {
 
     /**
      * Sets the ID.
-     * 
-     * @param id
-     *            the ID
+     *
+     * @param id the ID
      */
     public void setId(String id) {
         this.id = id;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.bremersee.fac.model.FailedAccess#getResourceId()
-     */
     @Override
     public String getResourceId() {
         if (resourceId == null || resourceId.trim().length() == 0) {
@@ -210,19 +174,13 @@ public class FailedAccessMongoDoc implements FailedAccess, Cloneable {
 
     /**
      * Sets the ID of the resource.
-     * 
-     * @param resourceId
-     *            the ID of the resource
+     *
+     * @param resourceId the ID of the resource
      */
     public void setResourceId(String resourceId) {
         this.resourceId = resourceId;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.bremersee.fac.model.FailedAccess#getRemoteHost()
-     */
     @Override
     public String getRemoteHost() {
         return remoteHost;
@@ -230,19 +188,13 @@ public class FailedAccessMongoDoc implements FailedAccess, Cloneable {
 
     /**
      * Sets the remote host.
-     * 
-     * @param remoteHost
-     *            the remote host
+     *
+     * @param remoteHost the remote host
      */
     public void setRemoteHost(String remoteHost) {
         this.remoteHost = remoteHost;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.bremersee.fac.model.FailedAccess#getCounter()
-     */
     @Override
     public int getCounter() {
         return counter;
@@ -250,9 +202,8 @@ public class FailedAccessMongoDoc implements FailedAccess, Cloneable {
 
     /**
      * Sets the counter.
-     * 
-     * @param failedAccessCounter
-     *            the counter
+     *
+     * @param failedAccessCounter the counter
      */
     public void setCounter(int failedAccessCounter) {
         this.counter = failedAccessCounter;
@@ -265,9 +216,8 @@ public class FailedAccessMongoDoc implements FailedAccess, Cloneable {
 
     /**
      * Sets the creation date.
-     * 
-     * @param creationDate
-     *            the creation date
+     *
+     * @param creationDate the creation date
      */
     public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
@@ -280,9 +230,8 @@ public class FailedAccessMongoDoc implements FailedAccess, Cloneable {
 
     /**
      * Sets the last modification date.
-     * 
-     * @param modificationDate
-     *            the last modification date
+     *
+     * @param modificationDate the last modification date
      */
     public void setModificationDate(Date modificationDate) {
         this.modificationDate = modificationDate;

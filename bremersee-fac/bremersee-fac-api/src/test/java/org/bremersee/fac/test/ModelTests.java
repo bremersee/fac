@@ -16,12 +16,12 @@
 
 package org.bremersee.fac.test;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-
 import org.bremersee.fac.model.ObjectFactory;
 import org.junit.Before;
 import org.junit.Test;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 
 /**
  * @author Christian Bremer

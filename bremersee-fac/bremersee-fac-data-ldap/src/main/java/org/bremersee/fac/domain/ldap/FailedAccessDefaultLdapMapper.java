@@ -16,17 +16,6 @@
 
 package org.bremersee.fac.domain.ldap;
 
-import java.nio.charset.Charset;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Locale;
-import java.util.TimeZone;
-
-import javax.annotation.PostConstruct;
-import javax.inject.Named;
-
 import org.apache.commons.lang3.StringUtils;
 import org.bremersee.fac.model.FailedAccess;
 import org.bremersee.fac.model.FailedAccessDto;
@@ -35,13 +24,20 @@ import org.ldaptive.LdapEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.PostConstruct;
+import javax.inject.Named;
+import java.nio.charset.Charset;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
 /**
  * <p>
  * Default implementation of a {@link FailedAccessLdapMapper}.
  * </p>
- * 
+ *
  * @author Christian Bremer
  */
+@SuppressWarnings({"WeakerAccess", "unused"})
 @Named("defaultLdapFailedAccessMapper")
 public class FailedAccessDefaultLdapMapper implements FailedAccessLdapMapper {
 
@@ -82,18 +78,12 @@ public class FailedAccessDefaultLdapMapper implements FailedAccessLdapMapper {
         log.info(getClass().getSimpleName() + " successfully initialized.");
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.bremersee.fac.domain.FailedAccessLdapMapper#getSimpleDateFormat()
-     */
     @Override
     public SimpleDateFormat getSimpleDateFormat() {
         return simpleDateFormat;
     }
 
-    public void setSimpleDateFormatPattern(String simpleDateFormatPattern) {
+    public void setSimpleDateFormatPattern(final String simpleDateFormatPattern) {
         if (StringUtils.isNotBlank(simpleDateFormatPattern)) {
             log.info("simpleDateFormatPattern = " + simpleDateFormatPattern);
             simpleDateFormat = new SimpleDateFormat(simpleDateFormatPattern, Locale.UK);
@@ -101,12 +91,6 @@ public class FailedAccessDefaultLdapMapper implements FailedAccessLdapMapper {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.bremersee.fac.domain.FailedAccessLdapMapper#getResourceIdAttribute()
-     */
     @Override
     public String getResourceIdAttribute() {
         return resourceIdAttribute;
@@ -116,18 +100,12 @@ public class FailedAccessDefaultLdapMapper implements FailedAccessLdapMapper {
         this.resourceIdAttribute = resourceIdAttribute;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.bremersee.fac.domain.FailedAccessLdapMapper#getRemoteHostAttribute()
-     */
     @Override
     public String getRemoteHostAttribute() {
         return remoteHostAttribute;
     }
 
-    public void setRemoteHostAttribute(String remoteHostAttribute) {
+    public void setRemoteHostAttribute(final String remoteHostAttribute) {
         this.remoteHostAttribute = remoteHostAttribute;
     }
 
@@ -135,7 +113,7 @@ public class FailedAccessDefaultLdapMapper implements FailedAccessLdapMapper {
         return counterAttribute;
     }
 
-    public void setCounterAttribute(String counterAttribute) {
+    public void setCounterAttribute(final String counterAttribute) {
         this.counterAttribute = counterAttribute;
     }
 
@@ -143,61 +121,39 @@ public class FailedAccessDefaultLdapMapper implements FailedAccessLdapMapper {
         return creationDateAttribute;
     }
 
-    public void setCreationDateAttribute(String creationDateAttribute) {
+    public void setCreationDateAttribute(final String creationDateAttribute) {
         this.creationDateAttribute = creationDateAttribute;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.bremersee.fac.domain.FailedAccessLdapMapper#
-     * getModificationDateAttribute()
-     */
     @Override
     public String getModificationDateAttribute() {
         return modificationDateAttribute;
     }
 
-    public void setModificationDateAttribute(String modificationDateAttribute) {
+    public void setModificationDateAttribute(final String modificationDateAttribute) {
         this.modificationDateAttribute = modificationDateAttribute;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.bremersee.fac.domain.FailedAccessLdapMapper#getObjectClass()
-     */
     @Override
     public String getObjectClass() {
         return objectClass;
     }
 
-    public void setObjectClass(String objectClass) {
+    public void setObjectClass(final String objectClass) {
         this.objectClass = objectClass;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.bremersee.fac.domain.FailedAccessLdapMapper#getIdAttribute()
-     */
     @Override
     public String getIdAttribute() {
         return idAttribute;
     }
 
-    public void setIdAttribute(String idAttribute) {
+    public void setIdAttribute(final String idAttribute) {
         this.idAttribute = idAttribute;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.bremersee.fac.domain.FailedAccessLdapMapper#
-     * mapToFailedAccessLdapEntity(org.ldaptive.LdapEntry)
-     */
     @Override
-    public FailedAccessDto mapToFailedAccessLdapEntity(LdapEntry entry) {
+    public FailedAccessDto mapToFailedAccessLdapEntity(final LdapEntry entry) {
 
         FailedAccessDto entity = new FailedAccessDto();
         entity.setCounter(Integer.parseInt(getString(entry, counterAttribute, "0")));
@@ -222,15 +178,8 @@ public class FailedAccessDefaultLdapMapper implements FailedAccessLdapMapper {
         return entity;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.bremersee.fac.domain.FailedAccessLdapMapper#
-     * mapFromFailedAccessLdapEntity(java.lang.String,
-     * org.bremersee.fac.model.FailedAccess)
-     */
     @Override
-    public LdapEntry mapFromFailedAccessLdapEntity(String dn, FailedAccess failedAccess) {
+    public LdapEntry mapFromFailedAccessLdapEntity(final String dn, final FailedAccess failedAccess) {
 
         FailedAccessDto dto;
         if (failedAccess instanceof FailedAccessDto) {
@@ -248,7 +197,7 @@ public class FailedAccessDefaultLdapMapper implements FailedAccessLdapMapper {
             log.debug("Creating entry " + newDn);
         }
 
-        final Collection<LdapAttribute> attrs = new ArrayList<LdapAttribute>();
+        final Collection<LdapAttribute> attrs = new ArrayList<>();
         attrs.add(new LdapAttribute(this.idAttribute, dto.getId()));
         attrs.add(new LdapAttribute(this.resourceIdAttribute, dto.getResourceId()));
         attrs.add(new LdapAttribute(this.remoteHostAttribute, dto.getRemoteHost()));
@@ -262,13 +211,6 @@ public class FailedAccessDefaultLdapMapper implements FailedAccessLdapMapper {
         return new LdapEntry(newDn, attrs);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.bremersee.fac.domain.FailedAccessLdapMapper#
-     * getDnForFailedAccessLdapEntity(java.lang.String,
-     * org.bremersee.fac.model.FailedAccess)
-     */
     @Override
     public String getDnForFailedAccessLdapEntity(final String parentDn, final FailedAccess entity) {
         return String.format("%s=%s,%s", this.idAttribute, entity.getId(), parentDn);
@@ -280,7 +222,7 @@ public class FailedAccessDefaultLdapMapper implements FailedAccessLdapMapper {
             return nullValue;
         }
 
-        String v = null;
+        String v;
         if (attr.isBinary()) {
             final byte[] b = attr.getBinaryValue();
             v = new String(b, Charset.forName("UTF-8"));

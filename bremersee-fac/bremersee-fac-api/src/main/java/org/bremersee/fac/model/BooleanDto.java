@@ -16,29 +16,21 @@
 
 package org.bremersee.fac.model;
 
-import java.io.Serializable;
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
-
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+import javax.xml.bind.annotation.*;
+import java.io.Serializable;
 
 /**
  * <p>
  * A {@link Boolean} wrapper.
  * </p>
- * 
+ *
  * @author Christian Bremer
  */
+@SuppressWarnings("WeakerAccess")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "boolean")
 @XmlType(name = "booleanType", propOrder = {
@@ -46,13 +38,13 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(Include.ALWAYS)
-@JsonAutoDetect(fieldVisibility = Visibility.ANY, 
-    getterVisibility = Visibility.NONE, 
-    creatorVisibility = Visibility.NONE, 
-    isGetterVisibility = Visibility.NONE, 
-    setterVisibility = Visibility.NONE)
+@JsonAutoDetect(fieldVisibility = Visibility.ANY,
+        getterVisibility = Visibility.NONE,
+        creatorVisibility = Visibility.NONE,
+        isGetterVisibility = Visibility.NONE,
+        setterVisibility = Visibility.NONE)
 @JsonPropertyOrder(value = {
-        "value" 
+        "value"
 })
 public class BooleanDto implements Serializable, Cloneable {
 
@@ -66,13 +58,13 @@ public class BooleanDto implements Serializable, Cloneable {
      * Default constructor.
      */
     public BooleanDto() {
+        super();
     }
 
     /**
      * Constructs an instance with the specified parameter.
-     * 
-     * @param value
-     *            the boolean value
+     *
+     * @param value the boolean value
      */
     public BooleanDto(boolean value) {
         this.value = value;
@@ -103,6 +95,7 @@ public class BooleanDto implements Serializable, Cloneable {
      * 
      * @see java.lang.Object#equals(java.lang.Object)
      */
+    @SuppressWarnings("RedundantIfStatement")
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -125,14 +118,15 @@ public class BooleanDto implements Serializable, Cloneable {
      * 
      * @see java.lang.Object#clone()
      */
+    @SuppressWarnings("MethodDoesntCallSuperMethod")
     @Override
-    public BooleanDto clone() {
+    public BooleanDto clone() { // NOSONAR
         return new BooleanDto(isValue());
     }
 
     /**
      * Return the boolean value.
-     * 
+     *
      * @return the boolean value
      */
     public boolean isValue() {
@@ -141,9 +135,8 @@ public class BooleanDto implements Serializable, Cloneable {
 
     /**
      * Sets the boolean value.
-     * 
-     * @param value
-     *            the boolean value
+     *
+     * @param value the boolean value
      */
     public void setValue(boolean value) {
         this.value = value;

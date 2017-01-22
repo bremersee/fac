@@ -76,7 +76,7 @@ public class InMemoryTests {
 
             System.out.println("Waiting for unlocking the resource ...");
             try {
-                Thread.sleep(800L);
+                Thread.sleep(800L); // NOSONAR
             } catch (InterruptedException e) {
                 return;
             }

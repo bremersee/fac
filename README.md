@@ -41,7 +41,7 @@ It consists of four modules:
 ```xml
 <dependency>
     <groupId>org.bremersee</groupId>
-    <artifactId>bremersee-fac-data-jpa</artifactId>
+    <artifactId>bremersee-fac-data-ldap</artifactId>
     <version>1.1.2</version>
 </dependency>
 ```
@@ -50,7 +50,7 @@ It consists of four modules:
 ```xml
 <dependency>
     <groupId>org.bremersee</groupId>
-    <artifactId>bremersee-fac-data-jpa</artifactId>
+    <artifactId>bremersee-fac-data-mongodb</artifactId>
     <version>1.1.2</version>
 </dependency>
 ```

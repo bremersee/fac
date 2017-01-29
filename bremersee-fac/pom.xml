@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bremersee</groupId>
     <artifactId>bremersee-fac</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
     <name>Bremersee Failed Access Counter</name>
     <description>Failed access counter project</description>
     <url>http://bremersee.github.io/fac/</url>
@@ -22,8 +22,8 @@
         <hibernate-jpa-21-api.version>1.0.0.Final</hibernate-jpa-21-api.version>
         <ldaptive.version>1.2.0</ldaptive.version>
         <lombok.version>1.16.10</lombok.version>
-        <spring-boot.version>1.4.1.RELEASE</spring-boot.version>
-        <spring.version>4.3.3.RELEASE</spring.version>
+        <spring-boot.version>1.4.2.RELEASE</spring-boot.version>
+        <spring.version>4.3.4.RELEASE</spring.version>
         <swagger.version>1.5.9</swagger.version>
         <main.basedir>${basedir}</main.basedir>
     </properties>

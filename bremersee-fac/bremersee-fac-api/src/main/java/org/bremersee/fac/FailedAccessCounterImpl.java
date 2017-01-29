@@ -63,6 +63,10 @@ public class FailedAccessCounterImpl implements FailedAccessCounter {
      */
     private final Logger log = LoggerFactory.getLogger(getClass());
 
+    private final Object lock = new Object();
+
+    private boolean started;
+
     /**
      * The failed access DAO
      */
@@ -128,20 +132,27 @@ public class FailedAccessCounterImpl implements FailedAccessCounter {
      */
     @PostConstruct
     public void start() {
-        log.info("Starting " + getClass().getSimpleName() + " ...");
-        if (failedAccessDao == null) {
-            FailedAccessInMemoryDao failedAccessDao = new FailedAccessInMemoryDao(); // NOSONAR
-            failedAccessDao.setObjectComparatorFactory(ObjectComparatorFactory.newInstance());
-            failedAccessDao.init();
-            this.failedAccessDao = failedAccessDao;
+        synchronized (lock) {
+            if (!started) {
+                log.info("Starting " + getClass().getSimpleName() + " ...");
+                if (failedAccessDao == null) {
+                    FailedAccessInMemoryDao failedAccessDao = new FailedAccessInMemoryDao(); // NOSONAR
+                    failedAccessDao.setObjectComparatorFactory(ObjectComparatorFactory.newInstance());
+                    failedAccessDao.init();
+                    this.failedAccessDao = failedAccessDao;
+                }
+                log.info("failedAccessDao = " + failedAccessDao.getClass().getSimpleName()); // NOSONAR
+                log.info("failedAccessCounterThreshold = " + getFailedAccessCounterThreshold());
+                log.info("removeFailedAccessEntriesAfterMillis = " + getRemoveFailedAccessEntriesAfterMillis());
+                log.info("removeFailedEntriesInterval = " + getRemoveFailedEntriesInterval());
+                lastRemovingOfFailedEntries = System.currentTimeMillis();
+                removeFailedEntriesThread.start();
+                log.info(getClass().getSimpleName() + " successfully started.");
+                started = true;
+            } else {
+                log.warn("Failed access counter is already started.");
+            }
         }
-        log.info("failedAccessDao = " + failedAccessDao.getClass().getSimpleName()); // NOSONAR
-        log.info("failedAccessCounterThreshold = " + getFailedAccessCounterThreshold());
-        log.info("removeFailedAccessEntriesAfterMillis = " + getRemoveFailedAccessEntriesAfterMillis());
-        log.info("removeFailedEntriesInterval = " + getRemoveFailedEntriesInterval());
-        lastRemovingOfFailedEntries = System.currentTimeMillis();
-        removeFailedEntriesThread.start();
-        log.info(getClass().getSimpleName() + " successfully started.");
     }
 
     /**
@@ -149,9 +160,16 @@ public class FailedAccessCounterImpl implements FailedAccessCounter {
      */
     @PreDestroy
     public void stop() {
-        log.info("Stopping " + getClass().getSimpleName() + " ...");
-        removeFailedEntriesThread.interrupt();
-        log.info(getClass().getSimpleName() + " successfully stopped.");
+        synchronized (lock) {
+            if (started) {
+                log.info("Stopping " + getClass().getSimpleName() + " ...");
+                removeFailedEntriesThread.interrupt();
+                log.info(getClass().getSimpleName() + " successfully stopped.");
+                started = false;
+            } else {
+                log.warn("Failed access counter has not been started.");
+            }
+        }
     }
 
     /**

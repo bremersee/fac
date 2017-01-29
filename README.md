@@ -14,8 +14,8 @@ The failed access counter needs a DAO (interface FailedAccessDao) to persist the
 
 The generated maven site is committed to the [gh-pages branch](https://github.com/bremersee/fac/tree/gh-pages) and visible [here](http://bremersee.github.io/fac/). There you can find more information.
 
-## Release 1.1.1
-Release 1.1.1 is available at Maven Central.
+## Release 1.1.2
+Release 1.1.2 is available at Maven Central.
 
 It consists of four modules:
 
@@ -24,7 +24,7 @@ It consists of four modules:
 <dependency>
     <groupId>org.bremersee</groupId>
     <artifactId>bremersee-fac-api</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
 </dependency>
 ```
 
@@ -33,7 +33,7 @@ It consists of four modules:
 <dependency>
     <groupId>org.bremersee</groupId>
     <artifactId>bremersee-fac-data-jpa</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
 </dependency>
 ```
 
@@ -42,7 +42,7 @@ It consists of four modules:
 <dependency>
     <groupId>org.bremersee</groupId>
     <artifactId>bremersee-fac-data-jpa</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
 </dependency>
 ```
 
@@ -51,7 +51,7 @@ It consists of four modules:
 <dependency>
     <groupId>org.bremersee</groupId>
     <artifactId>bremersee-fac-data-jpa</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
 </dependency>
 ```
 

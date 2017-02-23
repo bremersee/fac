@@ -384,10 +384,18 @@ public class FailedAccessCounterImpl implements FailedAccessCounter {
         Date modificationDate = timeInMillis == null || timeInMillis <= 0 ? new Date() : new Date(timeInMillis);
         FailedAccess entity = failedAccessDao.getByResourceIdAndRemoteHost(resourceId, remoteHost);
         boolean accessGranted = isAccessGranted(entity);
-        if (accessGranted && entity != null) {
-            failedAccessDao.removeById(entity.getId());
+        AccessResultDto result = new AccessResultDto(accessGranted, modificationDate.getTime(),
+                calculateAccessDeniedUntil(entity));
+        if (accessGranted) {
+            result.setCounter(0);
+            if (entity != null) {
+                failedAccessDao.removeById(entity.getId());
+            }
+        } else {
+            result.setCounter(entity.getCounter());
         }
-        return new AccessResultDto(accessGranted, modificationDate.getTime(), calculateAccessDeniedUntil(entity));
+        result.setCounterThreshold(getFailedAccessCounterThreshold());
+        return result;
     }
 
     @Override
@@ -412,10 +420,8 @@ public class FailedAccessCounterImpl implements FailedAccessCounter {
         boolean accessGranted = isAccessGranted(entity);
         AccessResultDto result = new AccessResultDto(accessGranted, modificationDate.getTime(),
                 calculateAccessDeniedUntil(dto));
-        if (!accessGranted) {
-            result.setCounter(entity.getCounter());
-            result.setCounterThreshold(getFailedAccessCounterThreshold());
-        }
+        result.setCounter(entity.getCounter()); // NOSONAR
+        result.setCounterThreshold(getFailedAccessCounterThreshold());
         return result;
     }
 
